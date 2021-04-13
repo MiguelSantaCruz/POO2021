@@ -199,10 +199,16 @@ public class Jogador
         return sb.toString();
     }
     
+    /**
+     * Calcula a habilidade de um Jogador
+     */
+    public float calculaHabilidade(){
+        //Considera todos os parametros importantes
+        return this.velocidade + this.resistencia + this.destreza 
+                + this.impulsao + this.jogo_de_cabeça + this.remate 
+                  + this.capacidade_de_passe;
+    }
     
-    
-    
-        
 
 
 }
