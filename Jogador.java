@@ -2,7 +2,7 @@
  * Classe jogador
  * @version 1
  */
-public class Jogador
+public class Jogador extends Atleta
 {
     private int velocidade;
     private int resistencia;
@@ -16,7 +16,7 @@ public class Jogador
      * Construtor vazio para objetos da classe Jogador
      */
     public Jogador()
-    {
+    {   super();
         this.velocidade = 0;
         this.resistencia = 0;
         this.destreza = 0;
@@ -29,7 +29,9 @@ public class Jogador
     /**
      * Construtor para objetos da classe Jogador
      */
-    public Jogador(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe){
+    public Jogador(int velocidade, int resistencia, int destreza, int impulsao, 
+    int jogo_de_cabeça, int remate, int capacidade_de_passe, int idAtleta, String nomeAtleta,int idade){
+        super(idAtleta,nomeAtleta,idade);
         this.velocidade = velocidade;
         this.resistencia = resistencia;
         this.destreza = destreza;
@@ -43,6 +45,7 @@ public class Jogador
      * Construtor de cópia para objetos da classe Jogador
      */
     public Jogador(Jogador j){
+        super((Atleta) j);
         this.velocidade = j.getVelocidade();
         this.resistencia = j.getResistencia();
         this.destreza = j.getDestreza();
@@ -182,7 +185,8 @@ public class Jogador
      */
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Velocidade: ");
+        sb.append(super.toString());
+        sb.append(" Velocidade: ");
         sb.append(getVelocidade());
         sb.append(" Resistencia: ");
         sb.append(getResistencia());

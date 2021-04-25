@@ -17,8 +17,8 @@ public class Medio extends Jogador
     /**
      * Construtor para objetos da classe Medio
      */
-    public Medio(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int recuperacao_bolas){
-        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe);
+    public Medio(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int recuperacao_bolas,int idAtleta,String nomeAtleta,int idade){
+        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe,idAtleta,nomeAtleta,idade);
         this.recuperacao_bolas = recuperacao_bolas;
     }
 

@@ -17,8 +17,8 @@ public class Guarda_Redes extends Jogador
     /**
      * Construtor para objetos da classe Guarda_Redes
      */
-    public Guarda_Redes(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int elasticidade){
-        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe);
+    public Guarda_Redes(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int elasticidade,int idAtleta,String nomeAtleta,int idade){
+        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe,idAtleta,nomeAtleta,idade);
         this.elasticidade = elasticidade;
     }
 

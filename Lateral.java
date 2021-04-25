@@ -17,8 +17,8 @@ public class Lateral extends Jogador
     /**
      * Construtor para objetos da classe Lateral
      */
-    public Lateral(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int cruzamentos){
-        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe);
+    public Lateral(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int cruzamentos,int idAtleta,String nomeAtleta,int idade){
+        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe,idAtleta,nomeAtleta,idade);
         this.cruzamentos = cruzamentos;
     }
 
