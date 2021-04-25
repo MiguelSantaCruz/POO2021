@@ -13,7 +13,7 @@ public class Atleta {
      */
     public Atleta (){
         this.idAtleta = 0;
-        this.nomeAtleta = "aaaa";
+        this.nomeAtleta = "none";
         this.idade = 0;
     }
     /**
