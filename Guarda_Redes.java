@@ -17,16 +17,47 @@ public class Guarda_Redes extends Jogador
     /**
      * Construtor para objetos da classe Guarda_Redes
      */
-    public Guarda_Redes(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int elasticidade,int idAtleta,String nomeAtleta,int idade){
-        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe,idAtleta,nomeAtleta,idade);
+    public Guarda_Redes(int numero,int velocidade, int resistencia, int destreza, 
+    int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,
+    int elasticidade,int idAtleta,String nomeAtleta,int idade){
+        super(numero,velocidade,
+              resistencia,
+              destreza,
+              impulsao,
+              jogo_de_cabeça,
+              remate,
+              capacidade_de_passe,
+              idAtleta,
+              nomeAtleta,
+              idade);
+        this.habilidade = calculaHabilidade();
         this.elasticidade = elasticidade;
     }
 
     /**
      * Construtor de cópia para objetos da classe Guarda_Redes
      */
+   public static Guarda_Redes parse(String input){
+        String[] campos = input.split(",");
+        return new Guarda_Redes(Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[11]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                Integer.parseInt(campos[9]),
+                Integer.parseInt(campos[10]),
+                campos[0],
+                Integer.parseInt(campos[1]));
+    }
+    /**
+     * Construtor de cópia para objetos da classe Guarda_Redes
+     */
     public Guarda_Redes(Guarda_Redes g){
         super((Jogador) g);
+        this.habilidade = g.calculaHabilidade();
         this.elasticidade = g.getElasticidade();
     }
 
@@ -58,16 +89,7 @@ public class Guarda_Redes extends Jogador
      * Clona o objeto Guarda_Redes
      */
     public Guarda_Redes clone(){
-        Guarda_Redes g = new Guarda_Redes();
-        g.setVelocidade(this.getVelocidade());
-        g.setResistencia(this.getResistencia());
-        g.setDestreza(this.getDestreza());
-        g.setImpulsao(this.getImpulsao());
-        g.setJogoDeCabeca(this.getJogoDeCabeca());
-        g.setRemate(this.getRemate());
-        g.setCapacidadeDePasse(this.getCapacidadeDePasse());  
-        g.setElasticidade(this.getElasticidade());
-        return g;
+        return new Guarda_Redes(this);
     }
 
     /**
@@ -78,6 +100,7 @@ public class Guarda_Redes extends Jogador
         sb.append(super.toString());
         sb.append(" Elasticidade: ");
         sb.append(this.getElasticidade());
+        sb.append(" Guarda-Redes\n");
         return sb.toString();
     }
 
@@ -88,8 +111,13 @@ public class Guarda_Redes extends Jogador
     public float calculaHabilidade(){
         //Desvaloriza a resistencia, velocidade,jogo de cabeça e valoriza a destreza e
         // elasticidade
-        return (this.getVelocidade() + this.getResistencia()*0.5f + this.getDestreza()*2 
-                + this.getImpulsao() + this.getJogoDeCabeca()*0.5f + this.getRemate() 
-                    + this.getCapacidadeDePasse() + this.getElasticidade() * 2);
+        return (this.getVelocidade()*0.01f + 
+                this.getResistencia()*0.02f + 
+                this.getDestreza()*0.3f+ 
+                this.getImpulsao()*0.2f + 
+                this.getJogoDeCabeca()*0.1f + 
+                this.getRemate()*0.1f+ 
+                this.getCapacidadeDePasse()*0.02f + 
+                this.getElasticidade() * 0.25f);
     }
 }

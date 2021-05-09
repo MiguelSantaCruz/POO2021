@@ -2,8 +2,7 @@
  * Classe Jogador lateral
  * @version 1
  */
-public class Lateral extends Jogador
-{
+public class Lateral extends Jogador{
     private int cruzamentos;
  
     /**
@@ -17,16 +16,42 @@ public class Lateral extends Jogador
     /**
      * Construtor para objetos da classe Lateral
      */
-    public Lateral(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int cruzamentos,int idAtleta,String nomeAtleta,int idade){
-        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe,idAtleta,nomeAtleta,idade);
+    public Lateral(int numero,int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int cruzamentos,int idAtleta,String nomeAtleta,int idade) {
+        super(numero,velocidade,
+                resistencia,
+                destreza,
+                impulsao,
+                jogo_de_cabeça,
+                remate,
+                capacidade_de_passe,
+                idAtleta,
+                nomeAtleta,
+                idade);
+        this.habilidade = calculaHabilidade();
         this.cruzamentos = cruzamentos;
     }
 
+    public static Lateral parse(String input){
+        String[] campos = input.split(",");
+        return new Lateral(Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[10]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                Integer.parseInt(campos[9]),
+                Integer.parseInt(campos[11]),
+                campos[0],
+                Integer.parseInt(campos[1]));
+    }
     /**
      * Construtor de cópia para objetos da classe Lateral
      */
     public Lateral(Lateral l){
         super((Jogador) l);
+        this.habilidade = l.calculaHabilidade();
         this.cruzamentos = l.getCruzamentos();
     }
 
@@ -58,16 +83,7 @@ public class Lateral extends Jogador
      * Clona o objeto Lateral
      */
     public Lateral clone(){
-        Lateral l = new Lateral();
-        l.setVelocidade(this.getVelocidade());
-        l.setResistencia(this.getResistencia());
-        l.setDestreza(this.getDestreza());
-        l.setImpulsao(this.getImpulsao());
-        l.setJogoDeCabeca(this.getJogoDeCabeca());
-        l.setRemate(this.getRemate());
-        l.setCapacidadeDePasse(this.getCapacidadeDePasse());  
-        l.setCruzamentos(this.getCruzamentos());
-        return l;
+        return new Lateral(this);
     }
 
     /**
@@ -77,7 +93,8 @@ public class Lateral extends Jogador
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
         sb.append(" Cruzamentos: ");
-        sb.append(this.getCruzamentos());
+        sb.append(getCruzamentos());
+        sb.append(" Lateral\n");
         return sb.toString();
     }
 
@@ -87,8 +104,13 @@ public class Lateral extends Jogador
      */
     public float calculaHabilidade(){
         //Desvaloriza a resistencia e valoriza o cruzamento
-        return this.getVelocidade() + this.getResistencia()* 0.5f + this.getDestreza() 
-                + this.getImpulsao() + this.getJogoDeCabeca() + this.getRemate() 
-                    + this.getCapacidadeDePasse() + this.getCruzamentos() * 2;
+        return this.getVelocidade()*0.02f +
+               this.getResistencia()* 0.03f + 
+               this.getDestreza()*0.12f + 
+               this.getImpulsao()*0.05f + 
+               this.getJogoDeCabeca()*0.05f + 
+               this.getRemate()*0.03f +
+               this.getCapacidadeDePasse()*0.2f + 
+               this.getCruzamentos()*0.5f ;
     }
 }
