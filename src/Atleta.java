@@ -1,10 +1,12 @@
+import java.io.*;
+
 /**
  * Classe Atleta
  * @version 1
  */
 
-public class Atleta {
-    private String idAtleta;
+public class Atleta{
+    private int idAtleta;
     private String nomeAtleta;
     private int idade;
 
@@ -12,12 +14,12 @@ public class Atleta {
      * Construtor vazio para objetos da classe Atleta
      */
     public Atleta (){
-        this.idAtleta = "NaN";
-        this.nomeAtleta = "NaN";
+        this.idAtleta = 0;
+        this.nomeAtleta = "none";
         this.idade = 0;
     }
     /**
-     * Construtor de cópia para objetos da classe Jogador
+            * Construtor de cópia para objetos da classe Jogador
      */
     public Atleta(Atleta a){
         this.idAtleta=a.getIdAtleta();
@@ -27,7 +29,7 @@ public class Atleta {
     /**
      * Construtor para objetos da classe Jogador
      */
-    public Atleta(String idAtleta, String nomeAtleta, int idade) {
+    public Atleta(int idAtleta, String nomeAtleta, int idade) {
         this.idAtleta = idAtleta;
         this.nomeAtleta = nomeAtleta;
         this.idade = idade;
@@ -43,18 +45,19 @@ public class Atleta {
      */
     public String getNomeAtleta() {
         return this.nomeAtleta;
+        //return "Merda Para Isto Tudo";
     }
     /**
      * Retorna o id do Atleta
      */
-    public String getIdAtleta() {
+    public int getIdAtleta() {
         return this.idAtleta;
     }
     /**
      * Atribui um id ao Atleta
      */
 
-    public void setIdAtleta(String idAtleta) {
+    public void setIdAtleta(int idAtleta) {
         this.idAtleta = idAtleta;
     }
     /**
@@ -75,12 +78,12 @@ public class Atleta {
      */
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(" IdAtleta: ");
+        sb.append("IdAtleta:");
         sb.append(this.getIdAtleta());
-        sb.append(" Nome: ");
-        sb.append(getNomeAtleta());
-        sb.append(" Idade: ");
-        sb.append(getIdade());
+        sb.append(" Nome:");
+        sb.append(this.getNomeAtleta());
+        sb.append(" Idade:");
+        sb.append(this.getIdade());
         return sb.toString();
     }
     /**
@@ -93,4 +96,27 @@ public class Atleta {
         a.setIdade(this.getIdade());
         return a;
     }
+/*
+    public void gravaOb (String name) throws FileNotFoundException, IOException{
+        FileOutputStream fos = new FileOutputStream(name);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(this);
+        oos.flush();
+        oos.close();
+    }
+    public Atleta lerObjeto (String caminho) {
+        Atleta pessoa = null;
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(caminho));
+            pessoa = (Atleta) ois.readObject();
+            ois.close();
+        }
+        catch (ClassNotFoundException ex) {
+            System.out.println("Erro ao converter o arquivo em objeto");
+        }
+        catch (IOException ex) {
+            System.out.println("Erro ao ler o objeto do arquivo");
+        }
+        return pessoa;
+    }*/
 }

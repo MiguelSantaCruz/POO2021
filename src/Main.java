@@ -2,23 +2,37 @@
  * Classe Main
  * @version 1
  */
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 public class Main
 {
-    public static void main(String[] args) {
-        
+    public static void main(String[] args) throws Exception{
+        Parser.parse();
+        //Avancado j1 = new Avancado (1,1,5,3,3,7,8,7,0,123,3,3,"Sérgio",20);
+        //System.out.println("Atleta: " + j1.toString());
         //Teste para Jogador --------------------------------------------------------------------
-        Atleta a = new Atleta("1478","Pedro",26);
-        Jogador j0 = new Jogador();
-        Jogador j1 = new Jogador(6,5,3,3,7,8,5,"8147","Júlio",26);
+        //Atleta a = new Atleta(1478,"Pedro",26);
+        //a.gravaOb("ass.txt");
+        //Jogador j1 = new Jogador(6,5,3,3,7,8,5,100,8147,"Júlio",26);
+        //
+        //Avancado j1 = new Avancado (6,5,3,3,7,8,7,0,123,3,3,"Sérgio",20);
+        //Lateral j = new Lateral(6,5,3,3,7,8,5,8,1234,"Sérgio",20);
+        //Guarda_Redes j1 = new Guarda_Redes(6,5,3,3,7,8,5,8,1234,"Paulinho",20);
+        //j1.gravaOb("ass.txt");
+        //Atleta b = j1.lerObjeto("ass.txt");
+	    
+        /*Jogador j0 = new Jogador();
+
         Jogador j2 = new Jogador(j1);
         Lateral l0 = new Lateral();
-        Lateral l1 = new Lateral(6,5,3,3,7,8,5,8,"1234","Sérgio",20);
+        Lateral l1 = new Lateral(6,5,3,3,7,8,5,8,1234,"Sérgio",20);
         Lateral l2 = new Lateral(l1);
         Guarda_Redes g0 = new Guarda_Redes();
-        Guarda_Redes g1 = new Guarda_Redes(1,2,3,4,5,6,7,8,"2234","Paulo",31);
+        Guarda_Redes g1 = new Guarda_Redes(1,2,3,4,5,6,7,8,2234,"Paulo",31);
         Guarda_Redes g2 = new Guarda_Redes(g1);
         Medio m0 = new Medio();
-        Medio m1 = new Medio(6,5,3,3,7,8,5,8,"5578","Rui",18);
+        Medio m1 = new Medio(6,5,3,3,7,8,5,8,5578,"Rui",18);
         Medio m2 = new Medio(m1);
 
         System.out.println("Atleta: " + a.toString());
@@ -80,7 +94,7 @@ public class Main
         System.out.println("Habilidade Médio 0: " + m0.calculaHabilidade());
         System.out.println("Habilidade Médio 2: " + m2.calculaHabilidade());
         System.out.println("Habilidade Médio 3: " + m3.calculaHabilidade());
-        //---------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------*/
     }
 
 }
