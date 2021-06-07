@@ -7,20 +7,24 @@ import java.util.List;
 import java.util.Map;
 
 public class Jogo{
-    //private int idJogo;
+    private String idJogo;
     private int golosCasa;
     private int golosVisitante; //deixei o numero de golos de cada equipa como dois ints pq assim podemos apenas fazer golosVisitantes++ em vez de alterar uma string
     private LocalDate date;
     private String nomeEqCasa;  //nome da equipa da Casa
     private String nomeEqVisitante; //nome da equipa Visitante
-    private List <Integer> titularesCasa;   //Lista de todos os jogadores da equipa da casa
-    private List <Integer> titularesVisitante;  //Lista de todos os jogadores da equipa Visitante
-    Map<Integer, Integer> substituicoesCasa = new HashMap<>();
-    Map<Integer, Integer> substituicoesFora = new HashMap<>();
+    private List <Jogador> titularesCasa;   //Lista de todos os jogadores da equipa da casa
+    private List <Jogador> titularesVisitante;  //Lista de todos os jogadores da equipa Visitante
+    private List <Jogador> suplentesCasa;   //Lista de todos os jogadores da equipa da casa
+    private List <Jogador> suplentesVisitante;  //Lista de todos os jogadores da equipa Visitante
+    Map<Integer, Jogador> substituicoesCasa = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador
+    Map<Integer, Jogador> substituicoesFora = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador
+    Map<Integer, Integer> entraSaiCasa = new HashMap<>();
+    Map<Integer, Integer> entraSaiVisitante = new HashMap<>();
 
 
     public Jogo () {
-        //this.idJogo = 0;
+        this.idJogo = "";
         this.golosCasa = 0;
         this.golosVisitante = 0;
         this.date = null;
@@ -28,12 +32,16 @@ public class Jogo{
         this.nomeEqVisitante = "";
         this.titularesCasa = new ArrayList<>();
         this.titularesVisitante = new ArrayList<>();
+        this.suplentesCasa = new ArrayList<>();
+        this.suplentesVisitante = new ArrayList<>();
         this.substituicoesCasa = new HashMap<>();
         this.substituicoesFora  = new HashMap<>();
+        this.entraSaiCasa = new HashMap<>();
+        this.entraSaiVisitante = new HashMap<>();
     }
 
     public Jogo (Jogo j) {
-        //this.idJogo = j.idJogo;
+        this.idJogo = j.idJogo;
         this.golosCasa = j.golosCasa;
         this.golosVisitante = j.golosVisitante;
         this.date = j.date;
@@ -41,21 +49,30 @@ public class Jogo{
         this.nomeEqVisitante = j.getNomeEqVisitante();
         setTitularesCasa(j.getTitularesCasa());
         setTitularesVisitante(j.getTitularesVisitante());
+        setSuplentesCasa(j.getSuplentesCasa());
+        setSuplentesVisitante(j.getSuplentesVisitante());
         setSubstituicoesCasa (j.getSubstituicoesCasa ());
-       // setSubstituicoesFora (j.getSubstituicoesFora());
+        setSubstituicoesFora (j.getSubstituicoesFora());
+        setEntraSaiCasa(j.getEntraSaiCasa());
+        setEntraSaiVisitante(j.getEntraSaiVisitante());
     }
  
 
-    public Jogo (String ec, String ef, int gc, int gf, LocalDate d,  List<Integer> jc, Map<Integer, Integer> sc,  List<Integer> jf, Map<Integer, Integer> sf){
+    public Jogo (String idJogo, int gc, int gf, LocalDate d, String eqCasaName, String eqForaName, List<Jogador> titCasa, List<Jogador> titVis, List<Jogador> suplCasa, List<Jogador> suplVis, Map<Integer,Jogador> subsCasa, Map<Integer,Jogador> subsFora, Map<Integer, Integer> entraSaiCasa, Map <Integer,Integer> entraSaiVisitante){
+        this.idJogo = idJogo;
         this.golosCasa = gc;
         this.golosVisitante = gf;
         this.date = d;
-        this.nomeEqCasa = ec;
-        this.nomeEqVisitante = ef;
-        this.titularesCasa = new ArrayList<>(jc);
-        this.titularesVisitante = new ArrayList<>(jf);
-        this.substituicoesCasa = new HashMap<>(sc);
-        this.substituicoesFora= new HashMap<>(sf);
+        this.nomeEqCasa = eqCasaName;
+        this.nomeEqVisitante = eqForaName;
+        this.setTitularesCasa(titCasa);
+        this.setTitularesVisitante(titVis);
+        this.setSuplentesCasa(suplCasa);
+        this.setSuplentesVisitante(suplVis);
+        this.setSubstituicoesCasa(subsCasa);
+        this.setSubstituicoesFora(subsFora);
+        this.setEntraSaiCasa(entraSaiCasa);
+        this.setEntraSaiVisitante(entraSaiVisitante);
     }
 
 
@@ -125,42 +142,85 @@ public class Jogo{
         this.nomeEqVisitante = nomeEqVisitante;
     }
 
-    public List<Integer> getTitularesCasa() {
+    public List<Jogador> getTitularesCasa() {
         return this.titularesCasa;
     }
 
-    public void setTitularesCasa(List<Integer> titularesCasa) {
-        this.titularesCasa = new ArrayList<>();
-        //for (Jogador j : titularesCasa) this.titularesCasa.add(j.clone());
+    public void setTitularesCasa(List<Jogador> titularesCasa) {
+        for (Jogador j : titularesCasa) {
+            this.titularesCasa.add(j.clone());
+        }
     }
 
-    public List<Integer> getTitularesVisitante() {
+    public List<Jogador> getTitularesVisitante() {
         return this.titularesVisitante;
     }
 
-    public void setTitularesVisitante(List<Integer> titularesVisitante) {
-        this.titularesVisitante = new ArrayList<>();
-        //for (Jogador j : titularesVisitante) this.titularesVisitante.add(j.clone());
+    public void setTitularesVisitante(List<Jogador> titularesVisitante) {
+        for (Jogador j : titularesVisitante) {
+            this.titularesVisitante.add(j.clone()); //fazer sempre o clone por causa do encapsulamento
+        }
     }
 
-    public Map<Integer, Integer> getSubstituicoesCasa() {
+    public List<Jogador> getSuplentesCasa() {
+        return this.suplentesCasa;
+    }
+
+    public void setSuplentesCasa(List<Jogador> suplentesCasa) {
+        for (Jogador j : suplentesCasa) {
+            this.suplentesCasa.add(j.clone());
+        }
+    }
+
+    public List<Jogador> getSuplentesVisitante() {
+        return this.suplentesVisitante;
+    }
+
+    public void setSuplentesVisitante(List<Jogador> suplentesVisitante) {
+        for (Jogador j : suplentesVisitante) {
+            this.suplentesVisitante.add(j.clone()); //fazer sempre o clone por causa do encapsulamento
+        }
+    }
+
+    public Map<Integer, Jogador> getSubstituicoesCasa() {
         return this.substituicoesCasa;
     }
 
-    public void setSubstituicoesCasa(Map<Integer, Integer> suplentesCasa) {
-        this.substituicoesCasa = new HashMap<>();
-        //for (Jogador j : suplentesCasa) this.substituicoesCasa.add(j.clone());
+    public void setSubstituicoesCasa(Map<Integer, Jogador> substCasa) {
+        for (Jogador j : substCasa.values()) {
+            this.substituicoesCasa.put(j.getNumeroJogador(), j.clone());
+        }
     }
 
-    public  Map<Integer, Integer> getSubstituicoesFora() {
+    public  Map<Integer, Jogador> getSubstituicoesFora() {
         return this.substituicoesFora;
     }
 
-    public void setSubstituicoesFora(List<Integer> suplentesVisitantes) {
-        this.substituicoesFora = new HashMap<>();
-        //for (Jogador j : suplentesVisitantes) this.substituicoesFora.add(j.clone());
+    public void setSubstituicoesFora(Map <Integer, Jogador> substFora) {
+        for (Jogador j : substFora.values()) {
+            this.substituicoesFora.put(j.getNumeroJogador(), j.clone());
+        }
     }
 
+    public Map<Integer, Integer> getEntraSaiCasa () {
+        return this.entraSaiCasa;
+    }
+
+    public void setEntraSaiCasa (Map <Integer, Integer> entraSaiC) {
+        for (Map.Entry<Integer, Integer> it : entraSaiC.entrySet()) {
+            this.entraSaiCasa.put(it.getKey(), it.getValue());
+        }
+    }
+
+    public Map<Integer, Integer> getEntraSaiVisitante () {
+        return this.entraSaiVisitante;
+    }
+
+    public void setEntraSaiVisitante (Map <Integer, Integer> entraSaiV) {
+        for (Map.Entry<Integer, Integer> it : entraSaiV.entrySet()) {
+            this.entraSaiVisitante.put(it.getKey(), it.getValue());
+        }
+    }
 
     public boolean equals (Object o) {      //verificar se esta bem definido para o Tempo de jogo
         if (this == o) return true;

@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Equipa {
     private ArrayList<Jogador> plantel;
-    //private String idDaEquipa;
+    private String idDaEquipa;
     private String nome;
     private LocalDate dataDeFundação;
     private ArrayList<Jogo> jogosAgendados;
@@ -15,7 +15,7 @@ public class Equipa {
 
     public Equipa(String string,LocalDate d) {
         this.plantel = new ArrayList<>();
-        //this.idDaEquipa = "NaN";
+        this.idDaEquipa = "NaN";
         this.nome = string;
         this.dataDeFundação = d;
         this.jogosAgendados = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Equipa {
 
     public Equipa(List<Jogador> list,String nome, LocalDate c, ArrayList<Jogo> jogosAgendados) {
         this.plantel = (ArrayList<Jogador>) list;
-        //this.idDaEquipa = idDaEquipa;
+        this.idDaEquipa = idDaEquipa;
         this.nome = nome;
         this.dataDeFundação = c;
         this.jogosAgendados = jogosAgendados;

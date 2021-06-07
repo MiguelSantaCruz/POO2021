@@ -12,7 +12,7 @@ public class Jogador extends Atleta{
     private int remate;
     private int capacidade_de_passe;
     protected float habilidade;
-    private int numeroJogador;
+    private int numeroJogador;  //numero da camisola do jogador
     
 
     /**
