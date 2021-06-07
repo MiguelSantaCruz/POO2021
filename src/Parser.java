@@ -8,12 +8,20 @@ import java.util.List;
 import java.util.Map;
 
 public class Parser {
+    private Map<String, Equipa> equipas;
+    private List<Jogo> jogos;
+    //Map<String, Jogador> jogadores
 
-    public static void parse() throws LinhaIncorretaException {
-        List<String> linhas = lerFicheiro("final.txt");
-        Map<String, Equipa> equipas = new HashMap<>(); //nome, equipa
-        //Map<String, Jogador> jogadores = new HashMap<>(); //numero, jogador
-        List<Jogo> jogos = new ArrayList<>();
+    public Parser(){
+        this.equipas = new HashMap<>();
+        this.jogos = new ArrayList<>();
+    }
+
+    public void parse() throws LinhaIncorretaException {
+        List<String> linhas = lerFicheiro("../POO2021/final.txt");
+        this.equipas = new HashMap<>(); //nome, equipa
+        //this.jogadores = new HashMap<>(); //numero, jogador
+        this.jogos = new ArrayList<>();
         Equipa ultima = null; Jogador j = null;
         String[] linhaPartida;
         for (String linha : linhas) {
@@ -66,12 +74,12 @@ public class Parser {
         // if ( equipas.containsKey("Boavista FC") )
         //      System.out.println("Valor da Chave"+
         //       " = "+equipas.get("Boavista FC"));
-        for (Equipa e: equipas.values()){
+       /*  for (Equipa e: equipas.values()){
             System.out.println(e.toString());
         }
         for (Jogo jog: jogos){
             System.out.println(jog.toString());
-        }
+        } */
 
 
     }
@@ -81,6 +89,22 @@ public class Parser {
         try { lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8); }
         catch(IOException exc) { lines = new ArrayList<>(); }
         return lines;
+    }
+
+    public Map<String,Equipa> getEquipas(){
+        Map <String,Equipa> copy = new HashMap<>();
+        for (Map.Entry<String, Equipa> equipaMap: this.equipas.entrySet()) {
+            copy.put(equipaMap.getKey(), equipaMap.getValue());
+        }
+        return copy;
+    }
+
+    public List<Jogo> getJogos(){
+        ArrayList<Jogo> l = new ArrayList<>();
+        for (Jogo jogo : this.jogos) {
+            l.add(jogo);
+        }
+        return l;
     }
 
 
