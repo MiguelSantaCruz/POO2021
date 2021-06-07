@@ -149,7 +149,7 @@ public class Jogo{
     public void setNomeEqVisitante(String nomeEqVisitante) {
         this.nomeEqVisitante = nomeEqVisitante;
     }
-    
+
     public List<Jogador> getTitularesCasa() {
         return this.titularesCasa;
     }
@@ -316,5 +316,26 @@ public class Jogo{
         sb.append(", entraSaiVisitante=").append(entraSaiVisitante);
         sb.append('}');
         return sb.toString();
+    }
+
+
+    public double calculaHabilidadeCasa () {
+        double total = 0.0;
+        int size = this.getEmJogoCasa().size();
+        if (size != 11) System.out.println("[ERRO] A equipa da casa tem mais de 11 jogadores...");
+        for (Jogador j : this.getEmJogoCasa()) {
+            total += j.getHabilidade();
+        }
+        return total/size;
+    }
+
+    public double calculaHabilidadeVisitantes () {
+        double total = 0.0;
+        int size = this.getEmJogoFora().size();
+        if (size != 11) System.out.println("[ERRO] A equipa visitante tem mais de 11 jogadores...");
+        for (Jogador j : this.getEmJogoFora()) {
+            total += j.getHabilidade();
+        }
+        return total/size;
     }
 }

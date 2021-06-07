@@ -54,5 +54,13 @@ public class GameResult {
     }
 
 
-
+//NOTA:: Esta função ainda está muito basica e tem que ser melhorada. Isto é so uma versao inicial
+    //pensei em ver o overall da defesa de cada uma das equipas para influenciar o nº de golos
+    public String calculaResultado (Jogo j, Equipa casa, Equipa visitante, int golosCasa, int golosFora) {
+        double habCasa = j.calculaHabilidadeCasa();
+        double habVis = j.calculaHabilidadeVisitantes();
+        habCasa *= 1.08;  //equipa da casa tem um boost de habilidade de 8%
+        double dif = habCasa - habVis;
+        dif = dif % 1.5;  //1.5 é um numero random -> deixei 1.5 para nao ser muito grande
+    }
 }
