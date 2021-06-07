@@ -1,4 +1,3 @@
-package POO2021;
 
 public class Avancado extends Jogador {
     private int finalizacao;
@@ -25,10 +24,40 @@ public class Avancado extends Jogador {
      * @param finalizacao
      * @param sprint
      */
-    public Avancado (int velocidade, int resistencia,int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe, int finalizacao, int sprint) {
-        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe);
+    public Avancado (int numero,int velocidade, int resistencia,int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,float habilidade, int finalizacao, int sprint,int idAtleta,String nomeAtleta,int idade) {
+        super(numero,
+              velocidade,
+              resistencia,
+              destreza,
+              impulsao,
+              jogo_de_cabeça,
+              remate,
+              capacidade_de_passe,
+              idAtleta,
+              nomeAtleta,
+              idade);
         this.finalizacao = finalizacao;
         this.sprint = sprint;
+        this.habilidade = calculaHabilidade();
+    }
+
+
+    public static Avancado parse(String input){
+        String[] campos = input.split(",");
+        return new Avancado(Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[13]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                Integer.parseInt(campos[9]),
+                Integer.parseInt(campos[10]),
+                Integer.parseInt(campos[11]),
+                Integer.parseInt(campos[12]),
+                campos[0],
+                Integer.parseInt(campos[1]));
     }
 
     /**
@@ -37,6 +66,7 @@ public class Avancado extends Jogador {
      */
     public Avancado (Avancado a) {
         super (a);
+        this.habilidade = calculaHabilidade();
         this.finalizacao = a.finalizacao;
         this.sprint = a.sprint;
     }
@@ -93,10 +123,11 @@ public class Avancado extends Jogador {
      * @return Valores de finalização e sprint em String
      */
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Avançado{");
-        sb.append("Finalização=").append(finalizacao);
-        sb.append(", sprint=").append(sprint);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append(" Finalização=").append(finalizacao);
+        sb.append(", Sprint=").append(sprint);
+        sb.append(" Avancado\n");
         return sb.toString();
     }
 
@@ -105,17 +136,7 @@ public class Avancado extends Jogador {
      * @return Clone do Avançado
      */
     public Avancado clone () {
-        Avancado a = new Avancado();
-        a.setVelocidade(this.getVelocidade());
-        a.setDestreza(this.getDestreza());
-        a.setResistencia(this.getResistencia());
-        a.setJogoDeCabeca(this.getJogoDeCabeca());
-        a.setImpulsao(this.getImpulsao());
-        a.setRemate(this.getRemate());
-        a.setCapacidadeDePasse(this.getCapacidadeDePasse());
-        a.setFinalizacao(this.getFinalizacao());
-        a.setSprint(this.getSprint());
-        return a;
+        return new Avancado(this);
     }
 
     /**

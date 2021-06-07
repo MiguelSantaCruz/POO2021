@@ -17,9 +17,36 @@ public class Medio extends Jogador
     /**
      * Construtor para objetos da classe Medio
      */
-    public Medio(int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int recuperacao_bolas,int idAtleta,String nomeAtleta,int idade){
-        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe,idAtleta,nomeAtleta,idade);
+    public Medio(int numero,int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int recuperacao_bolas,int idAtleta,String nomeAtleta,int idade){
+        super(numero,
+              velocidade,
+              resistencia,
+              destreza,
+              impulsao,
+              jogo_de_cabeça,
+              remate,
+              capacidade_de_passe,
+              idAtleta,
+              nomeAtleta,
+              idade);
+        this.habilidade = calculaHabilidade();
         this.recuperacao_bolas = recuperacao_bolas;
+    }
+
+    public static Medio parse(String input){
+        String[] campos = input.split(",");
+        return new Medio( Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[11]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                Integer.parseInt(campos[9]),
+                Integer.parseInt(campos[10]),
+                campos[0],
+                Integer.parseInt(campos[1]));
     }
 
     /**
@@ -27,6 +54,7 @@ public class Medio extends Jogador
      */
     public Medio(Medio m){
         super((Jogador) m);
+        this.habilidade = m.calculaHabilidade();
         this.recuperacao_bolas = m.getRecuperacao_bolas();
     }
 
@@ -58,16 +86,7 @@ public class Medio extends Jogador
      * Clona o objeto Medio
      */
     public Medio clone(){
-        Medio m= new Medio();
-        m.setVelocidade(this.getVelocidade());
-        m.setResistencia(this.getResistencia());
-        m.setDestreza(this.getDestreza());
-        m.setImpulsao(this.getImpulsao());
-        m.setJogoDeCabeca(this.getJogoDeCabeca());
-        m.setRemate(this.getRemate());
-        m.setCapacidadeDePasse(this.getCapacidadeDePasse());  
-        m.setRecuperacao_bolas(this.getRecuperacao_bolas());
-        return m;
+        return new Medio(this);
     }
 
     /**
@@ -78,6 +97,7 @@ public class Medio extends Jogador
         sb.append(super.toString());
         sb.append(" Recuperação de bolas: ");
         sb.append(this.getRecuperacao_bolas());
+        sb.append(" Médio\n");
         return sb.toString();
     }
 
@@ -87,8 +107,13 @@ public class Medio extends Jogador
      */
     public float calculaHabilidade(){
         //Desvaloriza a velocidade e valoriza o capcidade de passe e recuperação de bolas
-        return (this.getVelocidade()*0.5f + this.getResistencia() + this.getDestreza() 
-                + this.getImpulsao()*0.5f + this.getJogoDeCabeca() + this.getRemate() 
-                    + this.getCapacidadeDePasse()*2 + this.getRecuperacao_bolas() * 3);
+        return (this.getVelocidade()*0.05f+
+                this.getResistencia()*0.01f + 
+                this.getDestreza()*0.02f+
+                this.getImpulsao()*0.05f + 
+                this.getJogoDeCabeca()*0.05f + 
+                this.getRemate()*0.12f+ 
+                this.getCapacidadeDePasse()*0.31f + 
+                this.getRecuperacao_bolas()*0.3f);
     }
 }

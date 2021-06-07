@@ -2,8 +2,8 @@
  * Classe jogador
  * @version 1
  */
-public class Jogador extends Atleta
-{
+public class Jogador extends Atleta{
+    
     private int velocidade;
     private int resistencia;
     private int destreza;
@@ -11,12 +11,16 @@ public class Jogador extends Atleta
     private int jogo_de_cabeça;
     private int remate;
     private int capacidade_de_passe;
+    protected float habilidade;
+    private int numeroJogador;
+    
 
     /**
      * Construtor vazio para objetos da classe Jogador
      */
     public Jogador()
     {   super();
+        this.numeroJogador = 0;
         this.velocidade = 0;
         this.resistencia = 0;
         this.destreza = 0;
@@ -24,14 +28,18 @@ public class Jogador extends Atleta
         this.jogo_de_cabeça = 0;
         this.remate = 0;
         this.capacidade_de_passe = 0;
+        this.habilidade = (float) 0.0;
     }
     
     /**
      * Construtor para objetos da classe Jogador
      */
-    public Jogador(int velocidade, int resistencia, int destreza, int impulsao, 
-    int jogo_de_cabeça, int remate, int capacidade_de_passe, int idAtleta, String nomeAtleta,int idade){
-        super(idAtleta,nomeAtleta,idade);
+    public Jogador(int numero,int velocidade, int resistencia, int destreza, int impulsao, 
+    int jogo_de_cabeça, int remate, int capacidade_de_passe,int idAtleta, String nomeAtleta,int idade){
+        super(idAtleta,
+              nomeAtleta,
+              idade);
+        this.numeroJogador = numero;
         this.velocidade = velocidade;
         this.resistencia = resistencia;
         this.destreza = destreza;
@@ -46,6 +54,7 @@ public class Jogador extends Atleta
      */
     public Jogador(Jogador j){
         super((Atleta) j);
+        this.numeroJogador = j. getNumeroJogador();
         this.velocidade = j.getVelocidade();
         this.resistencia = j.getResistencia();
         this.destreza = j.getDestreza();
@@ -53,131 +62,140 @@ public class Jogador extends Atleta
         this.jogo_de_cabeça = j.getJogoDeCabeca();
         this.remate = j.getRemate();
         this.capacidade_de_passe = j.getCapacidadeDePasse();
+        this.habilidade = j.getHabilidade();
+    }
+
+    public int getNumeroJogador() {
+        return this.numeroJogador;
+    }
+
+    public float getHabilidade() {
+        return this.habilidade;
     }
 
     /**
      * Retorna a velocidade do Jogador
      */
-    int getVelocidade(){
+    public int getVelocidade(){
         return this.velocidade;
     }
 
     /**
      * Retorna a resistencia do Jogador
      */
-    int getResistencia(){
+    public int getResistencia(){
         return this.resistencia;
     }
 
     /**
      * Retorna a destreza do Jogador
      */
-    int getDestreza(){
+    public int getDestreza(){
         return this.destreza;
     }
 
     /**
      * Retorna a impulsao do Jogador
      */
-    int getImpulsao(){
+    public int getImpulsao(){
         return this.impulsao;
     }
 
     /**
      * Retorna o jogo de cabeça do Jogador
      */
-    int getJogoDeCabeca(){
+    public int getJogoDeCabeca(){
         return this.jogo_de_cabeça;
     }
 
     /**
      * Retorna o remate do Jogador
      */
-    int getRemate(){
+    public int getRemate(){
         return this.remate;
     }
 
     /**
      * Retorna a capacidade de passe do Jogador
      */
-    int getCapacidadeDePasse(){
+    public int getCapacidadeDePasse(){
         return this.capacidade_de_passe;
+    }
+
+
+    public void setNumeroJogador(int numero){
+        this.numeroJogador = numero;
     }
 
     /**
      * Atribui velocidade ao Jogador
      */
-    void setVelocidade(int velocidade){
+    public void setVelocidade(int velocidade){
         this.velocidade = velocidade;
     }
 
     /**
      * Atribui resistencia ao Jogador
      */
-    void setResistencia(int resistencia){
+    public void setResistencia(int resistencia){
         this.resistencia = resistencia;
     }
 
     /**
      * Atribui destreza ao Jogador
      */
-    void setDestreza(int destreza){
+    public void setDestreza(int destreza){
         this.destreza = destreza;
     }
 
     /**
      * Atribui impulsao ao Jogador
      */
-    void setImpulsao(int impulsao){
+    public void setImpulsao(int impulsao){
         this.impulsao = impulsao;
     }
 
     /**
      * Atribui jogo de cabeça ao Jogador
      */
-    void setJogoDeCabeca(int jogo_de_cabeça){
+    public void setJogoDeCabeca(int jogo_de_cabeça){
         this.jogo_de_cabeça = jogo_de_cabeça;
     }
 
     /**
      * Atribui remate ao Jogador
      */
-    void setRemate(int remate){
+    public void setRemate(int remate){
         this.remate = remate;
     }
 
     /**
      * Atribui capacidade de passe ao Jogador
      */
-    void setCapacidadeDePasse(int capacidade_de_passe){
+    public void setCapacidadeDePasse(int capacidade_de_passe){
         this.capacidade_de_passe = capacidade_de_passe;
     }
 
+    public void setHabilidade(float habilidade){
+        this.habilidade = habilidade;
+    }
     /**
      * Compara um objeto com Jogador e diz se são iguais
      */
     public boolean equals(Object o){
         if(o.getClass() != this.getClass() || o == null) return false;
         Jogador j = (Jogador) o;
-        return j.getVelocidade() == this.getVelocidade() && j.getResistencia() == this.getResistencia()
+        return j.getNumeroJogador() == this.getNumeroJogador()&& j.getVelocidade() == this.getVelocidade() && j.getResistencia() == this.getResistencia()
                 && j.getDestreza() == this.getDestreza() && j.getImpulsao() == this.getImpulsao()
                  &&j.getJogoDeCabeca() == this.getJogoDeCabeca() && j.getRemate() == this.getRemate() 
-                  && j.getCapacidadeDePasse() == this.getCapacidadeDePasse();
+                  && j.getCapacidadeDePasse() == this.getCapacidadeDePasse()&& j.getHabilidade() == this.getHabilidade();
     }
 
     /**
      * Clona o objeto Jogador
      */
     public Jogador clone(){
-        Jogador j = new Jogador();
-        j.velocidade = this.getVelocidade();
-        j.resistencia = this.getResistencia();
-        j.destreza = this.getDestreza();
-        j.impulsao = this.getImpulsao();
-        j.jogo_de_cabeça = this.getJogoDeCabeca();
-        j.remate = this.getRemate();
-        j.capacidade_de_passe = this.getCapacidadeDePasse();
-        return j;
+        return new Jogador(this);
     }
 
     /**
@@ -186,6 +204,8 @@ public class Jogador extends Atleta
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
+        sb.append(" Número: ");
+        sb.append(getNumeroJogador());
         sb.append(" Velocidade: ");
         sb.append(getVelocidade());
         sb.append(" Resistencia: ");
@@ -200,19 +220,9 @@ public class Jogador extends Atleta
         sb.append(getRemate());
         sb.append(" Capacidade de passe: ");
         sb.append(getCapacidadeDePasse());
+        sb.append(" Habilidade: ");
+        sb.append(getHabilidade());
         return sb.toString();
     }
-    
-    /**
-     * Calcula a habilidade de um Jogador
-     */
-    public float calculaHabilidade(){
-        //Considera todos os parametros importantes
-        return this.velocidade + this.resistencia + this.destreza 
-                + this.impulsao + this.jogo_de_cabeça + this.remate 
-                  + this.capacidade_de_passe;
-    }
-    
-
 
 }

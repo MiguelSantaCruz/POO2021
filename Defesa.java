@@ -1,4 +1,4 @@
-package POO2021;
+
 
 public class Defesa extends Jogador {
     private int intersecao;
@@ -25,18 +25,45 @@ public class Defesa extends Jogador {
      * @param intersecao
      * @param drible
      */
-    public Defesa (int velocidade, int resistencia,int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe, int intersecao, int drible) {
-        super(velocidade,resistencia,destreza,impulsao,jogo_de_cabeça,remate,capacidade_de_passe);
+    public Defesa (int numero,int velocidade, int resistencia,int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe, int intersecao, int drible,int idAtleta,String nomeAtleta,int idade) {
+        super(numero,
+              velocidade,
+              resistencia,
+              destreza,
+              impulsao,
+              jogo_de_cabeça,
+              remate,
+              capacidade_de_passe,
+              idAtleta,
+              nomeAtleta,
+              idade);
+        this.habilidade = calculaHabilidade();
         this.drible = drible;
         this.intersecao = intersecao;
     }
-
+    public static Defesa parse(String input){
+        String[] campos = input.split(",");
+        return new Defesa(Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[12]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                Integer.parseInt(campos[9]),
+                Integer.parseInt(campos[10]),
+                Integer.parseInt(campos[11]), 
+                campos[0],
+                Integer.parseInt(campos[1]));
+    }
     /**
      * Construtor de cópia para a classe Defesa
      * @param d
      */
     public Defesa (Defesa d) {
-        super (d);
+        super ((Jogador)d);
+        this.habilidade = d.calculaHabilidade();
         this.intersecao = d.intersecao;
         this.drible = d.drible;
     }
@@ -93,10 +120,11 @@ public class Defesa extends Jogador {
      * @return Valores de interseção e drible em String
      */
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Defesa{");
-        sb.append("interseção=").append(intersecao);
-        sb.append(", drible=").append(drible);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append(" Interseção=").append(intersecao);
+        sb.append(", Drible=").append(drible);
+        sb.append(" Defesa\n");
         return sb.toString();
     }
 
@@ -105,17 +133,7 @@ public class Defesa extends Jogador {
      * @return Clone do Defesa
      */
     public Defesa clone () {
-        Defesa d = new Defesa();
-        d.setVelocidade(this.getVelocidade());
-        d.setDestreza(this.getDestreza());
-        d.setResistencia(this.getResistencia());
-        d.setJogoDeCabeca(this.getJogoDeCabeca());
-        d.setImpulsao(this.getImpulsao());
-        d.setRemate(this.getRemate());
-        d.setCapacidadeDePasse(this.getCapacidadeDePasse());
-        d.setIntersecao(this.getIntersecao());
-        d.setDrible(this.getDrible());
-        return d;
+        return new Defesa(this);
     }
 
     /**
