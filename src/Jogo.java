@@ -13,14 +13,14 @@ public class Jogo{
     private LocalDate date;
     private String nomeEqCasa;  //nome da equipa da Casa
     private String nomeEqVisitante; //nome da equipa Visitante
-    private List <Jogador> titularesCasa;   //Lista de todos os jogadores da equipa da casa
-    private List <Jogador> titularesVisitante;  //Lista de todos os jogadores da equipa Visitante
-    private List <Jogador> suplentesCasa;   //Lista de todos os jogadores da equipa da casa
-    private List <Jogador> suplentesVisitante;  //Lista de todos os jogadores da equipa Visitante
-    Map<Integer, Jogador> substituicoesCasa = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador
-    Map<Integer, Jogador> substituicoesFora = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador
-    Map<Integer, Integer> entraSaiCasa = new HashMap<>();
-    Map<Integer, Integer> entraSaiVisitante = new HashMap<>();
+    private List <Jogador> titularesCasa;   //Lista dos titulares da equipa da casa
+    private List <Jogador> titularesVisitante;  //Lista dos titulares da equipa Visitante
+    private List <Jogador> suplentesCasa;   //Lista dos suplentes da equipa da casa
+    private List <Jogador> suplentesVisitante;  //Lista dos suplentes da equipa Visitante
+    //Map<Integer, Jogador> substituicoesCasa = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador     -> isto é preciso??? Deixei tudo referente a isto em comentario (criei novo tostring)
+    //Map<Integer, Jogador> substituicoesFora = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador     -> isto é preciso??? Deixei tudo referente a isto em comentario (criei novo tostring)
+    Map<Integer, Integer> entraSaiCasa = new HashMap<>();           //key é o nº da camisola que entra e value é o nº da camisola do que sai
+    Map<Integer, Integer> entraSaiVisitante = new HashMap<>();      //key é o nº da camisola do que entra e value é o nº da camisola do que sai
 
 
     public Jogo () {
@@ -34,8 +34,8 @@ public class Jogo{
         this.titularesVisitante = new ArrayList<>();
         this.suplentesCasa = new ArrayList<>();
         this.suplentesVisitante = new ArrayList<>();
-        this.substituicoesCasa = new HashMap<>();
-        this.substituicoesFora  = new HashMap<>();
+        //this.substituicoesCasa = new HashMap<>();
+        //this.substituicoesFora  = new HashMap<>();
         this.entraSaiCasa = new HashMap<>();
         this.entraSaiVisitante = new HashMap<>();
     }
@@ -51,14 +51,14 @@ public class Jogo{
         setTitularesVisitante(j.getTitularesVisitante());
         setSuplentesCasa(j.getSuplentesCasa());
         setSuplentesVisitante(j.getSuplentesVisitante());
-        setSubstituicoesCasa (j.getSubstituicoesCasa ());
-        setSubstituicoesFora (j.getSubstituicoesFora());
+        //setSubstituicoesCasa (j.getSubstituicoesCasa ());
+        //setSubstituicoesFora (j.getSubstituicoesFora());
         setEntraSaiCasa(j.getEntraSaiCasa());
         setEntraSaiVisitante(j.getEntraSaiVisitante());
     }
  
 
-    public Jogo (String idJogo, int gc, int gf, LocalDate d, String eqCasaName, String eqForaName, List<Jogador> titCasa, List<Jogador> titVis, List<Jogador> suplCasa, List<Jogador> suplVis, Map<Integer,Jogador> subsCasa, Map<Integer,Jogador> subsFora, Map<Integer, Integer> entraSaiCasa, Map <Integer,Integer> entraSaiVisitante){
+    public Jogo (String idJogo, int gc, int gf, LocalDate d, String eqCasaName, String eqForaName, List<Jogador> titCasa, List<Jogador> titVis, List<Jogador> suplCasa, List<Jogador> suplVis, Map<Integer, Integer> entraSaiCasa, Map <Integer,Integer> entraSaiVisitante){
         this.idJogo = idJogo;
         this.golosCasa = gc;
         this.golosVisitante = gf;
@@ -69,8 +69,8 @@ public class Jogo{
         this.setTitularesVisitante(titVis);
         this.setSuplentesCasa(suplCasa);
         this.setSuplentesVisitante(suplVis);
-        this.setSubstituicoesCasa(subsCasa);
-        this.setSubstituicoesFora(subsFora);
+        //this.setSubstituicoesCasa(subsCasa);
+        //this.setSubstituicoesFora(subsFora);
         this.setEntraSaiCasa(entraSaiCasa);
         this.setEntraSaiVisitante(entraSaiVisitante);
     }
@@ -182,6 +182,9 @@ public class Jogo{
         }
     }
 
+    /*
+            Deixei em comentario pq nao sei se será preciso depois...
+
     public Map<Integer, Jogador> getSubstituicoesCasa() {
         return this.substituicoesCasa;
     }
@@ -200,7 +203,7 @@ public class Jogo{
         for (Jogador j : substFora.values()) {
             this.substituicoesFora.put(j.getNumeroJogador(), j.clone());
         }
-    }
+    } */
 
     public Map<Integer, Integer> getEntraSaiCasa () {
         return this.entraSaiCasa;
@@ -229,13 +232,20 @@ public class Jogo{
         return this.golosCasa == jogo.golosCasa && 
                 this.golosVisitante == jogo.golosVisitante && this.getTempoJogo() == ((Jogo) o).getTempoJogo()
                  && this.nomeEqCasa.equals(jogo.nomeEqCasa) && this.nomeEqVisitante.equals(jogo.nomeEqVisitante) 
-                 && this.titularesCasa.equals(jogo.titularesCasa) && this.titularesVisitante.equals(jogo.titularesVisitante) 
-                 && this.substituicoesCasa.equals(jogo.substituicoesCasa) && this.substituicoesFora.equals(jogo.substituicoesFora);
+                 && this.titularesCasa.equals(jogo.titularesCasa) && this.titularesVisitante.equals(jogo.titularesVisitante)
+                 && this.suplentesCasa.equals(jogo.suplentesCasa) && this.suplentesVisitante.equals(jogo.suplentesVisitante)
+                 && this.entraSaiCasa.equals(jogo.entraSaiCasa) && this.entraSaiVisitante.equals(jogo.entraSaiVisitante);
+                 //&& this.substituicoesCasa.equals(jogo.substituicoesCasa) && this.substituicoesFora.equals(jogo.substituicoesFora);
     }
 
     public Jogo clone () {
         return new Jogo(this);
     }
+
+
+    /*
+            Este toString tem as coisas do suplentesCasa e suplentesFora que eu deixei em comentario
+            Deixei este em comentario pq nao sei se ainda vai ser preciso
 
     public String toString() {
         final StringBuilder sb = new StringBuilder("Jogo{");
@@ -259,6 +269,26 @@ public class Jogo{
         sb.append(substituicoesCasa);
         sb.append(", suplentesVisitantes=");
         sb.append(substituicoesFora);
+        sb.append('}');
+        return sb.toString();
+    }
+ */
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Jogo{");
+        sb.append("idJogo='").append(idJogo).append('\'');
+        sb.append(", golosCasa=").append(golosCasa);
+        sb.append(", golosVisitante=").append(golosVisitante);
+        sb.append(", date=").append(date);
+        sb.append(", nomeEqCasa='").append(nomeEqCasa).append('\'');
+        sb.append(", nomeEqVisitante='").append(nomeEqVisitante).append('\'');
+        sb.append(", titularesCasa=").append(titularesCasa);
+        sb.append(", titularesVisitante=").append(titularesVisitante);
+        sb.append(", suplentesCasa=").append(suplentesCasa);
+        sb.append(", suplentesVisitante=").append(suplentesVisitante);
+        sb.append(", entraSaiCasa=").append(entraSaiCasa);
+        sb.append(", entraSaiVisitante=").append(entraSaiVisitante);
         sb.append('}');
         return sb.toString();
     }
