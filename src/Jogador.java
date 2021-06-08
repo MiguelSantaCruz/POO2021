@@ -17,6 +17,7 @@ public class Jogador extends Atleta{
     private ArrayList<Equipa> equipas;
     private int posicao;
     private boolean titular;
+    private boolean suplente;
     
     
 
@@ -36,8 +37,8 @@ public class Jogador extends Atleta{
         this.habilidade = (float) 0.0;
         this.equipas = new ArrayList<Equipa>();
         this.posicao = 0;
-        this.titular = true;
-    
+        this.titular = false;
+        this.suplente = false;
     }
     
     /**
@@ -45,7 +46,7 @@ public class Jogador extends Atleta{
      */
     public Jogador(int numero,int velocidade, int resistencia, int destreza, int impulsao, 
     int jogo_de_cabeça, int remate, int capacidade_de_passe,ArrayList<Equipa> eq,
-    int idAtleta, String nomeAtleta,int idade,boolean tit,int p){
+    int idAtleta, String nomeAtleta,int idade,boolean tit, int p, boolean supl){
         super(idAtleta,
               nomeAtleta,
               idade);
@@ -60,6 +61,7 @@ public class Jogador extends Atleta{
         this.equipas = eq;
         this.posicao = p;
         this.titular = tit;
+        this.suplente = supl;
     }
     
     /**
@@ -79,6 +81,15 @@ public class Jogador extends Atleta{
         this.equipas = j.getEquipas();
         this.posicao = j.getPosicao();
         this.titular = j.getTitular();
+        this.suplente = j.getSuplente();
+    }
+
+    public boolean getSuplente () {
+        return this.suplente;
+    }
+
+    public void setSuplente (boolean t) {
+        this.suplente = t;
     }
 
     public boolean getTitular() {
@@ -225,7 +236,7 @@ public class Jogador extends Atleta{
                 && j.getDestreza() == this.getDestreza() && j.getImpulsao() == this.getImpulsao()
                  &&j.getJogoDeCabeca() == this.getJogoDeCabeca() && j.getRemate() == this.getRemate() 
                   && j.getCapacidadeDePasse() == this.getCapacidadeDePasse()&& j.getHabilidade() == this.getHabilidade()&&
-                  j.getEquipas() == this.getEquipas();
+                  j.getEquipas() == this.getEquipas() && j.getSuplente() == this.getSuplente();
     }
 
     /**
@@ -266,6 +277,10 @@ public class Jogador extends Atleta{
         sb.append(getHabilidade());
         sb.append(" Equipas: ");
         sb.append(s.toString());
+        sb.append("Suplente: ");
+        sb.append(getSuplente());
+        sb.append("Titular: ");
+        sb.append(getTitular());
         return sb.toString();
     }
 

@@ -13,39 +13,40 @@ public class GameResult {
         return eq2.getHabilidadeGlobal();
     }
 
-    public void efetuarSubstituicao (Jogo jogo, Jogador entra, Jogador sai, String nomeEquipa) throws JogadorNaoExisteException, EquipaNaoExisteException {
-        if (nomeEquipa.equals(jogo.getNomeEqCasa())) {           //saber se é na equipa da casa ou na visitante que vamos fazer a substituiçao
-            if (jogo.getEmJogoCasa().contains(sai)) {
-                if (jogo.getSuplentesCasa().contains(entra)) {
-                    jogo.getEmJogoCasa().remove(sai);
+    public void efetuarSubstituicao (Jogo jogo, Integer entra, Integer sai, Equipa nomeEquipa) throws JogadorNaoExisteException, EquipaNaoExisteException {
+        if (nomeEquipa.equals(jogo.getEqCasa().getNome())) {           //saber se é na equipa da casa ou na visitante que vamos fazer a substituiçao
+            if (jogo.getEmJogoCasa().contains(sai)) {                   //se o que sai estiver em jogo
+                if (jogo.getEqCasa().getplantel().get(entra).getSuplente()) {       //se o que entra estiver a suplente
                     jogo.getEmJogoCasa().remove(sai);
                     jogo.getEmJogoCasa().add(entra);
-                    jogo.getSuplentesCasa().remove(entra);
-                    jogo.entraSaiCasa.put(entra.getNumeroJogador(), sai.getNumeroJogador());        //Map que tem os que entram como key, e os que saem como value
+                    jogo.getEqCasa().getplantel().get(entra).setSuplente(false);    //o que entra deixa de ser suplente
+                    jogo.getEqCasa().getplantel().get(sai).setSuplente(true);       //o que sai passa a suplente
+                    jogo.entraSaiCasa.put(entra, sai);        //Map que tem os que entram como key, e os que saem como value
                 }
                 else {
-                    throw new JogadorNaoExisteException("[Eq. Casa] Jogador que entra não existe...");
+                    throw new JogadorNaoExisteException("[Eq. Casa] Jogador que entra não está no banco...");
                 }
             }
             else {
-                throw new JogadorNaoExisteException("[Eq. Casa] Jogador que sai não existe...");
+                throw new JogadorNaoExisteException("[Eq. Casa] Jogador que sai não está em jogo...");
             }
         }
 
-        else if (nomeEquipa.equals(jogo.getNomeEqVisitante())) {         //caso seja na equipa Visitante que temos que fazer a substituiçao
+        else if (nomeEquipa.equals(jogo.getEqVisitante().getNome())) {         //caso seja na equipa Visitante que temos que fazer a substituiçao
             if (jogo.getEmJogoFora().contains(sai)) {
-                if (jogo.getSuplentesVisitante().contains(entra)) {
-                    jogo.getEmJogoFora().remove(sai);
+                if (jogo.getEqVisitante().getplantel().get(entra).getSuplente()) {     //se o que entra estiver a suplente
                     jogo.getEmJogoFora().remove(sai);
                     jogo.getEmJogoFora().add(entra);
-                    jogo.entraSaiVisitante.put(entra.getNumeroJogador(), sai.getNumeroJogador());
+                    jogo.getEqVisitante().getplantel().get(entra).setSuplente(false);       //o que entra passa a estar em Jogo
+                    jogo.getEqVisitante().getplantel().get(sai).setSuplente(true);      //o que sai passa a suplente
+                    jogo.entraSaiVisitante.put(entra, sai);
                 }
                 else {
-                    throw new JogadorNaoExisteException("[Eq. Visitante] Jogador que entra não existe...");
+                    throw new JogadorNaoExisteException("[Eq. Visitante] Jogador que entra não está no banco...");
                 }
             }
             else {
-                throw new JogadorNaoExisteException("[Eq. Visitante] Jogador que sai não existe...");
+                throw new JogadorNaoExisteException("[Eq. Visitante] Jogador que sai não está em jogo...");
             }
         }
         else {
