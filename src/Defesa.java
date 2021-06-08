@@ -145,7 +145,7 @@ public class Defesa extends Jogador {
      * @return Overall do defesa
      */
     public float calculaHabilidade () {
-        return (this.getVelocidade() *  0.12f +
+        return Math.round(this.getVelocidade() *  0.12f +
                 this.getResistencia() * 0.05f +
                 this.getDestreza() * 0.05f +
                 this.getImpulsao() * 0.15f +

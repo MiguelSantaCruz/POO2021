@@ -1,5 +1,3 @@
-import java.io.*;
-
 /**
  * Classe Atleta
  * @version 1

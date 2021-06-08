@@ -1,5 +1,5 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Interpretador {
@@ -9,18 +9,26 @@ public class Interpretador {
         p.parse();
         while(true){ 
             clearScreen();
-            ArrayList <String> opcoes = new ArrayList<>();
-            opcoes.add("Menu");
-            opcoes.add("Consultar equipas");
-            opcoes.add("Consultar jogadores");
-            opcoes.add("Sair");
-            menu(opcoes);
+            Menu menu = new Menu();
+            System.out.println("Foram lidas: " + p.getEquipas().size() + " equipas de " + p.getPath());
+            menu.setTitulo("Football Manager ⚽");
+            menu.adicionaOpcao("Consultar equipas 👥");
+            menu.adicionaOpcao("Consultar jogadores ⛹️‍");
+            menu.adicionaOpcao("Jogar 🎮‍");
+            menu.adicionaOpcao("Sair");
+            menu.show();
             int escolha = scanner.nextInt();
             switch (escolha) {
                 case 1:
                     procurarEquipa(p,scanner);
                     break;
+                case 2:
+                    procurarJogador(p,scanner);
+                    break;
                 case 3:
+                    
+                    break;
+                case 4:
                     scanner.close();
                     System.exit(0);
                     break;
@@ -35,39 +43,94 @@ public class Interpretador {
         System.out.flush();  
     }  
 
-    public static void procurarEquipa(Parser p,Scanner s){
-        ArrayList <String> opcoes = new ArrayList<>();
-        opcoes.add("Consultar lista de equipas ");
-        opcoes.add("Procurar por nome");
-        opcoes.add("Consultar lista de equipas");
-        opcoes.add("Consultar planteis");
-        opcoes.add("Voltar");
+    public static void procurarJogador(Parser p, Scanner s){
         clearScreen();
-        System.out.println("Foram lidas: " + p.getEquipas().size() + " equipas");
-        menu(opcoes);
-        int escolha = s.nextInt();
+        Menu menu = new Menu();
+        menu.adicionaOpcao("Procurar jogador nos planteis 📕");
+        menu.adicionaOpcao("Ver detalhes do jogador 📊");
+        menu.adicionaOpcao("Voltar");
+        menu.setTitulo("Consultar jogadores ⚽");
+        menu.show();
+        boolean detalhesJogador = false;
+        int escolha;
+        try {
+            escolha = s.nextInt();
+        } catch (InputMismatchException e) {
+            escolha = -1;
+        }
+        s.nextLine();
+        if(escolha == 2) {
+            escolha = 1;
+            detalhesJogador = true;
+        }
+        switch (escolha) {
+            case 1: 
+                System.out.println("Insira um nome para procurar:");
+                String search = s.nextLine();
+                boolean playerExists = false;
+                for (Equipa e : p.getEquipas().values()) {
+                    if (playerExists) break;
+                    for (Jogador j : e.getplantel().values()) {
+                        if (j.getNomeAtleta().toLowerCase().equals(search.toLowerCase())){
+                           playerExists = true;
+                           if(detalhesJogador) showDetalhesJogador(j,e);
+                           else showEquipa(e, true, j.getNumeroJogador());
+                           break;
+                        }
+                        
+                    }
+                }
+                if(!playerExists) System.out.println("Não encontrado");
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("-- [Erro]: pressione enter --");
+                s.nextLine();
+                procurarJogador(p, s);
+                break;  
+        }
+        System.out.println("-- press enter --");
+        s.nextLine();
+        return;
+    }
+
+    public static void procurarEquipa(Parser p,Scanner s){
+        clearScreen();
+        Menu menu = new Menu();
+        menu.adicionaOpcao("Procurar por nome 📕");
+        menu.adicionaOpcao("Consultar lista 📋");
+        menu.adicionaOpcao("Voltar");
+        menu.setTitulo("Consultar equipas ⚽");
+        menu.show();
+        int escolha;
+        try {
+            escolha = s.nextInt();
+        } catch (InputMismatchException e) {
+            escolha = -1;
+        }
         s.nextLine();
         switch (escolha) {
             case 1: 
                 System.out.println("Insira um nome para procurar:");
                 String search = s.nextLine();
-                if (p.getEquipas().containsKey(search)) {
-                    showEquipa(p.getEquipas().get(search));
-                    System.out.println(p.getEquipas().get(search).getplantel()+"");
+                if (p.getEquipas().containsKey(search.toLowerCase())) {
+                    clearScreen();
+                    showEquipa(p.getEquipas().get(search.toLowerCase()),true,-1);
                 }
                 else System.out.println("Não encontrado");
                 break;
             case 2:
                 for (Equipa e: p.getEquipas().values()){
-                    showEquipa(e);
+                    showEquipa(e,false,-1);
                 }
                 break;
             case 3:
-                
-                break;
-            case 4:
-                break;
+                return;
             default:
+                System.out.println("-- [Erro]: pressione enter --");
+                s.nextLine();
+                procurarEquipa(p, s);
                 break;
         }
         System.out.println("-- press enter --");
@@ -75,35 +138,56 @@ public class Interpretador {
         return;
     }
 
-    public static void showEquipa(Equipa e){
-        System.out.println("Nome: " + e.getNome());
-        System.out.println("Data de fundação: " + e.getDataDeFundação());
-        System.out.print("Habilidade global: " + e.getHabilidadeGlobal());
-        if(e.getHabilidadeGlobal()>60) System.out.println(" [Muito Elevada]");
-        if(e.getHabilidadeGlobal()>50 && e.getHabilidadeGlobal()<60) System.out.println(" [Elevada]");
-        if(e.getHabilidadeGlobal()>40 && e.getHabilidadeGlobal()<50) System.out.println(" [Mediana]");
-        if(e.getHabilidadeGlobal()>30 && e.getHabilidadeGlobal()<40) System.out.println(" [Baixa]");
-        if(e.getHabilidadeGlobal()<20) System.out.println(" [Muito Baixa]");
-    }
-
-    public static void showJogador(Jogador j){
-        System.out.println("Nome: " + j.getNomeAtleta());
-        System.out.println("Número de atleta: " + j.getIdAtleta());
+    public static void showDetalhesJogador(Jogador j,Equipa e){
+        System.out.println("Equipa: " + e.getNome());
+        System.out.println("Nome: " + (j.getNomeAtleta()));
+        System.out.println("Número: " + j.getIdAtleta());
         System.out.println("Idade " + j.getIdade());
-        System.out.println("Habilidade geral: " + j.getHabilidade());
-        if(j.getHabilidade()>60) System.out.println(" [Muito Elevada]");
-        if(j.getHabilidade()>50 && j.getHabilidade()<60) System.out.println(" [Elevada]");
-        if(j.getHabilidade()>40 && j.getHabilidade()<50) System.out.println(" [Mediana]");
-        if(j.getHabilidade()>30 && j.getHabilidade()<40) System.out.println(" [Baixa]");
-        if(j.getHabilidade()<20) System.out.println(" [Muito Baixa]");
+        System.out.println("Habilidade geral: " + j.getHabilidade() + avaliaHabilidade(j.getHabilidade()));
+        System.out.println("Posição: " + j.getClass().getName());
+        System.out.println(j.toString());
     }
 
-    public static void menu(ArrayList<String> l){
-        int i = 1;
-        for (String string : l) {
-            if (i == 1) System.out.println(string); 
-            else System.out.println("(" + (i-1) + "): " + string);
-            i++;
+    public static void showEquipa(Equipa e,boolean showPlantel,int highlight){
+        System.out.print("Nome: " + truncateString(e.getNome(), 30));
+        System.out.print("  Data de fundação: " + e.getDataDeFundação());
+        System.out.println("            Habilidade global: " + e.getHabilidadeGlobal() + avaliaHabilidade(e.getHabilidadeGlobal()));
+        if(showPlantel){
+            System.out.println("Plantel:");
+            for (Map.Entry<Integer,Jogador> plantel: e.getplantel().entrySet()) {
+                if(plantel.getKey() == highlight) showJogador(plantel.getValue(),true);
+                else showJogador(plantel.getValue(), false);
+                
+            }
         }
     }
+
+    public static void showJogador(Jogador j,boolean highlight){
+        if (highlight) {
+            System.out.print("\u001B[47m");
+            System.out.print("\u001B[30m");
+        }
+        System.out.print("Nome: " + truncateString(j.getNomeAtleta(),30));
+        System.out.print(" │ Número: " + truncateString(String.valueOf(j.getIdAtleta()),3));
+        System.out.print(" │ Idade " + truncateString(String.valueOf(j.getIdade()),3));
+        System.out.println(" │ Habilidade geral: " + j.getHabilidade() + avaliaHabilidade(j.getHabilidade()));
+        System.out.print("\u001B[0m");
+    }
+
+    public static String truncateString(String s, int n) {
+        return String.format("%-" + n + "s", s);  
+    }
+
+    public static String avaliaHabilidade(float habilidade){
+        StringBuilder sb = new StringBuilder();
+        if(habilidade >= 90) sb.append("[Lendário]");
+        if(habilidade >= 80 && habilidade < 90) sb.append("[Muito elevado]");
+        if(habilidade >= 60 && habilidade < 80) sb.append("[Elevado]");
+        if(habilidade >= 40 && habilidade < 60) sb.append("[Mediano]");
+        if(habilidade >= 20 && habilidade < 40) sb.append("[Baixo]");
+        if(habilidade < 20) sb.append("[Muito baixo]");
+        return sb.toString();
+    }
+
+
 }

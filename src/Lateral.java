@@ -111,13 +111,13 @@ public class Lateral extends Jogador{
      */
     public float calculaHabilidade(){
         //Desvaloriza a resistencia e valoriza o cruzamento
-        return this.getVelocidade()*0.02f +
+        return Math.round(this.getVelocidade()*0.02f +
                this.getResistencia()* 0.03f + 
                this.getDestreza()*0.12f + 
                this.getImpulsao()*0.05f + 
                this.getJogoDeCabeca()*0.05f + 
                this.getRemate()*0.03f +
                this.getCapacidadeDePasse()*0.2f + 
-               this.getCruzamentos()*0.5f ;
+               this.getCruzamentos()*0.5f);
     }
 }

@@ -150,7 +150,7 @@ public class Avancado extends Jogador {
      * @return Overall do Avançado
      */
     public float calculaHabilidade () {
-        return (this.getVelocidade() *  0.12f +
+        return Math.round(this.getVelocidade() *  0.12f +
                 this.getResistencia() * 0.08f +
                 this.getDestreza() * 0.07f +
                 this.getImpulsao() * 0.15f +

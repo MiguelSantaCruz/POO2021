@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GameResult {
@@ -15,7 +13,7 @@ public class GameResult {
     }
 
     public void efetuarSubstituicao (Jogo jogo, Integer entra, Integer sai, Equipa nomeEquipa) throws JogadorNaoExisteException, EquipaNaoExisteException {
-        if (nomeEquipa.equals(jogo.getEqCasa().getNome())) {           //saber se é na equipa da casa ou na visitante que vamos fazer a substituiçao
+        if (nomeEquipa.getNome().equals(jogo.getEqCasa().getNome())) {           //saber se é na equipa da casa ou na visitante que vamos fazer a substituiçao
             if (jogo.getEmJogoCasa().contains(sai)) {                   //se o que sai estiver em jogo
                 if (jogo.getEqCasa().getplantel().get(entra).getSuplente()) {       //se o que entra estiver a suplente
                     jogo.getEmJogoCasa().remove(sai);
@@ -33,7 +31,7 @@ public class GameResult {
             }
         }
 
-        else if (nomeEquipa.equals(jogo.getEqVisitante().getNome())) {         //caso seja na equipa Visitante que temos que fazer a substituiçao
+        else if (nomeEquipa.getNome().equals(jogo.getEqVisitante().getNome())) {         //caso seja na equipa Visitante que temos que fazer a substituiçao
             if (jogo.getEmJogoFora().contains(sai)) {
                 if (jogo.getEqVisitante().getplantel().get(entra).getSuplente()) {     //se o que entra estiver a suplente
                     jogo.getEmJogoFora().remove(sai);

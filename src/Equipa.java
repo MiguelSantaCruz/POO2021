@@ -6,7 +6,7 @@ public class Equipa {
     private String nome;
     private LocalDate dataDeFundação;
     private ArrayList<Jogo> jogosAgendados;
-    private double habilidadeGlobal;
+    private float habilidadeGlobal;
 
 
     public Equipa() {
@@ -40,7 +40,7 @@ public class Equipa {
         this.habilidadeGlobal = e.getHabilidadeGlobal();
     }
     
-    private double calculaHabilidadeGlobal() {       //NOTA:: TEMOS QUE CHAMAR ESTE METODO SEMPRE QUE MEXER NA EQUIPA!!!!
+    private float calculaHabilidadeGlobal() {       //NOTA:: TEMOS QUE CHAMAR ESTE METODO SEMPRE QUE MEXER NA EQUIPA!!!!
         double sum = 0;
         int i=0;
         for (Jogador j : this.plantel.values()) {
@@ -107,11 +107,11 @@ public class Equipa {
         this.jogosAgendados = jogosAgendados;
     }
 
-    public double getHabilidadeGlobal() {
+    public float getHabilidadeGlobal() {
         return this.habilidadeGlobal;
     }
 
-    public void setHabilidadeGlobal(double habilidadeGlobal) {
+    public void setHabilidadeGlobal(float habilidadeGlobal) {
         this.habilidadeGlobal = habilidadeGlobal;
     }
     public Jogador getJogador(int n) {return this.plantel.get(n);}

@@ -8,17 +8,19 @@ import java.util.List;
 import java.util.Map;
 
 public class Parser {
+    private String path;
     private Map<String, Equipa> equipas;
     private List<Jogo> jogos;
     //Map<String, Jogador> jogadores
 
     public Parser(){
+        this.path = "../POO2021/final.txt";
         this.equipas = new HashMap<>();
         this.jogos = new ArrayList<>();
     }
 
     public void parse() throws LinhaIncorretaException {
-        List<String> linhas = lerFicheiro("../POO2021/final.txt");
+        List<String> linhas = lerFicheiro(getPath());
         this.equipas = new HashMap<>(); //nome, equipa
         //this.jogadores = new HashMap<>(); //numero, jogador
         this.jogos = new ArrayList<>();
@@ -29,7 +31,7 @@ public class Parser {
             switch(linhaPartida[0]){
                 case "Equipa":
                     Equipa e = Equipa.parse(linhaPartida[1]);
-                    equipas.put(e.getNome(), e);
+                    equipas.put(e.getNome().toLowerCase(), e);
                     ultima = e;
                     break;
                 case "GK":
@@ -97,6 +99,10 @@ public class Parser {
             copy.put(equipaMap.getKey(), equipaMap.getValue());
         }
         return copy;
+    }
+
+    public String getPath(){
+        return this.path;
     }
 
     public List<Jogo> getJogos(){

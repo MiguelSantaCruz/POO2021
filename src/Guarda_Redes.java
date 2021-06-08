@@ -1,4 +1,5 @@
-import java.util.*;
+import java.util.ArrayList;
+
 /**
  * Classe Jogador Guarda_Redes
  * @version 1
@@ -114,7 +115,7 @@ public class Guarda_Redes extends Jogador
     public float calculaHabilidade(){
         //Desvaloriza a resistencia, velocidade,jogo de cabeça e valoriza a destreza e
         // elasticidade
-        return (this.getVelocidade()*0.01f + 
+        return Math.round(this.getVelocidade()*0.01f + 
                 this.getResistencia()*0.02f + 
                 this.getDestreza()*0.3f+ 
                 this.getImpulsao()*0.2f + 

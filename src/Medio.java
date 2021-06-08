@@ -113,7 +113,7 @@ public class Medio extends Jogador
      */
     public float calculaHabilidade(){
         //Desvaloriza a velocidade e valoriza o capcidade de passe e recuperação de bolas
-        return (this.getVelocidade()*0.05f+
+        return Math.round(this.getVelocidade()*0.05f+
                 this.getResistencia()*0.01f + 
                 this.getDestreza()*0.02f+
                 this.getImpulsao()*0.05f + 
