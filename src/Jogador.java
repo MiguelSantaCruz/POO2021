@@ -1,3 +1,4 @@
+import java.util.*;
 /**
  * Classe jogador
  * @version 1
@@ -13,6 +14,10 @@ public class Jogador extends Atleta{
     private int capacidade_de_passe;
     protected float habilidade;
     private int numeroJogador;  //numero da camisola do jogador
+    private ArrayList<Equipa> equipas;
+    private int posicao;
+    private boolean titular;
+    
     
 
     /**
@@ -29,13 +34,18 @@ public class Jogador extends Atleta{
         this.remate = 0;
         this.capacidade_de_passe = 0;
         this.habilidade = (float) 0.0;
+        this.equipas = new ArrayList<Equipa>();
+        this.posicao = 0;
+        this.titular = true;
+    
     }
     
     /**
      * Construtor para objetos da classe Jogador
      */
     public Jogador(int numero,int velocidade, int resistencia, int destreza, int impulsao, 
-    int jogo_de_cabeça, int remate, int capacidade_de_passe,int idAtleta, String nomeAtleta,int idade){
+    int jogo_de_cabeça, int remate, int capacidade_de_passe,ArrayList<Equipa> eq,
+    int idAtleta, String nomeAtleta,int idade,boolean tit,int p){
         super(idAtleta,
               nomeAtleta,
               idade);
@@ -47,6 +57,9 @@ public class Jogador extends Atleta{
         this.jogo_de_cabeça = jogo_de_cabeça;
         this.remate = remate;
         this.capacidade_de_passe = capacidade_de_passe;
+        this.equipas = eq;
+        this.posicao = p;
+        this.titular = tit;
     }
     
     /**
@@ -63,6 +76,29 @@ public class Jogador extends Atleta{
         this.remate = j.getRemate();
         this.capacidade_de_passe = j.getCapacidadeDePasse();
         this.habilidade = j.getHabilidade();
+        this.equipas = j.getEquipas();
+        this.posicao = j.getPosicao();
+        this.titular = j.getTitular();
+    }
+
+    public boolean getTitular() {
+        return this.titular;
+    }
+    public void setTitular(boolean t) {
+        this.titular = t;
+    }
+    public int getPosicao() {
+        return this.posicao;
+    }
+    public void setPosicao(int p){
+        this.posicao = p;
+    }
+
+    public ArrayList<Equipa> getEquipas(){
+        return this.equipas;
+    }
+    public void addEquipa(Equipa eq) {
+        this.equipas.add(eq.clone());
     }
 
     public int getNumeroJogador() {
@@ -188,7 +224,8 @@ public class Jogador extends Atleta{
         return j.getNumeroJogador() == this.getNumeroJogador()&& j.getVelocidade() == this.getVelocidade() && j.getResistencia() == this.getResistencia()
                 && j.getDestreza() == this.getDestreza() && j.getImpulsao() == this.getImpulsao()
                  &&j.getJogoDeCabeca() == this.getJogoDeCabeca() && j.getRemate() == this.getRemate() 
-                  && j.getCapacidadeDePasse() == this.getCapacidadeDePasse()&& j.getHabilidade() == this.getHabilidade();
+                  && j.getCapacidadeDePasse() == this.getCapacidadeDePasse()&& j.getHabilidade() == this.getHabilidade()&&
+                  j.getEquipas() == this.getEquipas();
     }
 
     /**
@@ -202,6 +239,11 @@ public class Jogador extends Atleta{
      * Converte para string o objeto Jogador
      */
     public String toString(){
+        StringBuilder s = new StringBuilder();
+        for (Equipa e : this.equipas) {
+            s.append(e.getNome());
+            s.append(" ");
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
         sb.append(" Número: ");
@@ -222,6 +264,8 @@ public class Jogador extends Atleta{
         sb.append(getCapacidadeDePasse());
         sb.append(" Habilidade: ");
         sb.append(getHabilidade());
+        sb.append(" Equipas: ");
+        sb.append(s.toString());
         return sb.toString();
     }
 

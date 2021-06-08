@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Classe Jogador Medio
  * @version 1
@@ -17,7 +19,9 @@ public class Medio extends Jogador
     /**
      * Construtor para objetos da classe Medio
      */
-    public Medio(int numero,int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int recuperacao_bolas,int idAtleta,String nomeAtleta,int idade){
+    public Medio(int numero,int velocidade, int resistencia, int destreza, int impulsao,
+     int jogo_de_cabeça, int remate, int capacidade_de_passe,int recuperacao_bolas,
+     int idAtleta,String nomeAtleta,int idade, ArrayList<Equipa> eq,boolean t, int p){
         super(numero,
               velocidade,
               resistencia,
@@ -26,14 +30,16 @@ public class Medio extends Jogador
               jogo_de_cabeça,
               remate,
               capacidade_de_passe,
+              eq,
               idAtleta,
               nomeAtleta,
-              idade);
+              idade,t,p);
         this.habilidade = calculaHabilidade();
         this.recuperacao_bolas = recuperacao_bolas;
     }
 
     public static Medio parse(String input){
+        ArrayList<Equipa> eq = new ArrayList<Equipa>();
         String[] campos = input.split(",");
         return new Medio( Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[11]),
@@ -46,7 +52,7 @@ public class Medio extends Jogador
                 Integer.parseInt(campos[9]),
                 Integer.parseInt(campos[10]),
                 campos[0],
-                Integer.parseInt(campos[1]));
+                Integer.parseInt(campos[1]),eq,false, 3);
     }
 
     /**

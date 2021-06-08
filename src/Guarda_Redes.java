@@ -1,3 +1,4 @@
+import java.util.*;
 /**
  * Classe Jogador Guarda_Redes
  * @version 1
@@ -19,7 +20,7 @@ public class Guarda_Redes extends Jogador
      */
     public Guarda_Redes(int numero,int velocidade, int resistencia, int destreza, 
     int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,
-    int elasticidade,int idAtleta,String nomeAtleta,int idade){
+    int elasticidade,int idAtleta,String nomeAtleta,int idade,ArrayList<Equipa> eq, boolean t, int p){
         super(numero,velocidade,
               resistencia,
               destreza,
@@ -27,9 +28,10 @@ public class Guarda_Redes extends Jogador
               jogo_de_cabeça,
               remate,
               capacidade_de_passe,
+              eq,
               idAtleta,
               nomeAtleta,
-              idade);
+              idade,t,p);
         this.habilidade = calculaHabilidade();
         this.elasticidade = elasticidade;
     }
@@ -38,6 +40,7 @@ public class Guarda_Redes extends Jogador
      * Construtor de cópia para objetos da classe Guarda_Redes
      */
    public static Guarda_Redes parse(String input){
+        ArrayList<Equipa> eq = new ArrayList<Equipa>();
         String[] campos = input.split(",");
         return new Guarda_Redes(Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[11]),
@@ -50,7 +53,7 @@ public class Guarda_Redes extends Jogador
                 Integer.parseInt(campos[9]),
                 Integer.parseInt(campos[10]),
                 campos[0],
-                Integer.parseInt(campos[1]));
+                Integer.parseInt(campos[1]),eq,false,0);
     }
     /**
      * Construtor de cópia para objetos da classe Guarda_Redes

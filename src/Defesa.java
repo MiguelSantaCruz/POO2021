@@ -1,4 +1,4 @@
-
+import java.util.*;
 public class Defesa extends Jogador {
     private int intersecao;
     private int drible;
@@ -24,7 +24,10 @@ public class Defesa extends Jogador {
      * @param intersecao
      * @param drible
      */
-    public Defesa (int numero,int velocidade, int resistencia,int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe, int intersecao, int drible,int idAtleta,String nomeAtleta,int idade) {
+    public Defesa (int numero,int velocidade, int resistencia,int destreza, 
+    int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,
+     int intersecao, int drible,int idAtleta,String nomeAtleta,int idade,
+     ArrayList<Equipa> eq, boolean t,int p) {
         super(numero,
               velocidade,
               resistencia,
@@ -33,14 +36,16 @@ public class Defesa extends Jogador {
               jogo_de_cabeça,
               remate,
               capacidade_de_passe,
+              eq,
               idAtleta,
               nomeAtleta,
-              idade);
+              idade,t,p);
         this.habilidade = calculaHabilidade();
         this.drible = drible;
         this.intersecao = intersecao;
     }
     public static Defesa parse(String input){
+        ArrayList<Equipa> eq = new ArrayList<Equipa>();
         String[] campos = input.split(",");
         return new Defesa(Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[12]),
@@ -54,7 +59,7 @@ public class Defesa extends Jogador {
                 Integer.parseInt(campos[10]),
                 Integer.parseInt(campos[11]), 
                 campos[0],
-                Integer.parseInt(campos[1]));
+                Integer.parseInt(campos[1]),eq,false,1);
     }
     /**
      * Construtor de cópia para a classe Defesa

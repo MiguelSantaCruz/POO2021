@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Classe Jogador lateral
  * @version 1
@@ -16,7 +18,10 @@ public class Lateral extends Jogador{
     /**
      * Construtor para objetos da classe Lateral
      */
-    public Lateral(int numero,int velocidade, int resistencia, int destreza, int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,int cruzamentos,int idAtleta,String nomeAtleta,int idade) {
+    public Lateral(int numero,int velocidade, int resistencia, int destreza, 
+    int impulsao, int jogo_de_cabeça, int remate, 
+    int capacidade_de_passe,int cruzamentos,int idAtleta,
+    String nomeAtleta,int idade, ArrayList<Equipa> eq,boolean t,int p) {
         super(numero,velocidade,
                 resistencia,
                 destreza,
@@ -24,14 +29,16 @@ public class Lateral extends Jogador{
                 jogo_de_cabeça,
                 remate,
                 capacidade_de_passe,
+                eq,
                 idAtleta,
                 nomeAtleta,
-                idade);
+                idade,t,p);
         this.habilidade = calculaHabilidade();
         this.cruzamentos = cruzamentos;
     }
 
     public static Lateral parse(String input){
+        ArrayList<Equipa> eq = new ArrayList<Equipa>();
         String[] campos = input.split(",");
         return new Lateral(Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[10]),
@@ -44,7 +51,7 @@ public class Lateral extends Jogador{
                 Integer.parseInt(campos[9]),
                 Integer.parseInt(campos[11]),
                 campos[0],
-                Integer.parseInt(campos[1]));
+                Integer.parseInt(campos[1]),eq,false,2);
     }
     /**
      * Construtor de cópia para objetos da classe Lateral

@@ -7,18 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 public class Jogo{
-    private String idJogo;
     private int golosCasa;
     private int golosVisitante; //deixei o numero de golos de cada equipa como dois ints pq assim podemos apenas fazer golosVisitantes++ em vez de alterar uma string
     private LocalDate date;
-    private String nomeEqCasa;  //nome da equipa da Casa
-    private String nomeEqVisitante; //nome da equipa Visitante
-    private List <Jogador> titularesCasa;   //titulares da equipa da casa   -> Nunca usar este para efetuar substituiçoes ou assim (é so para guardar os titulares)
-    private List <Jogador> titularesVisitante;  //titulares da equipa Visitante -> Nunca usar este para efetuar substituiçoes ou assim (é so para guardar os titulares)
-    private List <Jogador> suplentesCasa;   //suplentes da equipa da casa
-    private List <Jogador> suplentesVisitante;  //Lista dos suplentes da equipa Visitante
-    private List <Jogador> emJogoCasa;  //jogadores que estao a jogar -> NOTA: temos sempre que trabalahr com isto pq os titulares nao se pode mexer (serve so para guardar a equipa titular)
-    private List <Jogador> emJogoFora;  //jogadores que estao a jogar -> NOTA: temos sempre que trabalahr com isto pq os titulares nao se pode mexer (serve so para guardar a equipa titular)
+    private Equipa eqCasa;  //equipa da Casa
+    private Equipa eqVisitante; //equipa Visitante
+    private List <Integer> titularesCasa;   //titulares da equipa da casa   -> Nunca usar este para efetuar substituiçoes ou assim (é so para guardar os titulares)
+    private List <Integer> titularesVisitante;  //titulares da equipa Visitante -> Nunca usar este para efetuar substituiçoes ou assim (é so para guardar os titulares)
+    //private List <Integer> suplentesCasa;   //suplentes da equipa da casa
+    //private List <Integer> suplentesVisitante;  //Lista dos suplentes da equipa Visitante
+    private List <Integer> emJogoCasa;  //jogadores que estao a jogar -> NOTA: temos sempre que trabalahr com isto pq os titulares nao se pode mexer (serve so para guardar a equipa titular)
+    private List <Integer> emJogoFora;  //jogadores que estao a jogar -> NOTA: temos sempre que trabalahr com isto pq os titulares nao se pode mexer (serve so para guardar a equipa titular)
     //Map<Integer, Jogador> substituicoesCasa = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador     -> isto é preciso??? Deixei tudo referente a isto em comentario (criei novo tostring)
     //Map<Integer, Jogador> substituicoesFora = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador     -> isto é preciso??? Deixei tudo referente a isto em comentario (criei novo tostring)
     Map<Integer, Integer> entraSaiCasa = new HashMap<>();           //key é o nº da camisola que entra e value é o nº da camisola do que sai
@@ -26,16 +25,15 @@ public class Jogo{
 
 
     public Jogo () {
-        this.idJogo = "";
         this.golosCasa = 0;
         this.golosVisitante = 0;
-        this.date = null;
-        this.nomeEqCasa = "";
-        this.nomeEqVisitante = "";
+        this.date = LocalDate.now();
+        this.eqCasa = new Equipa();
+        this.eqVisitante = new Equipa();
         this.titularesCasa = new ArrayList<>();
         this.titularesVisitante = new ArrayList<>();
-        this.suplentesCasa = new ArrayList<>();
-        this.suplentesVisitante = new ArrayList<>();
+        //this.suplentesCasa = new ArrayList<>();
+        //this.suplentesVisitante = new ArrayList<>();
         this.emJogoCasa = new ArrayList<>();
         this.emJogoFora = new ArrayList<>();
         //this.substituicoesCasa = new HashMap<>();
@@ -45,16 +43,15 @@ public class Jogo{
     }
 
     public Jogo (Jogo j) {
-        this.idJogo = j.idJogo;
         this.golosCasa = j.golosCasa;
         this.golosVisitante = j.golosVisitante;
         this.date = j.date;
-        this.nomeEqCasa = j.getNomeEqCasa();
-        this.nomeEqVisitante = j.getNomeEqVisitante();
+        this.eqCasa = j.getEqCasa();
+        this.eqVisitante = j.getEqVisitante();
         setTitularesCasa(j.getTitularesCasa());
         setTitularesVisitante(j.getTitularesVisitante());
-        setSuplentesCasa(j.getSuplentesCasa());
-        setSuplentesVisitante(j.getSuplentesVisitante());
+        //setSuplentesCasa(j.getSuplentesCasa());
+        //setSuplentesVisitante(j.getSuplentesVisitante());
         setEmJogoCasa(j.getEmJogoCasa());
         setEmJogoFora(j.getEmJogoFora());
         //setSubstituicoesCasa (j.getSubstituicoesCasa ());
@@ -64,26 +61,25 @@ public class Jogo{
     }
  
 
-    public Jogo (String idJogo, int gc, int gf, LocalDate d, String eqCasaName, String eqForaName, List<Jogador> titCasa, List<Jogador> titVis, List<Jogador> suplCasa, List<Jogador> suplVis, List<Jogador> emJCasa, List<Jogador> emJFora, Map<Integer, Integer> entraSaiCasa, Map <Integer,Integer> entraSaiVisitante){
-        this.idJogo = idJogo;
+    public Jogo (int gc, int gf,Equipa eqCasa, Equipa eqFora, LocalDate d, 
+    List<Integer> titCasa, List<Integer> titVis,List<Integer> emJCasa, List<Integer> emJFora, Map<Integer, Integer> entraSaiCasa, Map <Integer,Integer> entraSaiVisitante){
         this.golosCasa = gc;
         this.golosVisitante = gf;
         this.date = d;
-        this.nomeEqCasa = eqCasaName;
-        this.nomeEqVisitante = eqForaName;
-        this.setTitularesCasa(titCasa);
-        this.setTitularesVisitante(titVis);
-        this.setSuplentesCasa(suplCasa);
-        this.setSuplentesVisitante(suplVis);
-        this.setEmJogoCasa(emJCasa);
-        this.setEmJogoFora(emJFora);
+        this.eqCasa = eqCasa;
+        this.eqVisitante = eqFora;
+        this.titularesCasa= titCasa;
+        this.titularesVisitante = titVis;
+        //this.suplentesCasa = suplCasa;
+        //this.suplentesVisitante = suplVis;
+        this.emJogoCasa = emJCasa;
+        this.emJogoFora = emJFora;
         //this.setSubstituicoesCasa(subsCasa);
         //this.setSubstituicoesFora(subsFora);
         this.setEntraSaiCasa(entraSaiCasa);
         this.setEntraSaiVisitante(entraSaiVisitante);
     }
-
-
+    
     public static Jogo parse(String input){
         String[] campos = input.split(",");
         String[] data = campos[4].split("-");
@@ -91,6 +87,8 @@ public class Jogo{
         List<Integer> jf = new ArrayList<>();
         Map<Integer, Integer> subsC = new HashMap<>();
         Map<Integer, Integer> subsF = new HashMap<>();
+        Equipa eC = new Equipa(campos[0],LocalDate.now());
+        Equipa eV = new Equipa(campos[1],LocalDate.now());
         for (int i = 5; i < 16; i++){
             jc.add(Integer.parseInt(campos[i]));
         }
@@ -105,9 +103,17 @@ public class Jogo{
             String[] sub = campos[i].split("->");
             subsF.put(Integer.parseInt(sub[0]), Integer.parseInt(sub[1]));
         }
-        return new Jogo(campos[0], campos[1], Integer.parseInt(campos[2]), Integer.parseInt(campos[3]),
+        return new Jogo(Integer.parseInt(campos[2]),
+                        Integer.parseInt(campos[3]),
+                        eC,
+                        eV, 
                         LocalDate.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]), Integer.parseInt(data[2])),
-                        jc, subsC, jf, subsF);
+                        jc,
+                        jf,
+                        jc,
+                        jf, 
+                        subsC,
+                        subsF);
     }
 
     public int getGolosCasa() {
@@ -134,77 +140,71 @@ public class Jogo{
         this.date = data;
     }
 
-    public String getNomeEqCasa() {
-        return this.nomeEqCasa;
+    public Equipa getEqCasa() {
+        return this.eqCasa;
     }
 
-    public void setNomeEqCasa(String nomeEqCasa) {
-        this.nomeEqCasa = nomeEqCasa;
+    public void setNomeEqCasa(Equipa eqCasa) {
+        this.eqCasa = eqCasa;
     }
 
-    public String getNomeEqVisitante() {
-        return nomeEqVisitante;
+    public Equipa getEqVisitante() {
+        return this.eqVisitante;
     }
 
-    public void setNomeEqVisitante(String nomeEqVisitante) {
-        this.nomeEqVisitante = nomeEqVisitante;
+    public void setEqVisitante(Equipa EqVisitante) {
+        this.eqVisitante = EqVisitante;
     }
 
-    public List<Jogador> getTitularesCasa() {
+    public List<Integer> getTitularesCasa() {
         return this.titularesCasa;
     }
-    public void setTitularesCasa(List<Jogador> titularesCasa) {
-        for (Jogador j : titularesCasa) {
-            this.titularesCasa.add(j.clone());
+    // public void setTitularesCasa(List<Jogador> titularesCasa) {
+    //     for (Jogador j : titularesCasa) {
+    //         this.titularesCasa.add(j.clone());
+    //     }
+    // }
+    public void setTitularesCasa(List<Integer> titularesCasa) {
+        HashMap<Integer,Jogador> e = this.eqCasa.getplantel();
+        for (Map.Entry<Integer, Jogador> entry : e.entrySet()) {
+            Integer i = entry.getKey();
+            Jogador j = entry.getValue();
+            if (titularesCasa.contains(i)) j.setTitular(true);
+            else j.setTitular(false);
         }
     }
-
-
-    public List<Jogador> getTitularesVisitante() {
+    public List<Integer> getTitularesVisitante() {
         return this.titularesVisitante;
     }
-    public void setTitularesVisitante(List<Jogador> titularesVisitante) {
-        for (Jogador j : titularesVisitante) {
-            this.titularesVisitante.add(j.clone()); //fazer sempre o clone por causa do encapsulamento
-        }
-    }
-
-    public List<Jogador> getSuplentesCasa() {
-        return this.suplentesCasa;
-    }
-    public void setSuplentesCasa(List<Jogador> suplentesCasa) {
-        for (Jogador j : suplentesCasa) {
-            this.suplentesCasa.add(j.clone());
-        }
-    }
-
-    public List<Jogador> getSuplentesVisitante() {
-        return this.suplentesVisitante;
-    }
-    public void setSuplentesVisitante(List<Jogador> suplentesVisitante) {
-        for (Jogador j : suplentesVisitante) {
-            this.suplentesVisitante.add(j.clone()); //fazer sempre o clone por causa do encapsulamento
+    // public void setTitularesVisitante(List<Jogador> titularesVisitante) {
+    //     for (Jogador j : titularesVisitante) {
+    //         this.titularesVisitante.add(j.clone()); //fazer sempre o clone por causa do encapsulamento
+    //     }
+    // }
+    public void setTitularesVisitante(List<Integer> titularesVisitante) {
+        HashMap<Integer,Jogador> e = this.eqCasa.getplantel();
+        for (Map.Entry<Integer, Jogador> entry : e.entrySet()) {
+            Integer i = entry.getKey();
+            Jogador j = entry.getValue();
+            if (titularesVisitante.contains(i)) j.setTitular(true);
+            else j.setTitular(false);
         }
     }
 
 
-    public List<Jogador> getEmJogoCasa() {
+    public List<Integer> getEmJogoCasa() {
         return this.emJogoCasa;
     }
-    public void setEmJogoCasa(List<Jogador> emJogoC) {
-        for (Jogador j : emJogoC) {
-            this.emJogoCasa.add(j.clone());
-        }
+    public void setEmJogoCasa(List<Integer> emJogoC) {
+        this.emJogoCasa= emJogoC;
     }
 
 
-    public List<Jogador> getEmJogoFora() {
+    public List<Integer> getEmJogoFora() {
         return this.emJogoFora;
     }
-    public void setEmJogoFora(List<Jogador> emJogoF) {
-        for (Jogador j : emJogoF) {
-            this.emJogoFora.add(j.clone()); //fazer sempre o clone por causa do encapsulamento
-        }
+    public void setEmJogoFora(List<Integer> emJogoF) {
+        this.emJogoFora = emJogoF;
     }
 
     /*
@@ -256,9 +256,8 @@ public class Jogo{
         Jogo jogo = (Jogo) o;
         return this.golosCasa == jogo.golosCasa && 
                 this.golosVisitante == jogo.golosVisitante && this.getTempoJogo() == ((Jogo) o).getTempoJogo()
-                 && this.nomeEqCasa.equals(jogo.nomeEqCasa) && this.nomeEqVisitante.equals(jogo.nomeEqVisitante) 
+                 && this.eqCasa.equals(jogo.eqCasa) && this.eqVisitante.equals(jogo.eqVisitante) 
                  && this.titularesCasa.equals(jogo.titularesCasa) && this.titularesVisitante.equals(jogo.titularesVisitante)
-                 && this.suplentesCasa.equals(jogo.suplentesCasa) && this.suplentesVisitante.equals(jogo.suplentesVisitante)
                  && this.entraSaiCasa.equals(jogo.entraSaiCasa) && this.entraSaiVisitante.equals(jogo.entraSaiVisitante);
                  //&& this.substituicoesCasa.equals(jogo.substituicoesCasa) && this.substituicoesFora.equals(jogo.substituicoesFora);
     }
@@ -302,40 +301,37 @@ public class Jogo{
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Jogo{");
-        sb.append("idJogo='").append(idJogo).append('\'');
         sb.append(", golosCasa=").append(golosCasa);
         sb.append(", golosVisitante=").append(golosVisitante);
         sb.append(", date=").append(date);
-        sb.append(", nomeEqCasa='").append(nomeEqCasa).append('\'');
-        sb.append(", nomeEqVisitante='").append(nomeEqVisitante).append('\'');
+        sb.append(", nomeEqCasa='").append(eqCasa).append('\'');
+        sb.append(", nomeEqVisitante='").append(eqVisitante).append('\'');
         sb.append(", titularesCasa=").append(titularesCasa);
         sb.append(", titularesVisitante=").append(titularesVisitante);
-        sb.append(", suplentesCasa=").append(suplentesCasa);
-        sb.append(", suplentesVisitante=").append(suplentesVisitante);
         sb.append(", entraSaiCasa=").append(entraSaiCasa);
         sb.append(", entraSaiVisitante=").append(entraSaiVisitante);
         sb.append('}');
         return sb.toString();
     }
 
+    //não é aqui é em equipa
+    // public double calculaHabilidadeCasa () {
+    //     double total = 0.0;
+    //     int size = this.getEmJogoCasa().size();
+    //     if (size != 11) System.out.println("[ERRO] A equipa da casa tem mais de 11 jogadores...");
+    //     for (Jogador j : this.getEmJogoCasa()) {
+    //         total += j.getHabilidade();
+    //     }
+    //     return total/size;
+    // }
 
-    public double calculaHabilidadeCasa () {
-        double total = 0.0;
-        int size = this.getEmJogoCasa().size();
-        if (size != 11) System.out.println("[ERRO] A equipa da casa tem mais de 11 jogadores...");
-        for (Jogador j : this.getEmJogoCasa()) {
-            total += j.getHabilidade();
-        }
-        return total/size;
-    }
-
-    public double calculaHabilidadeVisitantes () {
-        double total = 0.0;
-        int size = this.getEmJogoFora().size();
-        if (size != 11) System.out.println("[ERRO] A equipa visitante tem mais de 11 jogadores...");
-        for (Jogador j : this.getEmJogoFora()) {
-            total += j.getHabilidade();
-        }
-        return total/size;
-    }
+    // public double calculaHabilidadeVisitantes () {
+    //     double total = 0.0;
+    //     int size = this.getEmJogoFora().size();
+    //     if (size != 11) System.out.println("[ERRO] A equipa visitante tem mais de 11 jogadores...");
+    //     for (Jogador j : this.getEmJogoFora()) {
+    //         total += j.getHabilidade();
+    //     }
+    //     return total/size;
+    // }
 }
