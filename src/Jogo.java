@@ -1,10 +1,7 @@
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Jogo{
     private int golosCasa;
@@ -22,7 +19,7 @@ public class Jogo{
     //Map<Integer, Jogador> substituicoesFora = new HashMap<>();  //key é o nº da camisola e value é o proprio jogador     -> isto é preciso??? Deixei tudo referente a isto em comentario (criei novo tostring)
     Map<Integer, Integer> entraSaiCasa = new HashMap<>();           //key é o nº da camisola que entra e value é o nº da camisola do que sai
     Map<Integer, Integer> entraSaiVisitante = new HashMap<>();      //key é o nº da camisola do que entra e value é o nº da camisola do que sai
-
+    private int posicaoBola;    //0- meio-campo; 1-BalizaCasa; 2-BalizaVisitantes; 3-AreaCasa; 4-AreaVisitantes; 5-CantoCasa; 6-CantoVisitantes; 7-GoloCasa; 8-GoloVisitante
 
     public Jogo () {
         this.golosCasa = 0;
@@ -40,6 +37,7 @@ public class Jogo{
         //this.substituicoesFora  = new HashMap<>();
         this.entraSaiCasa = new HashMap<>();
         this.entraSaiVisitante = new HashMap<>();
+        this.posicaoBola = 0;
     }
 
     public Jogo (Jogo j) {
@@ -58,6 +56,7 @@ public class Jogo{
         //setSubstituicoesFora (j.getSubstituicoesFora());
         setEntraSaiCasa(j.getEntraSaiCasa());
         setEntraSaiVisitante(j.getEntraSaiVisitante());
+        setPosicaoBola(j.getPosicaoBola());
     }
  
 
@@ -114,6 +113,15 @@ public class Jogo{
                         jf, 
                         subsC,
                         subsF);
+    }
+
+
+    public int getPosicaoBola () {
+        return this.posicaoBola;
+    }
+
+    public void setPosicaoBola (int i) {
+        this.posicaoBola = i;
     }
 
     public int getGolosCasa() {
@@ -181,6 +189,7 @@ public class Jogo{
     //         this.titularesVisitante.add(j.clone()); //fazer sempre o clone por causa do encapsulamento
     //     }
     // }
+
     public void setTitularesVisitante(List<Integer> titularesVisitante) {
         HashMap<Integer,Jogador> e = this.eqCasa.getplantel();
         for (Map.Entry<Integer, Jogador> entry : e.entrySet()) {
@@ -258,7 +267,8 @@ public class Jogo{
                 this.golosVisitante == jogo.golosVisitante && this.getTempoJogo() == ((Jogo) o).getTempoJogo()
                  && this.eqCasa.equals(jogo.eqCasa) && this.eqVisitante.equals(jogo.eqVisitante) 
                  && this.titularesCasa.equals(jogo.titularesCasa) && this.titularesVisitante.equals(jogo.titularesVisitante)
-                 && this.entraSaiCasa.equals(jogo.entraSaiCasa) && this.entraSaiVisitante.equals(jogo.entraSaiVisitante);
+                 && this.entraSaiCasa.equals(jogo.entraSaiCasa) && this.entraSaiVisitante.equals(jogo.entraSaiVisitante)
+                 && this.posicaoBola == jogo.getPosicaoBola();
                  //&& this.substituicoesCasa.equals(jogo.substituicoesCasa) && this.substituicoesFora.equals(jogo.substituicoesFora);
     }
 
@@ -310,6 +320,7 @@ public class Jogo{
         sb.append(", titularesVisitante=").append(titularesVisitante);
         sb.append(", entraSaiCasa=").append(entraSaiCasa);
         sb.append(", entraSaiVisitante=").append(entraSaiVisitante);
+        sb.append(", PosiçãoBola=").append(posicaoBola);
         sb.append('}');
         return sb.toString();
     }

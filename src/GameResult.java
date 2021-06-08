@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameResult {
     private double overallEquipa1;
@@ -55,13 +56,254 @@ public class GameResult {
     }
 
 
-//NOTA:: Esta função ainda está muito basica e tem que ser melhorada. Isto é so uma versao inicial
-    //pensei em ver o overall da defesa de cada uma das equipas para influenciar o nº de golos
-    public String calculaResultado (Jogo j, Equipa casa, Equipa visitante, int golosCasa, int golosFora) {
-        double habCasa = j.calculaHabilidadeCasa();
-        double habVis = j.calculaHabilidadeVisitantes();
-        habCasa *= 1.08;  //equipa da casa tem um boost de habilidade de 8%
+
+    public int calculaJogada (Jogo j, Equipa casa, Equipa visitante, int posicaoBola) {
+        Random r = new Random();
+        int rand;
+        rand = r.nextInt(100);
+
+        double habCasa = casa.getHabilidadeGlobal();
+        double habVis = visitante.getHabilidadeGlobal();
+        habCasa *= 1.1;  //equipa da casa tem um boost de habilidade de 10%
         double dif = habCasa - habVis;
-        dif = dif % 1.5;  //1.5 é um numero random -> deixei 1.5 para nao ser muito grande
+        int res=0;
+
+        switch (posicaoBola) {
+            case 0:
+                res = bolaMeioCampo(rand, habVis, habCasa);
+                break;
+            case 1:
+                res = bolaBaliza(rand,habVis, habCasa);
+                break;
+            case 2:
+                res = bolaBaliza(rand, habVis, habCasa);
+                break;
+            case 3:
+                res = bolaArea(rand, habVis, habCasa);
+                break;
+            case 4:
+                res = bolaArea(rand, habVis, habCasa);
+                break;
+            case 5:
+                res = bolaCanto(rand, habVis, habCasa);
+            case 6:
+                res = bolaCanto(rand, habVis, habCasa);
+                break;
+            case 7:
+                System.out.println("É GOLOOOOOO DA EQUIPA DA CASA!!!");
+                break;
+            case 8:
+                System.out.println("É GOLOOOOOO DA EQUIPA VISITANTE!!!");
+        }
+        return res;
+
     }
+
+    public boolean equipaMaisForte (double habVis, double habCasa) {
+        double diferencaHab;
+        boolean eqCasaMaisForte;
+        if (habCasa > habVis) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public int bolaMeioCampo (int rand, double habVis, double habCasa) {
+        double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
+        boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
+
+        //prob entre 0 e 20 é remate à baliza
+        if (rand >= 0 && rand <= 20 && eqCasaMaisForte) {
+            System.out.println("Remate à baliza por parte da equipa da Casa");
+            return 1;
+        }
+        else if (rand >= 0 && rand <= 20 && (!eqCasaMaisForte)) {
+            System.out.println("Remate à baliza por parte da equipa Visitante");
+            return 2;
+        }
+        //prob entre 20 e 60 o jogador faz um cruzamento para a area
+        else if (rand > 20 && rand <= 65 && eqCasaMaisForte) {
+            System.out.println("Passe para a área");
+            return 3;
+        }
+        else if (rand > 20 && rand <= 65 && !eqCasaMaisForte) {
+            System.out.println("Passe para a área");
+            return 4;
+        }
+        //prob entre 60 e 90 a bola foi para fora e é canto
+        else if (rand > 65 && rand <= 95 && eqCasaMaisForte) {
+            System.out.println("Canto para a equipa da Casa");
+            return 5;
+        }
+        else if (rand > 65 && rand <= 95 && !eqCasaMaisForte) {
+            System.out.println("Canto para a equipa Visitante");
+            return 6;
+        }
+        //prob entre 90 e 100 é golo
+        else if (rand > 95 && eqCasaMaisForte) {
+            System.out.println("Golo Equipa da Casa");
+            return 7;
+        }
+        else if (rand > 95 && !eqCasaMaisForte) {
+            System.out.println("Golo Equipa da Casa");
+            return 8;
+        }
+        return 0;
+    }
+
+
+    public int bolaCanto (int rand, double habVis, double habCasa) {                // 10% golo; 30% baliza; 30% area; 15% canto; 15% meio campo
+        double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
+        boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
+
+        //prob entre 0 e 30 é remate à baliza
+        if (rand >= 0 && rand <= 30 && eqCasaMaisForte) {
+            System.out.println("Remate à baliza por parte da equipa da Casa");
+            return 1;
+        }
+        else if (rand >= 0 && rand <= 30 && (!eqCasaMaisForte)) {
+            System.out.println("Remate à baliza por parte da equipa Visitante");
+            return 2;
+        }
+        //prob entre 20 e 60 o jogador faz um cruzamento para a area
+        else if (rand > 30 && rand <= 60 && eqCasaMaisForte) {
+            System.out.println("Passe para a área (posse da equipaCasa)");
+            return 3;
+        }
+        else if (rand > 30 && rand <= 60 && !eqCasaMaisForte) {
+            System.out.println("Passe para a área (posse da equipaVisitante)");
+            return 4;
+        }
+        //prob entre 60 e 90 a bola foi para fora e é canto
+        else if (rand > 60 && rand <= 75 && eqCasaMaisForte) {
+            System.out.println("Canto para a equipa da Casa");
+            return 5;
+        }
+        else if (rand > 60 && rand <= 75 && !eqCasaMaisForte) {
+            System.out.println("Canto para a equipa Visitante");
+            return 6;
+        }
+        else if (rand > 75 && rand <= 90 && eqCasaMaisForte) {
+            System.out.println("Bola para o meio campo (posse da equipaCasa)");
+            return 9;
+        }
+        else if (rand > 75 && rand <= 90 && !eqCasaMaisForte) {
+            System.out.println("Bola para o meio campo (posse da equipaVisitante)");
+            return 10;
+        }
+        //prob entre 90 e 100 é golo
+        else if (rand > 90 && eqCasaMaisForte) {
+            System.out.println("Golo Equipa da Casa");
+            return 7;
+        }
+        else if (rand > 90 && !eqCasaMaisForte) {
+            System.out.println("Golo Equipa da Casa");
+            return 8;
+        }
+        return 0;
+    }
+
+
+
+    public int bolaArea (int rand, double habVis, double habCasa) {                // 10% golo; 30% baliza; 5% area; 25% canto; 30% meio campo
+        double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
+        boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
+
+        //prob entre 0 e 30 é remate à baliza
+        if (rand >= 0 && rand <= 30 && eqCasaMaisForte) {
+            System.out.println("Remate à baliza por parte da equipa da Casa");
+            return 1;
+        }
+        else if (rand >= 0 && rand <= 30 && (!eqCasaMaisForte)) {
+            System.out.println("Remate à baliza por parte da equipa Visitante");
+            return 2;
+        }
+        //prob entre 20 e 60 o jogador faz um cruzamento para a area
+        else if (rand > 30 && rand <= 35 && eqCasaMaisForte) {
+            System.out.println("Passe para a área da eq Adversária (posse da equipaCasa)");
+            return 3;
+        }
+        else if (rand > 30 && rand <= 35 && !eqCasaMaisForte) {
+            System.out.println("Passe para a área da eq Adversária (posse da equipaVisitante)");
+            return 4;
+        }
+        //prob entre 60 e 90 a bola foi para fora e é canto
+        else if (rand > 35 && rand <= 60 && eqCasaMaisForte) {
+            System.out.println("Canto para a equipa da Casa");
+            return 5;
+        }
+        else if (rand > 35 && rand <= 60 && !eqCasaMaisForte) {
+            System.out.println("Canto para a equipa Visitante");
+            return 6;
+        }
+        else if (rand > 60 && rand <= 90 && eqCasaMaisForte) {
+            System.out.println("Bola para o meio campo (posse da equipaCasa)");
+            return 9;
+        }
+        else if (rand > 60 && rand <= 90 && !eqCasaMaisForte) {
+            System.out.println("Bola para o meio campo (posse da equipaVisitante)");
+            return 10;
+        }
+        //prob entre 90 e 100 é golo
+        else if (rand > 90 && eqCasaMaisForte) {
+            System.out.println("Golo Equipa da Casa");
+            return 7;
+        }
+        else if (rand > 90 && !eqCasaMaisForte) {
+            System.out.println("Golo Equipa da Casa");
+            return 8;
+        }
+        return 0;
+    }
+
+
+    public int bolaBaliza (int rand, double habVis, double habCasa) {                // 5% golo; 10% baliza; 30% area; 25% canto; 30% meio campo
+        double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
+        boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
+
+        if (rand >= 0 && rand <= 10 && eqCasaMaisForte) {
+            System.out.println("Remate à baliza por parte da equipa da Casa");
+            return 1;
+        }
+        else if (rand >= 0 && rand <= 10 && (!eqCasaMaisForte)) {
+            System.out.println("Remate à baliza por parte da equipa Visitante");
+            return 2;
+        }
+        else if (rand > 10 && rand <= 40 && eqCasaMaisForte) {
+            System.out.println("Passe para a área (posse da equipaCasa)");
+            return 3;
+        }
+        else if (rand > 10 && rand <= 40 && !eqCasaMaisForte) {
+            System.out.println("Passe para a área (posse da equipaVisitante)");
+            return 4;
+        }
+        else if (rand > 40 && rand <= 65 && eqCasaMaisForte) {
+            System.out.println("Canto para a equipa da Casa");
+            return 5;
+        }
+        else if (rand > 40 && rand <= 65 && !eqCasaMaisForte) {
+            System.out.println("Canto para a equipa Visitante");
+            return 6;
+        }
+        else if (rand > 65 && rand <= 95 && eqCasaMaisForte) {
+            System.out.println("Bola para o meio campo (posse da equipaCasa)");
+            return 9;
+        }
+        else if (rand > 65 && rand <= 95 && !eqCasaMaisForte) {
+            System.out.println("Bola para o meio campo (posse da equipaVisitante)");
+            return 10;
+        }
+        else if (rand > 95 && eqCasaMaisForte) {
+            System.out.println("Golo Equipa da Casa");
+            return 7;
+        }
+        else if (rand > 95 && !eqCasaMaisForte) {
+            System.out.println("Golo Equipa da Casa");
+            return 8;
+        }
+        return 0;
+    }
+
 }
