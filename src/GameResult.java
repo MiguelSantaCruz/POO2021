@@ -67,35 +67,47 @@ public class GameResult {
         habCasa *= 1.1;  //equipa da casa tem um boost de habilidade de 10%
         double dif = habCasa - habVis;
         int res=0;
+        int golo = 0;
 
         switch (posicaoBola) {
             case 0:
                 res = bolaMeioCampo(rand, habVis, habCasa);
+                j.setPosicaoBola(res);
                 break;
             case 1:
                 res = bolaBaliza(rand,habVis, habCasa);
+                j.setPosicaoBola(res);
                 break;
             case 2:
                 res = bolaBaliza(rand, habVis, habCasa);
+                j.setPosicaoBola(res);
                 break;
             case 3:
                 res = bolaArea(rand, habVis, habCasa);
+                j.setPosicaoBola(res);
                 break;
             case 4:
                 res = bolaArea(rand, habVis, habCasa);
+                j.setPosicaoBola(res);
                 break;
             case 5:
                 res = bolaCanto(rand, habVis, habCasa);
+                j.setPosicaoBola(res);
+                break;
             case 6:
                 res = bolaCanto(rand, habVis, habCasa);
+                j.setPosicaoBola(res);
                 break;
             case 7:
                 System.out.println("É GOLOOOOOO DA EQUIPA DA CASA!!!");
+                golo = 1;
                 break;
             case 8:
                 System.out.println("É GOLOOOOOO DA EQUIPA VISITANTE!!!");
+                golo = 2;
+                break;
         }
-        return res;
+        return golo;
 
     }
 
@@ -247,7 +259,7 @@ public class GameResult {
             System.out.println("Bola para o meio campo (posse da equipaVisitante)");
             return 10;
         }
-        
+
         else if (rand > 90 && eqCasaMaisForte) {
             System.out.println("Golo Equipa da Casa");
             return 7;
