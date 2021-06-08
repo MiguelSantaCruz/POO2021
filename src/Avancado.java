@@ -28,7 +28,7 @@ public class Avancado extends Jogador {
     int destreza, int impulsao, int jogo_de_cabeça, 
     int remate, int capacidade_de_passe,float habilidade, 
     int finalizacao, int sprint,int idAtleta,String nomeAtleta,
-    int idade,ArrayList<Equipa> eq,boolean t,int p) {
+    int idade,ArrayList<Equipa> eq,boolean tit,int p,boolean supl) {
         super(numero,
               velocidade,
               resistencia,
@@ -40,7 +40,7 @@ public class Avancado extends Jogador {
               eq,
               idAtleta,
               nomeAtleta,
-              idade,t,p);
+              idade,tit,p,supl);
         this.finalizacao = finalizacao;
         this.sprint = sprint;
         this.habilidade = calculaHabilidade();
@@ -63,7 +63,7 @@ public class Avancado extends Jogador {
                 Integer.parseInt(campos[11]),
                 Integer.parseInt(campos[12]),
                 campos[0],
-                Integer.parseInt(campos[1]),eq,false,4);
+                Integer.parseInt(campos[1]),eq,false,4,false);//titular = false suplente = false (???????)
     }
 
     /**

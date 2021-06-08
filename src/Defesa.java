@@ -27,7 +27,7 @@ public class Defesa extends Jogador {
     public Defesa (int numero,int velocidade, int resistencia,int destreza, 
     int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,
      int intersecao, int drible,int idAtleta,String nomeAtleta,int idade,
-     ArrayList<Equipa> eq, boolean t,int p) {
+     ArrayList<Equipa> eq, boolean t,int p,boolean supl) {
         super(numero,
               velocidade,
               resistencia,
@@ -39,7 +39,7 @@ public class Defesa extends Jogador {
               eq,
               idAtleta,
               nomeAtleta,
-              idade,t,p);
+              idade,t,p,supl);
         this.habilidade = calculaHabilidade();
         this.drible = drible;
         this.intersecao = intersecao;
@@ -59,7 +59,7 @@ public class Defesa extends Jogador {
                 Integer.parseInt(campos[10]),
                 Integer.parseInt(campos[11]), 
                 campos[0],
-                Integer.parseInt(campos[1]),eq,false,1);
+                Integer.parseInt(campos[1]),eq,false,1,true);
     }
     /**
      * Construtor de cópia para a classe Defesa

@@ -21,7 +21,7 @@ public class Medio extends Jogador
      */
     public Medio(int numero,int velocidade, int resistencia, int destreza, int impulsao,
      int jogo_de_cabeça, int remate, int capacidade_de_passe,int recuperacao_bolas,
-     int idAtleta,String nomeAtleta,int idade, ArrayList<Equipa> eq,boolean t, int p){
+     int idAtleta,String nomeAtleta,int idade, ArrayList<Equipa> eq,boolean t, int p,boolean supl){
         super(numero,
               velocidade,
               resistencia,
@@ -33,7 +33,7 @@ public class Medio extends Jogador
               eq,
               idAtleta,
               nomeAtleta,
-              idade,t,p);
+              idade,t,p,supl);
         this.habilidade = calculaHabilidade();
         this.recuperacao_bolas = recuperacao_bolas;
     }
@@ -52,7 +52,7 @@ public class Medio extends Jogador
                 Integer.parseInt(campos[9]),
                 Integer.parseInt(campos[10]),
                 campos[0],
-                Integer.parseInt(campos[1]),eq,false, 3);
+                Integer.parseInt(campos[1]),eq,false, 3,true);
     }
 
     /**
