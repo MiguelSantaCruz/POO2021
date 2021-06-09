@@ -30,6 +30,6 @@ public class Menu {
             System.out.println("(" + i + "): " + string);
             i++;
         }
-        System.out.print(">");
+        System.out.print("> ");
     }
 }

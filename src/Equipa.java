@@ -14,7 +14,7 @@ public class Equipa {
         this.nome = "";
         this.dataDeFundação = LocalDate.now();
         this.jogosAgendados = new ArrayList<>();
-        this.habilidadeGlobal = 0;
+        this.habilidadeGlobal = this.calculaHabilidadeGlobal();
     }
 
     public Equipa(String string,LocalDate d) {
@@ -22,7 +22,7 @@ public class Equipa {
         this.nome = string;
         this.dataDeFundação = d;
         this.jogosAgendados = new ArrayList<>();
-        this.habilidadeGlobal = 0;
+        this.habilidadeGlobal = this.calculaHabilidadeGlobal();
     }
 
     public Equipa(HashMap <Integer,Jogador> li,String nome, LocalDate c, ArrayList<Jogo> jogosAgendados) {

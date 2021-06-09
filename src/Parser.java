@@ -19,6 +19,10 @@ public class Parser {
         this.jogos = new ArrayList<>();
     }
 
+    public void addEquipa(Equipa e){
+        this.equipas.put(e.getNome().toLowerCase(), e.clone());
+    }
+
     public void parse() throws LinhaIncorretaException {
         List<String> linhas = lerFicheiro(getPath());
         this.equipas = new HashMap<>(); //nome, equipa

@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
@@ -14,18 +17,20 @@ public class Interpretador {
             menu.setTitulo("Football Manager ⚽");
             menu.adicionaOpcao("Consultar equipas 👥");
             menu.adicionaOpcao("Consultar jogadores ⛹️‍");
+            menu.adicionaOpcao("Adicionar equipa ➕👥");
+            menu.adicionaOpcao("Adicionar jogador ➕⛹️");
+            menu.adicionaOpcao("Transferir jogador ➡️ ⛹️");
             menu.adicionaOpcao("Jogar 🎮‍");
-            menu.adicionaOpcao("Sair");
+            menu.adicionaOpcao("Sair ❌");
             menu.show();
             int escolha = 0;
             try {
                     escolha = scanner.nextInt();
                     scanner.nextLine();
-                    System.out.println("Escolha " + escolha);
             } catch (InputMismatchException e) {
                     escolha = -1;
                     scanner.nextLine();
-                }
+            }
             switch (escolha) {
                 case 1:
                     procurarEquipa(p,scanner);
@@ -34,6 +39,12 @@ public class Interpretador {
                     procurarJogador(p,scanner);
                     break;
                 case 3:
+                    adicionaEquipa(p,scanner);
+                    break;
+                case 4:
+                    adicionaJogador(p,scanner);
+                    break;
+                case 6:
                     clearScreen();
                     Menu menuEquipas = new Menu();
                     menuEquipas.setTitulo("Selecione duas equipas");
@@ -41,15 +52,22 @@ public class Interpretador {
                         menuEquipas.adicionaOpcao(e.getNome());
                     }
                     menuEquipas.show();
-                    try {
-                        escolha = scanner.nextInt();
-                        scanner.nextLine();
-                    } catch (InputMismatchException e) {
-                        escolha = -1;
+                    ArrayList<String> text = new ArrayList<>();
+                    text.add("Insira a primeira equipa");
+                    text.add("Insira a segunda equipa");
+                    ArrayList<String> numEquipas = new ArrayList<>();
+                    numEquipas = leNargumentos(p, scanner, 2, true, text);
+                    int i = 1;
+                    Equipa eqCasa = new Equipa();
+                    Equipa eqVisitante = new Equipa();
+                    for (Equipa equipa : p.getEquipas().values()){
+                        if(String.valueOf(i).equals(numEquipas.get(0))) eqCasa = equipa;
+                        if(String.valueOf(i).equals(numEquipas.get(1))) eqVisitante = equipa; 
+                        i++;
                     }
-                    jogar(p.getEquipas().get("sc braga"),p.getEquipas().get("fc porto"),scanner);
+                    jogar(eqCasa,eqVisitante,scanner);
                     break;
-                case 4:
+                case 7:
                     scanner.close();
                     System.exit(0);
                     break;
@@ -124,14 +142,10 @@ public class Interpretador {
         menu.adicionaOpcao("Voltar");
         menu.setTitulo("Consultar equipas ⚽");
         menu.show();
-        int escolha;
-        try {
-            escolha = s.nextInt();
-        } catch (InputMismatchException e) {
-            escolha = -1;
-        }
-        s.nextLine();
-        switch (escolha) {
+        ArrayList<String> text = new ArrayList<>();
+        ArrayList<String> args = new ArrayList<>();
+        args = leNargumentos(p, s, 1, false, null);
+        switch (Integer.valueOf(args.get(0))) {
             case 1: 
                 System.out.println("Insira um nome para procurar:");
                 String search = s.nextLine();
@@ -236,4 +250,136 @@ public class Interpretador {
         s.nextLine();
     }
 
+    public static void adicionaEquipa(Parser p, Scanner s){
+        Equipa e = new Equipa();
+        e.setplantel(new HashMap<Integer,Jogador>());
+        e.setJogosAgendados(new ArrayList<Jogo>());
+        ArrayList<String> args = new ArrayList<>();
+        ArrayList<String> text = new ArrayList<>();
+        text.add("Insira o nome");
+        text.add("Insira a data de fundação (aaaa-mm-dd)");
+        args = leNargumentos(p, s, 2, false,text);
+        e.setNome(args.get(0));
+        e.setDataDeFundação(LocalDate.parse(args.get(1)));
+        p.addEquipa(e);
+    }
+
+    public static void adicionaJogador(Parser p, Scanner s){
+        Jogador j = new Jogador();
+        ArrayList<String> args = new ArrayList<>();
+        ArrayList<String> text = new ArrayList<>();
+        text.add("Insira o nome");
+        args = leNargumentos(p, s, 1, false,text);
+        ArrayList<String> args2 = new ArrayList<>();
+        ArrayList<String> text2 = new ArrayList<>();
+        text2.add("Insira a idade");
+        text2.add("Insira o número");
+        args2 = leNargumentos(p, s, 2, true,text2);
+        j.setNomeAtleta(args.get(0));
+        j.setIdade(Integer.valueOf(args2.get(0)));
+        j.setNumeroJogador(Integer.valueOf(args2.get(1)));
+        j.setCapacidadeDePasse((int) (Math.random()*100));
+        j.setDestreza((int) (Math.random()*100));
+        j.setImpulsao((int) (Math.random()*100));
+        j.setJogoDeCabeca((int) (Math.random()*100));
+        j.setRemate((int) (Math.random()*100));
+        j.setResistencia((int) (Math.random()*100));
+        j.setVelocidade((int) (Math.random()*100));
+        j.setTitular(true);
+        j.setSuplente(false);
+        Menu menuEquipas = new Menu();
+        menuEquipas.setTitulo("Selecione uma equipa");
+            for (Equipa e : p.getEquipas().values()) {
+                menuEquipas.adicionaOpcao(e.getNome());
+            }
+        menuEquipas.show();
+        ArrayList<String> texto = new ArrayList<>();
+        text.add("Insira a equipa");
+        ArrayList<String> numEquipas = new ArrayList<>();
+        numEquipas = leNargumentos(p, s, 1, true, texto);
+        int i = 1;
+        for (Equipa equipa : p.getEquipas().values()){
+            if(String.valueOf(i).equals(numEquipas.get(0))) {
+                equipa.insereJogador(j);
+                j.addEquipa(equipa);
+                break;
+            }
+            i++;
+        }
+        Menu menu = new Menu();
+        menu.setTitulo("Selecione a posição");
+        menu.adicionaOpcao("Medio");
+        menu.adicionaOpcao("Lateral");
+        menu.adicionaOpcao("Defesa");
+        menu.adicionaOpcao("Guarda-Redes");
+        menu.adicionaOpcao("Avançado");
+        menu.show();
+        int escolha = 0;
+        while(true) {
+            try {
+                  escolha = Integer.parseInt(s.nextLine());
+                  break;
+            }catch (NumberFormatException e) {
+                System.out.print("[Erro] Introduza de novo: ");
+                continue;
+            }
+        }
+        switch (escolha) {
+            case 1:
+                Medio m = (Medio) j;
+                m.setRecuperacao_bolas((int) (Math.random()*100));
+                m.setHabilidade(m.calculaHabilidade());
+                break;
+            case 2:
+                Lateral l =(Lateral) j;
+                l.setCruzamentos((int) (Math.random()*100));
+                l.setHabilidade(l.calculaHabilidade());
+                break;
+            case 3:
+                Defesa d =(Defesa) j;
+                d.setIntersecao((int) (Math.random()*100));
+                d.setDrible((int) (Math.random()*100));
+                d.setHabilidade(d.calculaHabilidade());
+                break;
+            case 4:
+                Guarda_Redes g =(Guarda_Redes) j;
+                g.setElasticidade((int) (Math.random()*100));
+                g.setHabilidade(g.calculaHabilidade());
+                break;
+            case 5:
+                Avancado a =(Avancado) j;
+                a.setFinalizacao((int) (Math.random()*100));
+                a.setSprint((int) (Math.random()*100));
+                a.setHabilidade(a.calculaHabilidade());
+                break;
+            default:
+                Avancado a2 =(Avancado) j;
+                a2.setFinalizacao((int) (Math.random()*100));
+                a2.setSprint((int) (Math.random()*100));
+                a2.setHabilidade(a2.calculaHabilidade());
+                break;
+        }
+    }
+
+    public static ArrayList<String> leNargumentos(Parser p, Scanner s,int n, boolean isNumeric,ArrayList<String> text){
+        ArrayList<String> l = new ArrayList<>();
+        int inputInt = 0;
+        String inputStr = "";
+        for (int i = 0; i < n; i++) {
+            if(text != null && text.size()>i) System.out.print(text.get(i) + ": ");
+            while(true) {
+                try {
+                      if (isNumeric) inputInt = Integer.parseInt(s.nextLine());
+                      else inputStr = s.nextLine();
+                      break;
+                }catch (NumberFormatException e) {
+                    System.out.println("[Erro] Insira de novo: ");
+                    continue;
+                }
+            }
+            if(isNumeric) l.add(String.valueOf(inputInt));
+            else l.add(inputStr);
+        }
+        return l;
+    }
 }
