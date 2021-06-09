@@ -38,6 +38,11 @@ public class Medio extends Jogador
         this.recuperacao_bolas = recuperacao_bolas;
     }
 
+    /**
+     * Parser de um Médio.
+     * @param input String com as informações do novo médio.
+     * @return O novo Médio com os parametros preenchidos de acordo com as informações passadas.
+     */
     public static Medio parse(String input){
         ArrayList<Equipa> eq = new ArrayList<Equipa>();
         String[] campos = input.split(",");

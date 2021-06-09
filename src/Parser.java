@@ -13,12 +13,19 @@ public class Parser {
     private List<Jogo> jogos;
     //Map<String, Jogador> jogadores
 
+    /**
+     * Construtor vazio de um Parser.
+     */
     public Parser(){
         this.path = "../POO2021/final.txt";
         this.equipas = new HashMap<>();
         this.jogos = new ArrayList<>();
     }
 
+    /**
+     * Método para fazer o parse das informações.
+     * @throws LinhaIncorretaException Quando ocorre algum problema com a linha em questão.
+     */
     public void parse() throws LinhaIncorretaException {
         List<String> linhas = lerFicheiro(getPath());
         this.equipas = new HashMap<>(); //nome, equipa
@@ -86,6 +93,11 @@ public class Parser {
 
     }
 
+    /**
+     * Método para ler as informações de um ficheiro para uma lista.
+     * @param nomeFich O nome do ficheiro.
+     * @return A lista das linhas lidas.
+     */
     public static List<String> lerFicheiro(String nomeFich) {
         List<String> lines;
         try { lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8); }
@@ -93,6 +105,10 @@ public class Parser {
         return lines;
     }
 
+    /**
+     * Obter o conjunto das equipas.
+     * @return O novo hashmap com as equipas.
+     */
     public Map<String,Equipa> getEquipas(){
         Map <String,Equipa> copy = new HashMap<>();
         for (Map.Entry<String, Equipa> equipaMap: this.equipas.entrySet()) {
@@ -101,10 +117,18 @@ public class Parser {
         return copy;
     }
 
+    /**
+     * Obter o path para o ficheiro com todas as informações.
+     * @return O path para o ficheiro.
+     */
     public String getPath(){
         return this.path;
     }
 
+    /**
+     * Obter a lista dos jogos.
+     * @return A lista dos jogos.
+     */
     public List<Jogo> getJogos(){
         ArrayList<Jogo> l = new ArrayList<>();
         for (Jogo jogo : this.jogos) {

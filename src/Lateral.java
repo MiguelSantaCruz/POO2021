@@ -37,6 +37,11 @@ public class Lateral extends Jogador{
         this.cruzamentos = cruzamentos;
     }
 
+    /**
+     * Parser para um Lateral que constrói um lateral com as informações passadas por string.
+     * @param input String com as informações do Lateral
+     * @return O novo lateral.
+     */
     public static Lateral parse(String input){
         ArrayList<Equipa> eq = new ArrayList<Equipa>();
         String[] campos = input.split(",");
@@ -53,6 +58,7 @@ public class Lateral extends Jogador{
                 campos[0],
                 Integer.parseInt(campos[1]),eq,false,2,true);
     }
+
     /**
      * Construtor de cópia para objetos da classe Lateral
      */
