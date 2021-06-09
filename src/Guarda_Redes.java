@@ -4,8 +4,7 @@ import java.util.ArrayList;
  * Classe Jogador Guarda_Redes
  * @version 1
  */
-public class Guarda_Redes extends Jogador
-{
+public class Guarda_Redes extends Jogador {
     private int elasticidade;
  
     /**
@@ -56,6 +55,7 @@ public class Guarda_Redes extends Jogador
                 campos[0],
                 Integer.parseInt(campos[1]),eq,false,0,true);
     }
+
     /**
      * Construtor de cópia para objetos da classe Guarda_Redes
      */

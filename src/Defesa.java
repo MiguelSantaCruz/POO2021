@@ -44,6 +44,12 @@ public class Defesa extends Jogador {
         this.drible = drible;
         this.intersecao = intersecao;
     }
+
+    /**
+     * Parser de defesa.
+     * @param input A string com as caracteristicas do Defesa.
+     * @return Novo defesa com as caracteristicas passadas na string.
+     */
     public static Defesa parse(String input){
         ArrayList<Equipa> eq = new ArrayList<Equipa>();
         String[] campos = input.split(",");
@@ -61,6 +67,7 @@ public class Defesa extends Jogador {
                 campos[0],
                 Integer.parseInt(campos[1]),eq,false,1,true);
     }
+
     /**
      * Construtor de cópia para a classe Defesa
      * @param d

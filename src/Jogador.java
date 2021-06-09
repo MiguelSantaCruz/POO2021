@@ -84,38 +84,82 @@ public class Jogador extends Atleta{
         this.suplente = j.getSuplente();
     }
 
+    /**
+     * Getter que retorna se o Jogador está a suplente ou não.
+     * @return Booleano correspondente a se o Jogador é suplente ou não.
+     */
     public boolean getSuplente () {
         return this.suplente;
     }
 
+    /**
+     * Setter que permite alternar a variável de instância Suplente a true ou false.
+     * @param t Novo estado de Suplente.
+     */
     public void setSuplente (boolean t) {
         this.suplente = t;
     }
 
+    /**
+     * Saber se um jogador é titular ou não.
+     * @return Booleano correspondente à titularidade do Jogador.
+     */
     public boolean getTitular() {
         return this.titular;
     }
+
+    /**
+     * Permite deixar um Jogador como titular ou não.
+     * @param t Booleano correspondente.
+     */
     public void setTitular(boolean t) {
         this.titular = t;
     }
+
+    /**
+     * Saber a posição de um Jogador.
+     * @return O inteiro correspondente à posição.
+     */
     public int getPosicao() {
         return this.posicao;
     }
+
+    /**
+     * Alterar a posição do Jogador.
+     * @param p O inteiro correspondente à nova posição.
+     */
     public void setPosicao(int p){
         this.posicao = p;
     }
 
+    /**
+     * Obter a lista das equipas.
+     * @return A lista das equipas
+     */
     public ArrayList<Equipa> getEquipas(){
         return this.equipas;
     }
+
+    /**
+     * Adicionar uma equipa à lista das equipas.
+     * @param eq A equipa a adicionar
+     */
     public void addEquipa(Equipa eq) {
         this.equipas.add(eq.clone());
     }
 
+    /**
+     * Obter o número da Camisola do Jogador.
+     * @return O seu número.
+     */
     public int getNumeroJogador() {
         return this.numeroJogador;
     }
 
+    /**
+     * Obter a habilidade do Jogador
+     * @return A sua habilidade.
+     */
     public float getHabilidade() {
         return this.habilidade;
     }
@@ -223,9 +267,15 @@ public class Jogador extends Atleta{
         this.capacidade_de_passe = capacidade_de_passe;
     }
 
+    /**
+     * Alterar a habilidade do Jogador
+     * @param habilidade O novo valor da Habilidade
+     */
     public void setHabilidade(float habilidade){
         this.habilidade = habilidade;
     }
+
+
     /**
      * Compara um objeto com Jogador e diz se são iguais
      */
