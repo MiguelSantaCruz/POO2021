@@ -16,14 +16,16 @@ public class Atleta{
         this.nomeAtleta = "none";
         this.idade = 0;
     }
+
     /**
-            * Construtor de cópia para objetos da classe Jogador
+     * Construtor de cópia para objetos da classe Jogador
      */
     public Atleta(Atleta a){
         this.idAtleta=a.getIdAtleta();
         this.nomeAtleta=a.getNomeAtleta();
         this.idade = a.getIdade();
     }
+
     /**
      * Construtor para objetos da classe Jogador
      */
@@ -32,12 +34,14 @@ public class Atleta{
         this.nomeAtleta = nomeAtleta;
         this.idade = idade;
     }
+
     /**
      * Retorna a idade do Atleta
      */
     public int getIdade() {
         return this.idade;
     }
+
     /**
      * Retorna o nome do Atleta
      */
@@ -45,25 +49,28 @@ public class Atleta{
         return this.nomeAtleta;
         //return "Merda Para Isto Tudo";
     }
+
     /**
      * Retorna o id do Atleta
      */
     public int getIdAtleta() {
         return this.idAtleta;
     }
+
     /**
      * Atribui um id ao Atleta
      */
-
     public void setIdAtleta(int idAtleta) {
         this.idAtleta = idAtleta;
     }
+
     /**
      * Atribui o nome ao Atleta
      */
     public void setNomeAtleta(String nomeAtleta) {
         this.nomeAtleta = nomeAtleta;
     }
+
     /**
      * Atribui a idade ao Atleta
      */
@@ -84,6 +91,7 @@ public class Atleta{
         sb.append(this.getIdade());
         return sb.toString();
     }
+    
     /**
      * Clona o objeto Atleta
      */
