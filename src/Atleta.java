@@ -91,7 +91,7 @@ public class Atleta{
         sb.append(this.getIdade());
         return sb.toString();
     }
-    
+
     /**
      * Clona o objeto Atleta
      */

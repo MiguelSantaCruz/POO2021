@@ -275,7 +275,7 @@ public class Jogador extends Atleta{
         this.habilidade = habilidade;
     }
 
-    
+
     /**
      * Compara um objeto com Jogador e diz se são iguais
      */
