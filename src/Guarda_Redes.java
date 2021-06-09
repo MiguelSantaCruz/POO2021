@@ -56,6 +56,7 @@ public class Guarda_Redes extends Jogador
                 campos[0],
                 Integer.parseInt(campos[1]),eq,false,0,true);
     }
+
     /**
      * Construtor de cópia para objetos da classe Guarda_Redes
      */

@@ -47,6 +47,11 @@ public class Avancado extends Jogador {
     }
 
 
+    /**
+     * Parser de avançado.
+     * @param input String com as informações de avançado.
+     * @return O avançado com as caracteristicas fornecidas na string.
+     */
     public static Avancado parse(String input){
         ArrayList<Equipa> eq = new ArrayList<Equipa>();
         String[] campos = input.split(",");
