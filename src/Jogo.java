@@ -19,6 +19,9 @@ public class Jogo{
     Map<Integer, Integer> entraSaiVisitante = new HashMap<>();      //key é o nº da camisola do que entra e value é o nº da camisola do que sai
     private int posicaoBola;    //0- meio-campo; 1-BalizaCasa; 2-BalizaVisitantes; 3-AreaCasa; 4-AreaVisitantes; 5-CantoCasa; 6-CantoVisitantes; 7-GoloCasa; 8-GoloVisitante
 
+    /**
+     * Construtor por omissão de Jogo.
+     */
     public Jogo () {
         this.golosCasa = 0;
         this.golosVisitante = 0;
@@ -38,6 +41,10 @@ public class Jogo{
         this.posicaoBola = 0;
     }
 
+    /**
+     * Construtor por cópia de Jogo.
+     * @param j O jogo pelo qual se copia.
+     */
     public Jogo (Jogo j) {
         this.golosCasa = j.golosCasa;
         this.golosVisitante = j.golosVisitante;
@@ -56,8 +63,22 @@ public class Jogo{
         setEntraSaiVisitante(j.getEntraSaiVisitante());
         setPosicaoBola(j.getPosicaoBola());
     }
- 
 
+
+    /**
+     * Construtor parametrizado de Jogo.
+     * @param gc Golos da equipa da casa.
+     * @param gf Golos da equipa Visitante.
+     * @param eqCasa Nome da equipa da casa.
+     * @param eqFora Nome da equipa Visitante.
+     * @param d Data do Jogo.
+     * @param titCasa Lista dos titulares da equipa da casa.
+     * @param titVis Lista dos titulares da equipa visitante.
+     * @param emJCasa Lista dos jogadores da equipa da casa que estão em jogo .
+     * @param emJFora Lista dos jogadores da equipa visitante que estão em jogo.
+     * @param entraSaiCasa Map das substituições ocorridas na equipa da casa.
+     * @param entraSaiVisitante Map das substituições ocorridas na equipa visitante.
+     */
     public Jogo (int gc, int gf,Equipa eqCasa, Equipa eqFora, LocalDate d, 
     List<Integer> titCasa, List<Integer> titVis,List<Integer> emJCasa, List<Integer> emJFora, Map<Integer, Integer> entraSaiCasa, Map <Integer,Integer> entraSaiVisitante){
         this.golosCasa = gc;
@@ -76,7 +97,12 @@ public class Jogo{
         this.setEntraSaiCasa(entraSaiCasa);
         this.setEntraSaiVisitante(entraSaiVisitante);
     }
-    
+
+    /**
+     * Parser de Jogo
+     * @param input String com as informações do Jogo
+     * @return Novo Jogo através de um construtor parametrizado.
+     */
     public static Jogo parse(String input){
         String[] campos = input.split(",");
         String[] data = campos[4].split("-");
@@ -114,58 +140,114 @@ public class Jogo{
     }
 
 
+    /**
+     * Obter a posição da bola (meio-campo, area, baliza, golo, canto).
+     * @return A posição.
+     */
     public int getPosicaoBola () {
         return this.posicaoBola;
     }
 
+    /**
+     * Definir a nova posição da bola.
+     * @param i A nova posição.
+     */
     public void setPosicaoBola (int i) {
         this.posicaoBola = i;
     }
 
+    /**
+     * Obter o número de golos da equipa da casa.
+     * @return O nº de golos.
+     */
     public int getGolosCasa() {
         return this.golosCasa;
     }
 
+    /**
+     * Alterar o número de golos da equipa da casa.
+     * @param golosCasa O novo número de golos.
+     */
     public void setGolosCasa(int golosCasa) {
         this.golosCasa = golosCasa;
     }
 
+    /**
+     * Obter o número de golos da equipa visitante.
+     * @return O nº de golos.
+     */
     public int getGolosVisitante() {
         return this.golosVisitante;
     }
 
+    /**
+     * Alterar o número de golos da equipa visitante.
+     * @param golosVisitante O novo número de golos.
+     */
     public void setGolosVisitante(int golosVisitante) {
         this.golosVisitante = golosVisitante;
     }
 
+    /**
+     * Obter o tempo de jogo decorrido.
+     * @return O tempo decorrido.
+     */
     public LocalDate getTempoJogo() {
         return this.date;
     }
 
+    /**
+     * Definir o tempo de jogo decorrido
+     * @param data O tempo a definir.
+     */
     public void setTempoJogo(LocalDate data) {
         this.date = data;
     }
 
+    /**
+     * Obter a Equipa da casa.
+     * @return A Equipa da casa.
+     */
     public Equipa getEqCasa() {
         return this.eqCasa;
     }
 
+    /**
+     * Definir o nome da equipa da casa.
+     * @param eq O nome da equipa.
+     */
     public void setEqCasa(Equipa eq) {
         this.eqCasa = eq.clone();
     }
 
+    /**
+     * Alterar o nome da equipa da casa.
+     * @param eqCasa O novo nome.
+     */
     public void setNomeEqCasa(Equipa eqCasa) {
         this.eqCasa = eqCasa;
     }
 
+    /**
+     * Obter a Equipa visitante.
+     * @return A Equipa Visitante.
+     */
     public Equipa getEqVisitante() {
         return this.eqVisitante;
     }
 
+    /**
+     * Definir a Equipa visitante.
+     * @param EqVisitante A equipa visitante.
+     */
     public void setEqVisitante(Equipa EqVisitante) {
         this.eqVisitante = EqVisitante;
     }
 
+    /**
+     * Obter a lista de titulares da equipa da casa.
+     * @return A lista com os titulares da equipa da casa.
+     */
     public List<Integer> getTitularesCasa() {
         return this.titularesCasa;
     }
@@ -174,6 +256,11 @@ public class Jogo{
     //         this.titularesCasa.add(j.clone());
     //     }
     // }
+
+    /**
+     * Definir os titulares da equipa da casa.
+     * @param titularesCasa A lista dos titulares da casa
+     */
     public void setTitularesCasa(List<Integer> titularesCasa) {
         HashMap<Integer,Jogador> e = this.eqCasa.getplantel();
         for (Map.Entry<Integer, Jogador> entry : e.entrySet()) {
@@ -183,6 +270,11 @@ public class Jogo{
             else j.setTitular(false);
         }
     }
+
+    /**
+     * Obter a lista dos números da camisola do titulares da equipa da casa.
+     * @return
+     */
     public List<Integer> getTitularesVisitante() {
         return this.titularesVisitante;
     }
@@ -192,6 +284,11 @@ public class Jogo{
     //     }
     // }
 
+
+    /**
+     * Definir a lista dos titulares da equipa visitante.
+     * @param titularesVisitante Os jogadores da equipa visitante.
+     */
     public void setTitularesVisitante(List<Integer> titularesVisitante) {
         HashMap<Integer,Jogador> e = this.eqCasa.getplantel();
         for (Map.Entry<Integer, Jogador> entry : e.entrySet()) {
@@ -203,6 +300,10 @@ public class Jogo{
     }
 
 
+    /**
+     * Obter a lista dos jogadores da equipa da casa que estão em jogo
+     * @return A lista dos jogadores em jogo.
+     */
     public List<Integer> getEmJogoCasa() {
         return this.emJogoCasa;
     }
@@ -211,9 +312,18 @@ public class Jogo{
     }
 
 
+    /**
+     * Obter a lista dos Jogadores em jogo da equipa visitante.
+     * @return A lista dos jogadores.
+     */
     public List<Integer> getEmJogoFora() {
         return this.emJogoFora;
     }
+
+    /**
+     * Definir a lista dos jogadores em jogo da equipa visitante.
+     * @param emJogoF A lista dos jogadores em jogo.
+     */
     public void setEmJogoFora(List<Integer> emJogoF) {
         this.emJogoFora = emJogoF;
     }
@@ -241,26 +351,48 @@ public class Jogo{
         }
     } */
 
+    /**
+     * Obter o map das substituições da equipa da casa.
+     * @return As substituições.
+     */
     public Map<Integer, Integer> getEntraSaiCasa () {
         return this.entraSaiCasa;
     }
 
+
+    /**
+     * Definir o map das substituições da equipa da casa.
+     * @param entraSaiC Novo map das substituições.
+     */
     public void setEntraSaiCasa (Map <Integer, Integer> entraSaiC) {
         for (Map.Entry<Integer, Integer> it : entraSaiC.entrySet()) {
             this.entraSaiCasa.put(it.getKey(), it.getValue());
         }
     }
 
+    /**
+     * Obter o map das substituições da equipa visitante
+     * @return As substituições.
+     */
     public Map<Integer, Integer> getEntraSaiVisitante () {
         return this.entraSaiVisitante;
     }
 
+    /**
+     * Definir o map das substituições da equipa visitante.
+     * @param entraSaiV Novo map das substituições.
+     */
     public void setEntraSaiVisitante (Map <Integer, Integer> entraSaiV) {
         for (Map.Entry<Integer, Integer> it : entraSaiV.entrySet()) {
             this.entraSaiVisitante.put(it.getKey(), it.getValue());
         }
     }
 
+    /**
+     * Verificar se um objeto é igual ao jogo.
+     * @param o O objeto em questão.
+     * @return A validade da igualdade.
+     */
     public boolean equals (Object o) {      //verificar se esta bem definido para o Tempo de jogo
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
@@ -274,6 +406,10 @@ public class Jogo{
                  //&& this.substituicoesCasa.equals(jogo.substituicoesCasa) && this.substituicoesFora.equals(jogo.substituicoesFora);
     }
 
+    /**
+     * Clone de um Jogo.
+     * @return O novo jogo.
+     */
     public Jogo clone () {
         return new Jogo(this);
     }
@@ -310,6 +446,10 @@ public class Jogo{
     }
  */
 
+    /**
+     * Converter a informação de um Jogo para String.
+     * @return A string com toda a informação.
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Jogo{");
