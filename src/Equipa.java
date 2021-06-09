@@ -9,6 +9,9 @@ public class Equipa {
     private float habilidadeGlobal;
 
 
+    /**
+     * Construtor vazio de Equipa
+     */
     public Equipa() {
         this.plantel = new HashMap<>();
         this.nome = "";
@@ -17,6 +20,11 @@ public class Equipa {
         this.habilidadeGlobal = 0;
     }
 
+    /**
+     * Construtor de Equipa.
+     * @param string Nome da equipa.
+     * @param d Data de fundação da Equipa.
+     */
     public Equipa(String string,LocalDate d) {
         this.plantel = new HashMap<>();
         this.nome = string;
@@ -25,6 +33,13 @@ public class Equipa {
         this.habilidadeGlobal = 0;
     }
 
+    /**
+     * Construtor parametrizado de Equipa.
+     * @param li Map do plantel de Jogadores da Equipa.
+     * @param nome Nome da equipa.
+     * @param c Data de Fundação da Equipa.
+     * @param jogosAgendados Lista dos jogos agendados.
+     */
     public Equipa(HashMap <Integer,Jogador> li,String nome, LocalDate c, ArrayList<Jogo> jogosAgendados) {
         this.plantel = li;
         this.nome = nome;
@@ -32,6 +47,11 @@ public class Equipa {
         this.jogosAgendados = jogosAgendados;
         this.habilidadeGlobal = calculaHabilidadeGlobal();
     }
+
+    /**
+     * Construtor por cópia da equipa.
+     * @param e A equipa pela qual queremos copiar.
+     */
     public Equipa(Equipa e) {
         this.nome = e.getNome();
         this.plantel = e.getplantel();
@@ -39,7 +59,11 @@ public class Equipa {
         this.jogosAgendados = e.getJogosAgendados();
         this.habilidadeGlobal = e.getHabilidadeGlobal();
     }
-    
+
+    /**
+     * Método para calcular a habilidade da equipa que está em jogo.
+     * @return O valor da média da habilidade.
+     */
     private float calculaHabilidadeGlobal() {       //NOTA:: TEMOS QUE CHAMAR ESTE METODO SEMPRE QUE MEXER NA EQUIPA!!!!
         double sum = 0;
         int i=0;
@@ -54,6 +78,11 @@ public class Equipa {
         return media;
     }
 
+    /**
+     * Parser de Equipa.
+     * @param input Informação da Equipa.
+     * @return Construtor de Equipa com os campos devidamente preenchidos.
+     */
     public static Equipa parse(String input){
         String[] campos = input.split(",");
         String[] data = campos[1].split("-");
@@ -61,11 +90,20 @@ public class Equipa {
     }
 
 
+    /**
+     * Inserir um novo jogador na equipa.
+     * @param j O Jogador a inserir
+     */
     public void insereJogador(Jogador j) {
         this.plantel.put(j.getNumeroJogador(), j.clone());
         j.addEquipa(this);
         calculaHabilidadeGlobal();
     }
+
+    /**
+     * Remover um Jogador da equipa.
+     * @param jo O Jogador que sai da equipa.
+     */
     public void removeJogador(Jogador jo) {
         for (Jogador j : this.plantel.values()) {
             if (jo.getNumeroJogador() == j.getNumeroJogador()) {
@@ -74,47 +112,99 @@ public class Equipa {
             }
         }
     }
-   
+
+    /**
+     * Obter o plantel da Equipa.
+     * @return O plantel.
+     */
     public HashMap<Integer, Jogador> getplantel() {
         return this.plantel;
     }
 
+    /**
+     * Definir o plantel da Equipa
+     * @param plantel O Map do plantel (key é o nº da camisola e value é o jogador).
+     */
     public void setplantel(HashMap<Integer,Jogador> plantel) {
         this.plantel = plantel;
     }
 
+    /**
+     * Obter o nome da Equipa.
+     * @return O nome da Equipa.
+     */
     public String getNome() {
         return this.nome;
     }
 
+    /**
+     * Definir o nome da Equipa.
+     * @param nome O novo nome.
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    /**
+     * Obter a data de fundação da equipa.
+     * @return A data.
+     */
     public LocalDate getDataDeFundação() {
         return this.dataDeFundação;
     }
 
+    /**
+     * Definir a data de Fundação da Equipa.
+     * @param dataDeFundação A nova data.
+     */
     public void setDataDeFundação(LocalDate dataDeFundação) {
         this.dataDeFundação = dataDeFundação;
     }
 
+    /**
+     * Obter a Lista de jogos agendados.
+     * @return A lista dos jogos.
+     */
     public ArrayList<Jogo> getJogosAgendados() {
         return this.jogosAgendados;
     }
 
+    /**
+     * Definir uma nova lista de jogos agendados.
+     * @param jogosAgendados A nova lista de jogos.
+     */
     public void setJogosAgendados(ArrayList<Jogo> jogosAgendados) {
         this.jogosAgendados = jogosAgendados;
     }
 
+    /**
+     * Obter a habilidade global da equipa.
+     * @return A habilidade da equipa.
+     */
     public float getHabilidadeGlobal() {
         return this.habilidadeGlobal;
     }
 
+    /**
+     * Definir a nova habilidade global da equipa.
+     * @param habilidadeGlobal O novo valor da habilidade.
+     */
     public void setHabilidadeGlobal(float habilidadeGlobal) {
         this.habilidadeGlobal = habilidadeGlobal;
     }
+
+    /**
+     * Obter um jogador da equipa.
+     * @param n O número da Camisola do Jogador que procuramos.
+     * @return O Jogador correspondente ao número passado.
+     */
     public Jogador getJogador(int n) {return this.plantel.get(n);}
+
+    /**
+     * Verificar a igualdade entre uma Equipa e um Objeto.
+     * @param o O objeto a verificar
+     * @return Validade da igualdade.
+     */
     @Override
     public boolean equals(Object o) {
         if(o.getClass() != this.getClass()) return false;
@@ -122,10 +212,18 @@ public class Equipa {
         return Objects.equals(plantel, equipa.plantel) && habilidadeGlobal == equipa.habilidadeGlobal;
     }
 
+    /**
+     * Clone de uma equipa.
+     * @return A equipa.
+     */
     public Equipa clone() {
         return new Equipa(this);
     }
 
+    /**
+     * Passar para String a equipa e todos os seus constituíntes.
+     * @return A string com toda a informação.
+     */
     @Override
     public String toString() {
         return "{" +

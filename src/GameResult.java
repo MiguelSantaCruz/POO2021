@@ -4,14 +4,25 @@ public class GameResult {
     private double overallEquipa1;
     private double overallEquipa2;
 
+    /**
+     * Método para obter a habilidade de uma equipa.
+     * @param eq1 A equipa.
+     * @return O overall da equipa.
+     */
     public double getOverallEquipa1(Equipa eq1) {
         return eq1.getHabilidadeGlobal();
     }
 
-    public double getOverallEquipa2(Equipa eq2) {
-        return eq2.getHabilidadeGlobal();
-    }
 
+    /**
+     * Efetuar uma substituição (um jogador entra e outro sai) na Equipa, num determinado jogo.
+     * @param jogo  O jogo em que se faz a substituição.
+     * @param entra O numero da camisola do Jogador que entra em campo.
+     * @param sai O numero da camisola do Jogador que sai.
+     * @param nomeEquipa O nome da Equipa em que queremos efetuar a substituição.
+     * @throws JogadorNaoExisteException Exceção lançada quando o jogador que é passado como argumento não pertence à equipa.
+     * @throws EquipaNaoExisteException Exceção lançada quando a equipa não corresponde à equipa da casa, nem à Visitante.
+     */
     public static void efetuarSubstituicao (Jogo jogo, Integer entra, Integer sai, Equipa nomeEquipa) throws JogadorNaoExisteException, EquipaNaoExisteException {
         if (nomeEquipa.getNome().equals(jogo.getEqCasa().getNome())) {           //saber se é na equipa da casa ou na visitante que vamos fazer a substituiçao
             if (jogo.getEmJogoCasa().contains(sai)) {                   //se o que sai estiver em jogo
@@ -55,6 +66,11 @@ public class GameResult {
 
 
 
+    /**
+     * Calcula a próxima posição da bola com base em probabilidades, números aleatórios (fator de sorte) e na posição atual.
+     * @param j O jogo em questão.
+     * @return O valor correspondente ao resultado daquela jogada (Golo, canto, remate à baliza, etc...)
+     */
     public static int calculaJogada (Jogo j) {
         Random r = new Random();
         int rand;
@@ -121,6 +137,12 @@ public class GameResult {
 
     }
 
+    /**
+     * Verifica se a equipa da casa é mais forte a nível global.
+     * @param habVis Habilidade da equipa Visitante.
+     * @param habCasa Habilidade da equipa da Casa.
+     * @return True se a equipa da casa tiver maior overall, false caso contrário.
+     */
     public static boolean equipaMaisForte (double habVis, double habCasa) {
         double diferencaHab;
         boolean eqCasaMaisForte;
@@ -132,7 +154,13 @@ public class GameResult {
         }
     }
 
-    //decidir o que acontece se a bola estiver no meio campo
+    /**
+     * Decidir o que acontece se a bola estiver no meio campo
+     * @param rand Número aleatório correspondente a um fator de sorte.
+     * @param habVis Habilidade da equipa Visitante.
+     * @param habCasa Habilidade da equipa da Casa.
+     * @return Próxima posição da bola
+     */
     public static int bolaMeioCampo (int rand, double habVis, double habCasa, String equipaCasaNome, String equipaVisitanteNome) {                    //20% baliza; 35% area; 30%canto; 5% golo
         double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
         boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
@@ -177,6 +205,13 @@ public class GameResult {
     }
 
 
+    /**
+     * Calcula a próxima posição da bola quando é batido um canto.
+     * @param rand Número aleatório correspondente a um fator de sorte.
+     * @param habVis Habilidade da equipa Visitante.
+     * @param habCasa Habilidade da equipa da Casa.
+     * @return Próxima posição da bola.
+     */
     public static int bolaCanto (int rand, double habVis, double habCasa, String equipaCasaNome, String equipaVisitanteNome) {                // 10% golo; 30% baliza; 30% area; 15% canto; 15% meio campo
         double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
         boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
@@ -230,6 +265,13 @@ public class GameResult {
 
 
 
+    /**
+     * Calcula a próxima posição da bola quando a bola está na área
+     * @param rand Número aleatório correspondente a um fator de sorte.
+     * @param habVis Habilidade da equipa Visitante.
+     * @param habCasa Habilidade da equipa da Casa.
+     * @return Próxima posição da bola.
+     */
     public static int bolaArea (int rand, double habVis, double habCasa,  String equipaCasaNome, String equipaVisitanteNome) {                // 10% golo; 30% baliza; 5% area; 25% canto; 30% meio campo
         double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
         boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
@@ -282,6 +324,13 @@ public class GameResult {
     }
 
 
+    /**
+     * Calcula a próxima posição da bola quando a bola está na Baliza (posse do guarda-redes).
+     * @param rand Número aleatório correspondente a um fator de sorte.
+     * @param habVis Habilidade da equipa Visitante.
+     * @param habCasa Habilidade da equipa da Casa.
+     * @return Próxima posição da bola.
+     */
     public static int bolaBaliza (int rand, double habVis, double habCasa, String equipaCasaNome, String equipaVisitanteNome) {                // 5% golo; 10% baliza; 30% area; 25% canto; 30% meio campo
         double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
         boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
