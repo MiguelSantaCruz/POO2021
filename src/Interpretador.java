@@ -10,14 +10,22 @@ public class Interpretador {
         while(true){ 
             clearScreen();
             Menu menu = new Menu();
-            System.out.println("Foram lidas: " + p.getEquipas().size() + " equipas de " + p.getPath());
+            System.out.println("[Foram lidas: " + p.getEquipas().size() + " equipas de " + p.getPath()+"]");
             menu.setTitulo("Football Manager ⚽");
             menu.adicionaOpcao("Consultar equipas 👥");
             menu.adicionaOpcao("Consultar jogadores ⛹️‍");
             menu.adicionaOpcao("Jogar 🎮‍");
             menu.adicionaOpcao("Sair");
             menu.show();
-            int escolha = scanner.nextInt();
+            int escolha = 0;
+            try {
+                    escolha = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Escolha " + escolha);
+            } catch (InputMismatchException e) {
+                    escolha = -1;
+                    scanner.nextLine();
+                }
             switch (escolha) {
                 case 1:
                     procurarEquipa(p,scanner);
@@ -26,7 +34,20 @@ public class Interpretador {
                     procurarJogador(p,scanner);
                     break;
                 case 3:
-                    
+                    clearScreen();
+                    Menu menuEquipas = new Menu();
+                    menuEquipas.setTitulo("Selecione duas equipas");
+                    for (Equipa e : p.getEquipas().values()) {
+                        menuEquipas.adicionaOpcao(e.getNome());
+                    }
+                    menuEquipas.show();
+                    try {
+                        escolha = scanner.nextInt();
+                        scanner.nextLine();
+                    } catch (InputMismatchException e) {
+                        escolha = -1;
+                    }
+                    jogar(p.getEquipas().get("sc braga"),p.getEquipas().get("fc porto"),scanner);
                     break;
                 case 4:
                     scanner.close();
@@ -189,5 +210,30 @@ public class Interpretador {
         return sb.toString();
     }
 
+    public static void jogar(Equipa equipaCasa, Equipa equipaVisitante,Scanner s){
+        clearScreen();
+        System.out.println("\u001B[36mJogo entre " + equipaCasa.getNome() + " e " + equipaVisitante.getNome() + " [Ainda não dá para selecionar]\u001B[0m");
+        System.out.println("-----------------------------------------");
+        Jogo j = new Jogo();
+        j.setEqVisitante(equipaVisitante);
+        j.setEqCasa(equipaCasa);
+        j.setPosicaoBola(0);
+        System.out.println("Bola ao meio campo");
+        for (int i = 0; i < 90; i++) {
+            GameResult.calculaJogada(j);
+            System.out.println(" (" + (i+1) + "')");
+            try
+            {
+            Thread.sleep(200);
+            }
+            catch(InterruptedException ex)
+            {
+                Thread.currentThread().interrupt();
+            }
+        }
+        System.out.println("\u001B[32mResultado final: " + j.getEqCasa().getNome() + " " + j.getGolosCasa() + " : " + j.getGolosVisitante() + " " + j.getEqVisitante().getNome()+"\u001B[0m");
+        System.out.println("-- press enter --");
+        s.nextLine();
+    }
 
 }

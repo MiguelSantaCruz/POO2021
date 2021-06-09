@@ -150,6 +150,10 @@ public class Jogo{
         return this.eqCasa;
     }
 
+    public void setEqCasa(Equipa eq) {
+        this.eqCasa = eq.clone();
+    }
+
     public void setNomeEqCasa(Equipa eqCasa) {
         this.eqCasa = eqCasa;
     }
