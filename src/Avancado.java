@@ -13,16 +13,16 @@ public class Avancado extends Jogador {
     }
 
     /**
-     * Construtor parametrizado da classe Avançado
-     * @param velocidade
-     * @param resistencia
-     * @param destreza
-     * @param impulsao
-     * @param jogo_de_cabeça
-     * @param remate
-     * @param capacidade_de_passe
-     * @param finalizacao
-     * @param sprint
+     * Construtor parametrizado da classe Avançado.
+     * @param velocidade A capacidade de velocidade.
+     * @param resistencia A capacidade de resistência.
+     * @param destreza A capacidade de destreza.
+     * @param impulsao A capacidade de impulsão.
+     * @param jogo_de_cabeça A capacidade de jogo de cabeça.
+     * @param remate A capacidade de remate.
+     * @param capacidade_de_passe A capacidade de passe.
+     * @param finalizacao A capacidade de finalização.
+     * @param sprint A capacidade de sprint.
      */
     public Avancado (int numero,int velocidade, int resistencia,
     int destreza, int impulsao, int jogo_de_cabeça, 
@@ -72,8 +72,8 @@ public class Avancado extends Jogador {
     }
 
     /**
-     * Construtor de cópia da classe Avançado
-     * @param a
+     * Construtor de cópia da classe Avançado.
+     * @param a O avançado a copiar.
      */
     public Avancado (Avancado a) {
         super (a);
@@ -83,8 +83,8 @@ public class Avancado extends Jogador {
     }
 
     /**
-     * Função que retorna o valor da capacidade de Finalização de um Avançado
-     * @return o valor associado à capacidade de finalização
+     * Função que retorna o valor da capacidade de Finalização de um Avançado.
+     * @return o valor associado à capacidade de finalização.
      */
     public int getFinalizacao() {
         return this.finalizacao;

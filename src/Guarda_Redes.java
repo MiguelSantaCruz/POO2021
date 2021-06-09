@@ -4,8 +4,7 @@ import java.util.ArrayList;
  * Classe Jogador Guarda_Redes
  * @version 1
  */
-public class Guarda_Redes extends Jogador
-{
+public class Guarda_Redes extends Jogador {
     private int elasticidade;
  
     /**
