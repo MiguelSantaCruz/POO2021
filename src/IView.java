@@ -5,6 +5,7 @@ public interface IView {
     public void mostrarMenuPrincipal();
     public void mostrarMenuDeConsultaDeEquipas();
     public void mostrarMenuDeConsultaDeJogador();
+    public void mostrarEquipasComOnzeOuMaisJogadores(IModel model);
     public void mostrarEquipas(IModel model);
     public void mostrarSelecaoDePosicaoJogador();
     public void showInicioJogo(IEquipa equipaCasa, IEquipa equipaVisitante);
@@ -12,9 +13,9 @@ public interface IView {
     public static void showEquipa(IEquipa e,boolean showPlantel,int highlight){
         System.out.print("Nome: " + truncateString(e.getNome(), 30));
         System.out.print("  Data de fundação: " + e.getDataDeFundação());
-        System.out.println("            Habilidade global: " + e.getHabilidadeGlobal() + avaliaHabilidade(e.getHabilidadeGlobal()));
+        System.out.println("            Habilidade global: " + e.calculaHabilidadeGlobal() + " " + avaliaHabilidade(e.calculaHabilidadeGlobal()));
         if(showPlantel){
-            System.out.println("Plantel:");
+            System.out.println("Plantel (" + e.getplantel().size() +"):");
             for (Map.Entry<Integer,IJogador> plantel: e.getplantel().entrySet()) {
                 if(plantel.getKey() == highlight) showJogador(plantel.getValue(),true);
                 else showJogador(plantel.getValue(), false);
@@ -29,9 +30,15 @@ public interface IView {
             System.out.print("\u001B[30m");
         }
         System.out.print("Nome: " + truncateString(j.getNomeAtleta(),30));
+        if(j.getClass().getName().equals("Medio")) System.out.print(" [CDM]");
+        else if(j.getClass().getName().equals("Lateral")) System.out.print("  [RB]");
+        else if(j.getClass().getName().equals("Avancado")) System.out.print("  [ST]");
+        else if(j.getClass().getName().equals("Guarda_Redes")) System.out.print("  [GK]");
+        else if(j.getClass().getName().equals("Defesa")) System.out.print("  [CB]");
+        else System.out.print("   [J]");
         System.out.print(" │ Número: " + truncateString(String.valueOf(j.getNumeroJogador()),3));
         System.out.print(" │ Idade " + truncateString(String.valueOf(j.getIdade()),3));
-        System.out.println(" │ Habilidade geral: " + j.getHabilidade() + avaliaHabilidade(j.getHabilidade()));
+        System.out.println(" │ Habilidade geral: " + j.getHabilidade() + " " + avaliaHabilidade(j.getHabilidade()));
         System.out.print("\u001B[0m");
     }
 

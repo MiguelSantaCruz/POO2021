@@ -15,10 +15,10 @@ public class Interpretador {
             int escolha = input.InputInteger();
             switch (escolha) {
                 case 1:
-                    procurarEquipa(p, input, view, model);
+                    procurarEquipa(input, view, model);
                     break;
                 case 2:
-                    procurarJogador(p, input, view, model);
+                    procurarJogador(input, view, model);
                     break;
                 case 3:
                     view.showJogos(model);
@@ -26,13 +26,16 @@ public class Interpretador {
                     input.InputString();
                     break;
                 case 4:
-                    adicionaEquipa(p, input, view, model);
+                    adicionaEquipa(input, view, model);
                     break;
                 case 5:
-                    adicionaJogador(p, input, view, model);
+                    adicionaJogador(input, view, model);
+                    break;
+                case 6:
+                    transfereJogador(input,view,model);
                     break;
                 case 7:
-                    view.mostrarEquipas(model);
+                    view.mostrarEquipasComOnzeOuMaisJogadores(model);
                     view.mostraMensagem("Insira a primeira equipa");
                     int equipa1 = input.InputInteger();
                     view.mostraMensagem("Insira a segunda equipa");
@@ -49,7 +52,7 @@ public class Interpretador {
                             eqCasa = equipa;
                         if (i == equipa2)
                             eqVisitante = equipa;
-                        i++;
+                        if(equipa.getplantel().size() >= 11) i++;
                     }
                     jogar(eqCasa, eqVisitante, view, input,model);
                     break;
@@ -84,7 +87,43 @@ public class Interpretador {
         System.out.flush();
     }
 
-    public static void procurarJogador(IParser p, IInput input, IView view, IModel model) {
+    public static void transfereJogador(IInput input, IView view, IModel model){
+        view.mostraMensagem("Insira o nome do jogador para procurar:");
+        String search;
+        search = input.InputString();
+        boolean playerExists = false;
+        IJogador jogador = new Jogador();
+        for (IEquipa e : model.getEquipas().values()) {
+            if (playerExists)
+            break;
+            for (IJogador j : e.getplantel().values()) {
+                if (j.getNomeAtleta().toLowerCase().equals(search.toLowerCase())) {
+                    jogador = j;
+                    playerExists = true;
+                }
+            }
+        }
+        if(!playerExists){
+            view.mostraMensagem("--- Não encontrado - Press enter ---");
+            return;
+        } else {
+           view.mostrarEquipas(model);
+           int escolha = input.InputInteger();
+           while (escolha < 1 || escolha > model.getEquipas().values().size()) {
+                escolha = input.InputInteger();
+           }
+           int i = 1;
+           for (IEquipa eq : model.getEquipas().values()) {
+                if (i == escolha) {
+                    eq.insereJogador(jogador);
+                    break;
+                }
+                i++;
+           }
+        }
+    }
+
+    public static void procurarJogador(IInput input, IView view, IModel model) {
         view.mostrarMenuDeConsultaDeJogador();
         boolean detalhesJogador = false;
         int escolha = input.InputInteger();
@@ -111,7 +150,6 @@ public class Interpretador {
                             }
                             break;
                         }
-
                     }
                 }
                 if (!playerExists)
@@ -122,7 +160,7 @@ public class Interpretador {
             default:
                 view.mostraMensagem("-- [Erro]: pressione enter --");
                 input.InputString();
-                procurarJogador(p, input, view, model);
+                procurarJogador(input, view, model);
                 break;
         }
         System.out.println("-- press enter --");
@@ -130,7 +168,7 @@ public class Interpretador {
         return;
     }
 
-    public static void procurarEquipa(IParser p, IInput input, IView view, IModel model) {
+    public static void procurarEquipa(IInput input, IView view, IModel model) {
         view.mostrarMenuDeConsultaDeEquipas();
         int escolha = input.InputInteger();
         switch (escolha) {
@@ -153,7 +191,7 @@ public class Interpretador {
             default:
                 view.mostraMensagem("-- [Erro]: pressione enter --");
                 input.InputString();
-                procurarEquipa(p, input, view, model);
+                procurarEquipa(input, view, model);
                 break;
         }
         view.mostraMensagem("-- pressione enter --");
@@ -172,7 +210,11 @@ public class Interpretador {
             GameResult.calculaJogada(j);
             view.mostraMensagem(" (" + (i + 1) + "')");
             try {
-                Thread.sleep(400);
+                if((i+1) == 45){
+                    view.mostraMensagem("\u001B[35m ------------------ Intervalo -------------------\u001B[0m");
+                    Thread.sleep(1000);
+                }
+                else Thread.sleep(400);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
@@ -183,7 +225,7 @@ public class Interpretador {
         input.InputString();
     }
 
-    public static void adicionaEquipa(IParser p, IInput input, IView view, IModel model) {
+    public static void adicionaEquipa(IInput input, IView view, IModel model) {
         IEquipa e = new Equipa();
         e.setplantel(new HashMap<Integer, IJogador>());
         e.setJogosAgendados(new ArrayList<IJogo>());
@@ -196,7 +238,7 @@ public class Interpretador {
         model.addEquipa(e);
     }
 
-    public static void adicionaJogador(IParser p, IInput input, IView view, IModel model) {
+    public static void adicionaJogador(IInput input, IView view, IModel model) {
         view.mostraMensagem("Insira o nome");
         String nome = input.InputString();
         view.mostraMensagem("Insira a idade");

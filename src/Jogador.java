@@ -275,7 +275,6 @@ public class Jogador extends Atleta implements IJogador{
         this.habilidade = habilidade;
     }
 
-
     /**
      * Compara um objeto com Jogador e diz se são iguais
      */

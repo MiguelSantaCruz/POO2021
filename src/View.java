@@ -60,6 +60,18 @@ public class View implements IView{
         menuEquipas.show(true);
     }
 
+    public void mostrarEquipasComOnzeOuMaisJogadores(IModel model){
+        clearScreen();
+        System.out.println("[Equipas com menos de 11 jogadores não podem realizar jogos e não aparecem na lista]");
+        Menu menuEquipas = new Menu();
+        menuEquipas.setTitulo("Selecione uma equipa");
+        for (IEquipa e : model.getEquipas().values()) {
+            if(e.getplantel().size()>=11) menuEquipas.adicionaOpcao(e.getNome());
+        }
+        menuEquipas.show(true);
+    }
+    
+
     public void mostrarSelecaoDePosicaoJogador(){
         Menu menu = new Menu();
         menu.setTitulo("Selecione a posição");

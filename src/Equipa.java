@@ -19,7 +19,7 @@ public class Equipa implements IEquipa{
         this.nome = "";
         this.dataDeFundação = LocalDate.now();
         this.jogosAgendados = new ArrayList<>();
-        this.habilidadeGlobal = this.calculaHabilidadeGlobal();
+        this.habilidadeGlobal = 0;
     }
 
     /**
@@ -32,7 +32,7 @@ public class Equipa implements IEquipa{
         this.nome = string;
         this.dataDeFundação = d;
         this.jogosAgendados = new ArrayList<>();
-        this.habilidadeGlobal = this.calculaHabilidadeGlobal();
+        this.habilidadeGlobal = 0;
     }
 
     /**
@@ -76,7 +76,7 @@ public class Equipa implements IEquipa{
             }
         }
         float media = (float) (sum / i);
-        return this.habilidadeGlobal = Math.round(media);
+        return Math.round(media);
     }
 
     /**
@@ -96,9 +96,12 @@ public class Equipa implements IEquipa{
      * @param j O Jogador a inserir
      */
     public void insereJogador(IJogador j) {
+        while(this.plantel.containsKey(j.getNumeroJogador())){
+            j.setNumeroJogador(j.getNumeroJogador()+1);
+        }
         this.plantel.put(j.getNumeroJogador(), j.clone());
         j.addEquipa(this);
-        calculaHabilidadeGlobal();
+        this.habilidadeGlobal = this.calculaHabilidadeGlobal();
     }
 
     /**
@@ -112,6 +115,7 @@ public class Equipa implements IEquipa{
                 break;
             }
         }
+        this.habilidadeGlobal = this.calculaHabilidadeGlobal();
     }
 
     /**
