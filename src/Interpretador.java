@@ -134,6 +134,7 @@ public class Interpretador {
            while (escolha < 1 || escolha > model.getEquipas().values().size()) {
                 escolha = input.InputInteger();
            }
+           model.getEquipas().get(jogador.getEquipas().get(jogador.getEquipas().size()-1).getNome().toLowerCase()).removeJogador(jogador);
            int i = 1;
            for (IEquipa eq : model.getEquipas().values()) {
                 if (i == escolha) {
@@ -141,7 +142,7 @@ public class Interpretador {
                     break;
                 }
                 i++;
-           }
+           }           
         }
     }
 
