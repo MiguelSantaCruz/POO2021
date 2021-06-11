@@ -10,7 +10,6 @@ public interface IView {
     public void showInicioJogo(IEquipa equipaCasa, IEquipa equipaVisitante);
     public void showFimJogo(IJogo j);
     public static void showEquipa(IEquipa e,boolean showPlantel,int highlight){
-        clearScreen();
         System.out.print("Nome: " + truncateString(e.getNome(), 30));
         System.out.print("  Data de fundação: " + e.getDataDeFundação());
         System.out.println("            Habilidade global: " + e.getHabilidadeGlobal() + avaliaHabilidade(e.getHabilidadeGlobal()));
@@ -30,11 +29,13 @@ public interface IView {
             System.out.print("\u001B[30m");
         }
         System.out.print("Nome: " + truncateString(j.getNomeAtleta(),30));
-        System.out.print(" │ Número: " + truncateString(String.valueOf(j.getIdAtleta()),3));
+        System.out.print(" │ Número: " + truncateString(String.valueOf(j.getNumeroJogador()),3));
         System.out.print(" │ Idade " + truncateString(String.valueOf(j.getIdade()),3));
         System.out.println(" │ Habilidade geral: " + j.getHabilidade() + avaliaHabilidade(j.getHabilidade()));
         System.out.print("\u001B[0m");
     }
+
+    public void showJogos(IModel model);
 
     public static void showDetalhesJogador(IJogador j,IEquipa e){
         System.out.println("Equipa atual: " + e.getNome());

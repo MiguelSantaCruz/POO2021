@@ -9,6 +9,7 @@ public class View implements IView{
             menu.setTitulo("Football Manager ⚽");
             menu.adicionaOpcao("Consultar equipas 👥");
             menu.adicionaOpcao("Consultar jogadores ⛹️‍");
+            menu.adicionaOpcao("Consultar jogos 🥅");
             menu.adicionaOpcao("Adicionar equipa ➕👥");
             menu.adicionaOpcao("Adicionar jogador ➕⛹️");
             menu.adicionaOpcao("Transferir jogador ➡️ ⛹️");
@@ -27,6 +28,15 @@ public class View implements IView{
         menu.adicionaOpcao("Voltar");
         menu.setTitulo("Consultar jogadores ⚽");
         menu.show(true);
+    }
+
+    public void showJogos(IModel model){
+        clearScreen();
+        for (IJogo jogo : model.getJogos()) {
+            System.out.println("Jogo realizado em " + jogo.getTempoJogo()+ ": " + jogo.getEqCasa().getNome() + " " + jogo.getGolosCasa() + " : "
+                                + jogo.getGolosVisitante() + " " +jogo.getEqVisitante().getNome());
+            System.out.println("-----------------------------------------------------------------");
+        }
     }
     
     

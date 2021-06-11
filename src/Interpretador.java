@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Interpretador {
     public static void run() throws LinhaIncorretaException, ClassNotFoundException, IOException {
@@ -22,12 +21,17 @@ public class Interpretador {
                     procurarJogador(p, input, view, model);
                     break;
                 case 3:
-                    adicionaEquipa(p, input, view, model);
+                    view.showJogos(model);
+                    view.mostraMensagem("--- press enter ---");
+                    input.InputString();
                     break;
                 case 4:
+                    adicionaEquipa(p, input, view, model);
+                    break;
+                case 5:
                     adicionaJogador(p, input, view, model);
                     break;
-                case 6:
+                case 7:
                     view.mostrarEquipas(model);
                     view.mostraMensagem("Insira a primeira equipa");
                     int equipa1 = input.InputInteger();
@@ -47,23 +51,25 @@ public class Interpretador {
                             eqVisitante = equipa;
                         i++;
                     }
-                    jogar(eqCasa, eqVisitante, view, input);
+                    jogar(eqCasa, eqVisitante, view, input,model);
                     break;
-                case 7:
+                case 8:
                     view.mostraMensagem("Insira o nome do ficheiro: ");
                     String filePath = input.InputString();
                     model = p.readBin(filePath);
                     view.mostraMensagem(
-                            "Lidas: " + model.getEquipas().values().size() + " equipas de [" + filePath + "]");
+                            "Lidas " + model.getEquipas().values().size() + " equipas de [" + filePath + "]");
+                    view.mostraMensagem(
+                            "Lidos " + model.getJogos().size() + " jogos de [" + filePath + "]");
                     view.mostraMensagem("--- press enter ---");
                     input.InputString();
                     break;
-                case 8:
+                case 9:
                     view.mostraMensagem("Insira o nome do ficheiro: ");
                     String filePath2 = input.InputString();
                     p.guardaBin(filePath2, model);
                     break;
-                case 9:
+                case 10:
                     input.closeScanner();
                     System.exit(0);
                     break;
@@ -99,8 +105,10 @@ public class Interpretador {
                             playerExists = true;
                             if (detalhesJogador)
                                 IView.showDetalhesJogador(j, e);
-                            else
+                            else{
+                                IView.clearScreen();
                                 IView.showEquipa(e, true, j.getNumeroJogador());
+                            }
                             break;
                         }
 
@@ -153,8 +161,9 @@ public class Interpretador {
         return;
     }
 
-    public static void jogar(IEquipa equipaCasa, IEquipa equipaVisitante, IView view, IInput input) {
+    public static void jogar(IEquipa equipaCasa, IEquipa equipaVisitante, IView view, IInput input,IModel model) {
         IJogo j = new Jogo();
+        j.setTempoJogo(LocalDate.now());
         j.setEqVisitante(equipaVisitante);
         j.setEqCasa(equipaCasa);
         j.setPosicaoBola(0);
@@ -163,11 +172,12 @@ public class Interpretador {
             GameResult.calculaJogada(j);
             view.mostraMensagem(" (" + (i + 1) + "')");
             try {
-                Thread.sleep(200);
+                Thread.sleep(400);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
         }
+        model.addJogo(j);
         view.showFimJogo(j);
         view.mostraMensagem("-- press enter --");
         input.InputString();
@@ -210,7 +220,6 @@ public class Interpretador {
         switch (escolha) {
             case 1:
                 Medio m = new Medio();
-                m.addEquipa(e);
                 m.setRecuperacao_bolas((int) (Math.random() * 100));
                 m.setHabilidade(m.calculaHabilidade());
                 m.setNomeAtleta(nome);
@@ -229,7 +238,6 @@ public class Interpretador {
                 break;
             case 2:
                 Lateral l = new Lateral();
-                l.addEquipa(e);
                 l.setCruzamentos((int) (Math.random() * 100));
                 l.setHabilidade(l.calculaHabilidade());
                 l.setNomeAtleta(nome);
@@ -248,7 +256,6 @@ public class Interpretador {
                 break;
             case 3:
                 Defesa d = new Defesa();
-                d.addEquipa(e);
                 d.setIntersecao((int) (Math.random() * 100));
                 d.setDrible((int) (Math.random() * 100));
                 d.setHabilidade(d.calculaHabilidade());
@@ -268,7 +275,6 @@ public class Interpretador {
                 break;
             case 4:
                 Guarda_Redes g = new Guarda_Redes();
-                g.addEquipa(e);
                 g.setElasticidade((int) (Math.random() * 100));
                 g.setHabilidade(g.calculaHabilidade());
                 g.setNomeAtleta(nome);
@@ -287,7 +293,6 @@ public class Interpretador {
                 break;
             case 5:
                 Avancado a = new Avancado();
-                a.addEquipa(e);
                 a.setFinalizacao((int) (Math.random() * 100));
                 a.setSprint((int) (Math.random() * 100));
                 a.setHabilidade(a.calculaHabilidade());
@@ -307,7 +312,6 @@ public class Interpretador {
                 break;
             default:
                 Avancado a1 = new Avancado();
-                a1.addEquipa(e);
                 a1.setFinalizacao((int) (Math.random() * 100));
                 a1.setSprint((int) (Math.random() * 100));
                 a1.setHabilidade(a1.calculaHabilidade());
@@ -326,33 +330,5 @@ public class Interpretador {
                 model.getEquipas().get(e.getNome().toLowerCase()).insereJogador(a1);
                 break;
         }
-    }
-
-    public static ArrayList<String> leNargumentos(IParser p, Scanner s, int n, boolean isNumeric,
-            ArrayList<String> text) {
-        ArrayList<String> l = new ArrayList<>();
-        int inputInt = 0;
-        String inputStr = "";
-        for (int i = 0; i < n; i++) {
-            if (text != null && text.size() > i)
-                System.out.print(text.get(i) + ": ");
-            while (true) {
-                try {
-                    if (isNumeric)
-                        inputInt = Integer.parseInt(s.nextLine());
-                    else
-                        inputStr = s.nextLine();
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("[Erro] Insira de novo: ");
-                    continue;
-                }
-            }
-            if (isNumeric)
-                l.add(String.valueOf(inputInt));
-            else
-                l.add(inputStr);
-        }
-        return l;
     }
 }
