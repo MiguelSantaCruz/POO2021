@@ -1,9 +1,6 @@
 import java.util.Random;
 
 public class GameResult {
-    private double overallEquipa1;
-    private double overallEquipa2;
-
     /**
      * Método para obter a habilidade de uma equipa.
      * @param eq1 A equipa.

@@ -3,7 +3,7 @@
  * @version 1
  */
 
-public interface IAtleta {
+public interface IAtleta{
     public int getIdade();
     public String getNomeAtleta();
     public int getIdAtleta();
