@@ -40,7 +40,7 @@ public class Menu {
     /**
      * Mostrar as opções do Menu.
      */
-    public void show(){
+    public void show(boolean cursorVisible){
         System.out.println("\u001B[36m" + titulo + "\u001B[0m");
         System.out.println("-----------------------------");
         int i = 1;
@@ -48,6 +48,6 @@ public class Menu {
             System.out.println("(" + i + "): " + string);
             i++;
         }
-        System.out.print("> ");
+        if(cursorVisible) System.out.print("> ");
     }
 }

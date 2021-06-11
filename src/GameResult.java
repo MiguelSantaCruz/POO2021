@@ -9,7 +9,7 @@ public class GameResult {
      * @param eq1 A equipa.
      * @return O overall da equipa.
      */
-    public double getOverallEquipa1(Equipa eq1) {
+    public double getOverallEquipa1(IEquipa eq1) {
         return eq1.getHabilidadeGlobal();
     }
 
@@ -23,7 +23,7 @@ public class GameResult {
      * @throws JogadorNaoExisteException Exceção lançada quando o jogador que é passado como argumento não pertence à equipa.
      * @throws EquipaNaoExisteException Exceção lançada quando a equipa não corresponde à equipa da casa, nem à Visitante.
      */
-    public static void efetuarSubstituicao (Jogo jogo, Integer entra, Integer sai, Equipa nomeEquipa) throws JogadorNaoExisteException, EquipaNaoExisteException {
+    public static void efetuarSubstituicao (IJogo jogo, Integer entra, Integer sai, IEquipa nomeEquipa) throws JogadorNaoExisteException, EquipaNaoExisteException {
         if (nomeEquipa.getNome().equals(jogo.getEqCasa().getNome())) {           //saber se é na equipa da casa ou na visitante que vamos fazer a substituiçao
             if (jogo.getEmJogoCasa().contains(sai)) {                   //se o que sai estiver em jogo
                 if (jogo.getEqCasa().getplantel().get(entra).getSuplente()) {       //se o que entra estiver a suplente
@@ -31,7 +31,7 @@ public class GameResult {
                     jogo.getEmJogoCasa().add(entra);
                     jogo.getEqCasa().getplantel().get(entra).setSuplente(false);    //o que entra deixa de ser suplente
                     jogo.getEqCasa().getplantel().get(sai).setSuplente(true);       //o que sai passa a suplente
-                    jogo.entraSaiCasa.put(entra, sai);        //Map que tem os que entram como key, e os que saem como value
+                    jogo.getEntraSaiCasa().put(entra, sai);        //Map que tem os que entram como key, e os que saem como value
                 }
                 else {
                     throw new JogadorNaoExisteException("[Eq. Casa] Jogador que entra não está no banco...");
@@ -49,7 +49,7 @@ public class GameResult {
                     jogo.getEmJogoFora().add(entra);
                     jogo.getEqVisitante().getplantel().get(entra).setSuplente(false);       //o que entra passa a estar em Jogo
                     jogo.getEqVisitante().getplantel().get(sai).setSuplente(true);      //o que sai passa a suplente
-                    jogo.entraSaiVisitante.put(entra, sai);
+                    jogo.getEntraSaiVisitante().put(entra, sai);
                 }
                 else {
                     throw new JogadorNaoExisteException("[Eq. Visitante] Jogador que entra não está no banco...");
@@ -71,7 +71,7 @@ public class GameResult {
      * @param j O jogo em questão.
      * @return O valor correspondente ao resultado daquela jogada (Golo, canto, remate à baliza, etc...)
      */
-    public static int calculaJogada (Jogo j) {
+    public static int calculaJogada (IJogo j) {
         Random r = new Random();
         int rand;
         rand = r.nextInt(100);
@@ -79,7 +79,6 @@ public class GameResult {
         double habCasa = j.getEqCasa().getHabilidadeGlobal();
         double habVis = j.getEqVisitante().getHabilidadeGlobal();
         habCasa *= 1.1;  //equipa da casa tem um boost de habilidade de 10%
-        double dif = habCasa - habVis;
         int res=0;
         int golo = 0;
 
@@ -115,7 +114,7 @@ public class GameResult {
             case 7:
                 j.setGolosCasa(j.getGolosCasa()+1);
                 System.out.println("\u001B[31m" + j.getEqCasa().getNome() + " " + j.getGolosCasa() + " : " + j.getGolosVisitante() + " " + j.getEqVisitante().getNome()+"\u001B[0m");
-                j.setPosicaoBola(0);
+                j.setPosicaoBola(0);    
                 System.out.print("Bola ao meio campo (posse do " + j.getEqVisitante().getNome() + ")");
                 break;
             case 8:
@@ -144,14 +143,8 @@ public class GameResult {
      * @return True se a equipa da casa tiver maior overall, false caso contrário.
      */
     public static boolean equipaMaisForte (double habVis, double habCasa) {
-        double diferencaHab;
-        boolean eqCasaMaisForte;
-        if (habCasa > habVis) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (habCasa > habVis) return true;
+        else return false;
     }
 
     /**
@@ -164,42 +157,48 @@ public class GameResult {
     public static int bolaMeioCampo (int rand, double habVis, double habCasa, String equipaCasaNome, String equipaVisitanteNome) {                    //20% baliza; 35% area; 30%canto; 5% golo
         double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
         boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
+        Random r = new Random();
+        int random = r.nextInt(100);
+        //Se a deferença entre as habilidades das equipas for 0 então a probabilidade de algo acontecer é 50%
+        //Se a diferença entre as habilidades for 100 então a melhor equipa joja 100% das vezes e ganha 100% das vezes
+        double probabilidade = 0.5* Math.abs(diferencaHab)+50;
 
-
-        if (rand >= 0 && rand <= 20 && eqCasaMaisForte) {
-            System.out.print("Remate à baliza do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+        if (rand >= 0 && rand <= 20) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaVisitanteNome);
+            else if(random > probabilidade && eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaVisitanteNome);
+            else System.out.print("Remate à baliza do " + equipaCasaNome);
             return 1;
         }
-        else if (rand >= 0 && rand <= 20 && (!eqCasaMaisForte)) {
-            System.out.print("Remate à baliza do " + equipaVisitanteNome);
-            return 2;
-        }
-
-        else if (rand > 20 && rand <= 65 && eqCasaMaisForte) {
-            System.out.print("Passe para a área do " + equipaCasaNome);
+        else if (rand > 20 && rand <= 65) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Passe para a área do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Passe para a área do " + equipaVisitanteNome);
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Passe para a área do " + equipaCasaNome);
+            else System.out.print("Passe para a área do " + equipaVisitanteNome);
             return 3;
         }
-        else if (rand > 20 && rand <= 65 && !eqCasaMaisForte) {
-            System.out.print("Passe para a área do " + equipaVisitanteNome);
-            return 4;
-        }
 
-        else if (rand > 65 && rand <= 95 && eqCasaMaisForte) {
-            System.out.print("Canto para o " + equipaCasaNome);
+        else if (rand > 65 && rand <= 95) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Canto para o " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Canto para o " + equipaVisitanteNome);
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Canto para o " + equipaCasaNome);
+            else System.out.print("Canto para o " + equipaVisitanteNome);
             return 5;
         }
-        else if (rand > 65 && rand <= 95 && !eqCasaMaisForte) {
-            System.out.print("Canto para o " + equipaVisitanteNome);
-            return 6;
-        }
-
-        else if (rand > 95 && eqCasaMaisForte) {
-            System.out.print("Golo do " + equipaCasaNome);
-            return 7;
-        }
-        else if (rand > 95 && !eqCasaMaisForte) {
-            System.out.print("Golo do " + equipaVisitanteNome);
-            return 8;
+        else if (rand > 95) {
+            if(random < probabilidade && eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaCasaNome); 
+                return 7;
+            } else if (random < probabilidade && !eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaVisitanteNome);
+                return 8;
+            } else if(random > probabilidade && !eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaCasaNome);
+                return 7;
+            } else {
+                System.out.print("Golo do " + equipaVisitanteNome);
+                return 8;
+            }
         }
         return 0;
     }
@@ -215,50 +214,55 @@ public class GameResult {
     public static int bolaCanto (int rand, double habVis, double habCasa, String equipaCasaNome, String equipaVisitanteNome) {                // 10% golo; 30% baliza; 30% area; 15% canto; 15% meio campo
         double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
         boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
+        Random r = new Random();
+        int random = r.nextInt(100);
+        //Se a deferença entre as habilidades das equipas for 0 então a probabilidade de algo acontecer é 50%
+        //Se a diferença entre as habilidades for 100 então a melhor equipa joja 100% das vezes e ganha 100% das vezes
+        double probabilidade = 0.5* Math.abs(diferencaHab)+50;
 
 
-        if (rand >= 0 && rand <= 30 && eqCasaMaisForte) {
-            System.out.print("Remate à baliza por parte do " + equipaCasaNome);
+        if (rand >= 0 && rand <= 30) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaVisitanteNome);
+            else if(random > probabilidade && eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaVisitanteNome);
+            else System.out.print("Remate à baliza do " + equipaCasaNome);
             return 1;
         }
-        else if (rand >= 0 && rand <= 30 && (!eqCasaMaisForte)) {
-            System.out.print("Remate à baliza por parte do "+ equipaVisitanteNome);
-            return 2;
-        }
-
-        else if (rand > 30 && rand <= 60 && eqCasaMaisForte) {
-            System.out.print("Passe para a área (posse do " + equipaCasaNome +")");
+        else if (rand > 30 && rand <= 60) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Passe para a área do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Passe para a área do " + equipaVisitanteNome);
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Passe para a área do " + equipaCasaNome);
+            else System.out.print("Passe para a área do " + equipaVisitanteNome);
             return 3;
         }
-        else if (rand > 30 && rand <= 60 && !eqCasaMaisForte) {
-            System.out.print("Passe para a área (posse do " + equipaVisitanteNome +")");
-            return 4;
-        }
-
-        else if (rand > 60 && rand <= 75 && eqCasaMaisForte) {
-            System.out.print("Canto para o " + equipaCasaNome);
+        else if (rand > 60 && rand <= 75) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Canto para o " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Canto para o " + equipaVisitanteNome);
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Canto para o " + equipaCasaNome);
+            else System.out.print("Canto para o " + equipaVisitanteNome);
             return 5;
         }
-        else if (rand > 60 && rand <= 75 && !eqCasaMaisForte) {
-            System.out.print("Canto para o " + equipaVisitanteNome);
-            return 6;
-        }
-        else if (rand > 75 && rand <= 90 && eqCasaMaisForte) {
-            System.out.print("Bola para o meio campo (posse do " + equipaCasaNome + ")");
+        else if (rand > 75 && rand <= 95) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaCasaNome + ")");  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome + ")");
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaCasaNome + ")");
+            else System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome + ")");
             return 9;
         }
-        else if (rand > 75 && rand <= 90 && !eqCasaMaisForte) {
-            System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome + ")");
-            return 10;
-        }
-
-        else if (rand > 90 && eqCasaMaisForte) {
-            System.out.print("Golo do " + equipaCasaNome);
-            return 7;
-        }
-        else if (rand > 90 && !eqCasaMaisForte) {
-            System.out.print("Golo do " + equipaVisitanteNome);
-            return 8;
+        else if (rand > 95) {
+            if(random < probabilidade && eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaCasaNome); 
+                return 7;
+            } else if (random < probabilidade && !eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaVisitanteNome);
+                return 8;
+            } else if(random > probabilidade && !eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaCasaNome);
+                return 7;
+            } else {
+                System.out.print("Golo do " + equipaVisitanteNome);
+                return 8;
+            }
         }
         return 0;
     }
@@ -275,50 +279,54 @@ public class GameResult {
     public static int bolaArea (int rand, double habVis, double habCasa,  String equipaCasaNome, String equipaVisitanteNome) {                // 10% golo; 30% baliza; 5% area; 25% canto; 30% meio campo
         double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
         boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
+        Random r = new Random();
+        int random = r.nextInt(100);
+        //Se a deferença entre as habilidades das equipas for 0 então a probabilidade de algo acontecer é 50%
+        //Se a diferença entre as habilidades for 100 então a melhor equipa joja 100% das vezes e ganha 100% das vezes
+        double probabilidade = 0.5* Math.abs(diferencaHab)+50;
 
-
-        if (rand >= 0 && rand <= 30 && eqCasaMaisForte) {
-            System.out.print("Remate à baliza por parte do " + equipaCasaNome);
+        if (rand >= 0 && rand <= 30) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaVisitanteNome);
+            else if(random > probabilidade && eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaVisitanteNome);
+            else System.out.print("Remate à baliza do " + equipaCasaNome);
             return 1;
         }
-        else if (rand >= 0 && rand <= 30 && (!eqCasaMaisForte)) {
-            System.out.print("Remate à baliza por parte do " + equipaVisitanteNome);
-            return 2;
-        }
-
-        else if (rand > 30 && rand <= 35 && eqCasaMaisForte) {
-            System.out.print("Passe para a área do " + equipaVisitanteNome + "(posse do " + equipaCasaNome +")");
+        else if (rand > 30 && rand <= 35) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Passe para a área do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Passe para a área do " + equipaVisitanteNome);
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Passe para a área do " + equipaCasaNome);
+            else System.out.print("Passe para a área do " + equipaVisitanteNome);
             return 3;
         }
-        else if (rand > 30 && rand <= 35 && !eqCasaMaisForte) {
-            System.out.print("Passe para a área do " + equipaCasaNome + "(posse do " + equipaVisitanteNome +")");
-            return 4;
-        }
-
-        else if (rand > 35 && rand <= 60 && eqCasaMaisForte) {
-            System.out.print("Canto para o " + equipaCasaNome);
+        else if (rand > 35 && rand <= 60) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Canto para o " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Canto para o " + equipaVisitanteNome);
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Canto para o " + equipaCasaNome);
+            else System.out.print("Canto para o " + equipaVisitanteNome);
             return 5;
         }
-        else if (rand > 35 && rand <= 60 && !eqCasaMaisForte) {
-            System.out.print("Canto para o " + equipaVisitanteNome);
-            return 6;
-        }
-        else if (rand > 60 && rand <= 90 && eqCasaMaisForte) {
-            System.out.print("Bola para o meio campo (posse do " + equipaCasaNome +")");
+        else if (rand > 60 && rand <= 95) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaCasaNome + ")");  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome + ")");
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaCasaNome + ")");
+            else System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome + ")");
             return 9;
         }
-        else if (rand > 60 && rand <= 90 && !eqCasaMaisForte) {
-            System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome +")");
-            return 10;
-        }
-
-        else if (rand > 90 && eqCasaMaisForte) {
-            System.out.print("Golo " + equipaCasaNome);
-            return 7;
-        }
-        else if (rand > 90 && !eqCasaMaisForte) {
-            System.out.print("Golo " + equipaVisitanteNome);
-            return 8;
+        else if (rand > 95) {
+            if(random < probabilidade && eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaCasaNome); 
+                return 7;
+            } else if (random < probabilidade && !eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaVisitanteNome);
+                return 8;
+            } else if(random > probabilidade && !eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaCasaNome);
+                return 7;
+            } else {
+                System.out.print("Golo do " + equipaVisitanteNome);
+                return 8;
+            }
         }
         return 0;
     }
@@ -334,46 +342,55 @@ public class GameResult {
     public static int bolaBaliza (int rand, double habVis, double habCasa, String equipaCasaNome, String equipaVisitanteNome) {                // 5% golo; 10% baliza; 30% area; 25% canto; 30% meio campo
         double diferencaHab = ( (habCasa>habVis) ? (habCasa-habVis) : (habVis-habCasa) );
         boolean eqCasaMaisForte = equipaMaisForte(habVis, habCasa);
+        Random r = new Random();
+        int random = r.nextInt(100);
 
-        if (rand >= 0 && rand <= 10 && eqCasaMaisForte) {
-            System.out.print("Remate à baliza por parte do " + equipaCasaNome);
+        //Se a deferença entre as habilidades das equipas for 0 então a probabilidade de algo acontecer é 50%
+        //Se a diferença entre as habilidades for 100 então a melhor equipa joja 100% das vezes e ganha 100% das vezes
+        double probabilidade = 0.5* Math.abs(diferencaHab)+50;
+
+        if (rand >= 0 && rand <= 10) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaVisitanteNome);
+            else if(random > probabilidade && eqCasaMaisForte) System.out.print("Remate à baliza do " + equipaVisitanteNome);
+            else System.out.print("Remate à baliza do " + equipaCasaNome);
             return 1;
         }
-        else if (rand >= 0 && rand <= 10 && (!eqCasaMaisForte)) {
-            System.out.print("Remate à baliza por parte do " + equipaVisitanteNome);
-            return 2;
-        }
-        else if (rand > 10 && rand <= 40 && eqCasaMaisForte) {
-            System.out.print("Passe para a área" + "(posse do " + equipaCasaNome +")");
+        else if (rand > 10 && rand <= 40) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Passe para a área do " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Passe para a área do " + equipaVisitanteNome);
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Passe para a área do " + equipaCasaNome);
+            else System.out.print("Passe para a área do " + equipaVisitanteNome);
             return 3;
         }
-        else if (rand > 10 && rand <= 40 && !eqCasaMaisForte) {
-            System.out.print("Passe para a área" + "(posse do " + equipaVisitanteNome +")");
-            return 4;
-        }
-        else if (rand > 40 && rand <= 65 && eqCasaMaisForte) {
-            System.out.print("Canto para o " + equipaCasaNome);
+        else if (rand > 40 && rand <= 65) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Canto para o " + equipaCasaNome);  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Canto para o " + equipaVisitanteNome);
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Canto para o " + equipaCasaNome);
+            else System.out.print("Canto para o " + equipaVisitanteNome);
             return 5;
         }
-        else if (rand > 40 && rand <= 65 && !eqCasaMaisForte) {
-            System.out.print("Canto para o " + equipaVisitanteNome);
-            return 6;
-        }
-        else if (rand > 65 && rand <= 95 && eqCasaMaisForte) {
-            System.out.print("Bola para o meio campo (posse do " + equipaCasaNome +")");
+        else if (rand > 65 && rand <= 95) {
+            if(random < probabilidade && eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaCasaNome + ")");  //remate à baliza significa que nao é golo e que o guarda-redes amarrou a bola
+            else if (random < probabilidade && !eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome + ")");
+            else if(random > probabilidade && !eqCasaMaisForte) System.out.print("Bola para o meio campo (posse do " + equipaCasaNome + ")");
+            else System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome + ")");
             return 9;
         }
-        else if (rand > 65 && rand <= 95 && !eqCasaMaisForte) {
-            System.out.print("Bola para o meio campo (posse do " + equipaVisitanteNome +")");
-            return 10;
-        }
-        else if (rand > 95 && eqCasaMaisForte) {
-            System.out.print("Golo do " + equipaCasaNome);
-            return 7;
-        }
-        else if (rand > 95 && !eqCasaMaisForte) {
-            System.out.print("Golo do " + equipaVisitanteNome);
-            return 8;
+        else if (rand > 95) {
+            if(random < probabilidade && eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaCasaNome); 
+                return 7;
+            } else if (random < probabilidade && !eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaVisitanteNome);
+                return 8;
+            } else if(random > probabilidade && !eqCasaMaisForte) {
+                System.out.print("Golo do " + equipaCasaNome);
+                return 7;
+            } else {
+                System.out.print("Golo do " + equipaVisitanteNome);
+                return 8;
+            }
         }
         return 0;
     }

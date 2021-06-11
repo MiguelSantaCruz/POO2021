@@ -1,5 +1,7 @@
-import java.util.*;
-public class Defesa extends Jogador {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Defesa extends Jogador implements Serializable{
     private int intersecao;
     private int drible;
 
@@ -27,7 +29,7 @@ public class Defesa extends Jogador {
     public Defesa (int numero,int velocidade, int resistencia,int destreza, 
     int impulsao, int jogo_de_cabeça, int remate, int capacidade_de_passe,
      int intersecao, int drible,int idAtleta,String nomeAtleta,int idade,
-     ArrayList<Equipa> eq, boolean t,int p,boolean supl) {
+     ArrayList<IEquipa> eq, boolean t,int p,boolean supl) {
         super(numero,
               velocidade,
               resistencia,
@@ -51,7 +53,7 @@ public class Defesa extends Jogador {
      * @return Novo defesa com as caracteristicas passadas na string.
      */
     public static Defesa parse(String input){
-        ArrayList<Equipa> eq = new ArrayList<Equipa>();
+        ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
         String[] campos = input.split(",");
         return new Defesa(Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[12]),
@@ -65,7 +67,7 @@ public class Defesa extends Jogador {
                 Integer.parseInt(campos[10]),
                 Integer.parseInt(campos[11]), 
                 campos[0],
-                Integer.parseInt(campos[1]),eq,false,1,true);
+                Integer.parseInt(campos[1]),eq,true,1,false);
     }
 
     /**

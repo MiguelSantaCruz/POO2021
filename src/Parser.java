@@ -1,40 +1,46 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class Parser {
+public class Parser implements IParser{
     private String path;
-    private Map<String, Equipa> equipas;
-    private List<Jogo> jogos;
-    //Map<String, Jogador> jogadores
 
     /**
      * Construtor vazio de um Parser.
      */
     public Parser(){
         this.path = "../POO2021/final.txt";
-        this.equipas = new HashMap<>();
-        this.jogos = new ArrayList<>();
     }
 
-    public void addEquipa(Equipa e){
-        this.equipas.put(e.getNome().toLowerCase(), e.clone());
+    public void guardaBin(String nomeFicheiro,IModel model) throws FileNotFoundException, IOException {
+        FileOutputStream bf = new FileOutputStream(nomeFicheiro);
+        ObjectOutputStream oos = new ObjectOutputStream(bf);
+        oos.writeObject(model);
+        oos.flush();
+        oos.close();
     }
 
+    public IModel readBin(String nomeFich) throws IOException, ClassNotFoundException{
+        FileInputStream bf = new FileInputStream(nomeFich);
+        ObjectInputStream ois = new ObjectInputStream(bf);
+        IModel m = (IModel) ois.readObject();
+        ois.close();
+        return m;
+    }
     /**
      * Método para fazer o parse das informações.
      * @throws LinhaIncorretaException Quando ocorre algum problema com a linha em questão.
      */
-    public void parse() throws LinhaIncorretaException {
+    public void parse(IModel model) throws LinhaIncorretaException {
         List<String> linhas = lerFicheiro(getPath());
-        this.equipas = new HashMap<>(); //nome, equipa
-        //this.jogadores = new HashMap<>(); //numero, jogador
-        this.jogos = new ArrayList<>();
         Equipa ultima = null; Jogador j = null;
         String[] linhaPartida;
         for (String linha : linhas) {
@@ -42,7 +48,7 @@ public class Parser {
             switch(linhaPartida[0]){
                 case "Equipa":
                     Equipa e = Equipa.parse(linhaPartida[1]);
-                    equipas.put(e.getNome().toLowerCase(), e);
+                    model.addEquipa(e);
                     ultima = e;
                     break;
                 case "GK":
@@ -77,23 +83,13 @@ public class Parser {
                     break;
                case "Jogo":
                     Jogo jo = Jogo.parse(linhaPartida[1]);
-                    jogos.add(jo);
+                    model.addJogo(jo);
                     break;
                 default:
                     throw new LinhaIncorretaException();
 
             }
         }
-        // if ( equipas.containsKey("Boavista FC") )
-        //      System.out.println("Valor da Chave"+
-        //       " = "+equipas.get("Boavista FC"));
-       /*  for (Equipa e: equipas.values()){
-            System.out.println(e.toString());
-        }
-        for (Jogo jog: jogos){
-            System.out.println(jog.toString());
-        } */
-
 
     }
 
@@ -110,36 +106,10 @@ public class Parser {
     }
 
     /**
-     * Obter o conjunto das equipas.
-     * @return O novo hashmap com as equipas.
-     */
-    public Map<String,Equipa> getEquipas(){
-        Map <String,Equipa> copy = new HashMap<>();
-        for (Map.Entry<String, Equipa> equipaMap: this.equipas.entrySet()) {
-            copy.put(equipaMap.getKey(), equipaMap.getValue());
-        }
-        return copy;
-    }
-
-    /**
      * Obter o path para o ficheiro com todas as informações.
      * @return O path para o ficheiro.
      */
     public String getPath(){
         return this.path;
     }
-
-    /**
-     * Obter a lista dos jogos.
-     * @return A lista dos jogos.
-     */
-    public List<Jogo> getJogos(){
-        ArrayList<Jogo> l = new ArrayList<>();
-        for (Jogo jogo : this.jogos) {
-            l.add(jogo);
-        }
-        return l;
-    }
-
-
 }

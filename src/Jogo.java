@@ -1,12 +1,12 @@
 import java.time.LocalDate;
 import java.util.*;
 
-public class Jogo{
+public class Jogo implements IJogo{
     private int golosCasa;
     private int golosVisitante; //deixei o numero de golos de cada equipa como dois ints pq assim podemos apenas fazer golosVisitantes++ em vez de alterar uma string
     private LocalDate date;
-    private Equipa eqCasa;  //equipa da Casa
-    private Equipa eqVisitante; //equipa Visitante
+    private IEquipa eqCasa;  //equipa da Casa
+    private IEquipa eqVisitante; //equipa Visitante
     private List <Integer> titularesCasa;   //titulares da equipa da casa   -> Nunca usar este para efetuar substituiçoes ou assim (é so para guardar os titulares)
     private List <Integer> titularesVisitante;  //titulares da equipa Visitante -> Nunca usar este para efetuar substituiçoes ou assim (é so para guardar os titulares)
     //private List <Integer> suplentesCasa;   //suplentes da equipa da casa
@@ -79,7 +79,7 @@ public class Jogo{
      * @param entraSaiCasa Map das substituições ocorridas na equipa da casa.
      * @param entraSaiVisitante Map das substituições ocorridas na equipa visitante.
      */
-    public Jogo (int gc, int gf,Equipa eqCasa, Equipa eqFora, LocalDate d, 
+    public Jogo (int gc, int gf,IEquipa eqCasa, IEquipa eqFora, LocalDate d, 
     List<Integer> titCasa, List<Integer> titVis,List<Integer> emJCasa, List<Integer> emJFora, Map<Integer, Integer> entraSaiCasa, Map <Integer,Integer> entraSaiVisitante){
         this.golosCasa = gc;
         this.golosVisitante = gf;
@@ -208,7 +208,7 @@ public class Jogo{
      * Obter a Equipa da casa.
      * @return A Equipa da casa.
      */
-    public Equipa getEqCasa() {
+    public IEquipa getEqCasa() {
         return this.eqCasa;
     }
 
@@ -216,7 +216,7 @@ public class Jogo{
      * Definir o nome da equipa da casa.
      * @param eq O nome da equipa.
      */
-    public void setEqCasa(Equipa eq) {
+    public void setEqCasa(IEquipa eq) {
         this.eqCasa = eq.clone();
     }
 
@@ -224,7 +224,7 @@ public class Jogo{
      * Alterar o nome da equipa da casa.
      * @param eqCasa O novo nome.
      */
-    public void setNomeEqCasa(Equipa eqCasa) {
+    public void setNomeEqCasa(IEquipa eqCasa) {
         this.eqCasa = eqCasa;
     }
 
@@ -232,7 +232,7 @@ public class Jogo{
      * Obter a Equipa visitante.
      * @return A Equipa Visitante.
      */
-    public Equipa getEqVisitante() {
+    public IEquipa getEqVisitante() {
         return this.eqVisitante;
     }
 
@@ -240,7 +240,7 @@ public class Jogo{
      * Definir a Equipa visitante.
      * @param EqVisitante A equipa visitante.
      */
-    public void setEqVisitante(Equipa EqVisitante) {
+    public void setEqVisitante(IEquipa EqVisitante) {
         this.eqVisitante = EqVisitante;
     }
 
@@ -262,10 +262,10 @@ public class Jogo{
      * @param titularesCasa A lista dos titulares da casa
      */
     public void setTitularesCasa(List<Integer> titularesCasa) {
-        HashMap<Integer,Jogador> e = this.eqCasa.getplantel();
-        for (Map.Entry<Integer, Jogador> entry : e.entrySet()) {
+        HashMap<Integer,IJogador> e = this.eqCasa.getplantel();
+        for (Map.Entry<Integer, IJogador> entry : e.entrySet()) {
             Integer i = entry.getKey();
-            Jogador j = entry.getValue();
+            IJogador j = entry.getValue();
             if (titularesCasa.contains(i)) j.setTitular(true);
             else j.setTitular(false);
         }
@@ -290,10 +290,10 @@ public class Jogo{
      * @param titularesVisitante Os jogadores da equipa visitante.
      */
     public void setTitularesVisitante(List<Integer> titularesVisitante) {
-        HashMap<Integer,Jogador> e = this.eqCasa.getplantel();
-        for (Map.Entry<Integer, Jogador> entry : e.entrySet()) {
+        HashMap<Integer,IJogador> e = this.eqCasa.getplantel();
+        for (Map.Entry<Integer, IJogador> entry : e.entrySet()) {
             Integer i = entry.getKey();
-            Jogador j = entry.getValue();
+            IJogador j = entry.getValue();
             if (titularesVisitante.contains(i)) j.setTitular(true);
             else j.setTitular(false);
         }
@@ -309,6 +309,18 @@ public class Jogo{
     }
     public void setEmJogoCasa(List<Integer> emJogoC) {
         this.emJogoCasa= emJogoC;
+    }
+
+    /**
+     * Obter o map das substituições da equipa da casa.
+     * @return As substituições.
+     */
+    public Map<Integer,Integer> getEntraSaiCasa(){
+        Map<Integer,Integer> m = new HashMap<>();
+        for (Map.Entry<Integer,Integer> entry : this.entraSaiCasa.entrySet()){
+            m.put(entry.getKey(), entry.getValue());
+        }
+        return m;
     }
 
 
@@ -352,15 +364,6 @@ public class Jogo{
     } */
 
     /**
-     * Obter o map das substituições da equipa da casa.
-     * @return As substituições.
-     */
-    public Map<Integer, Integer> getEntraSaiCasa () {
-        return this.entraSaiCasa;
-    }
-
-
-    /**
      * Definir o map das substituições da equipa da casa.
      * @param entraSaiC Novo map das substituições.
      */
@@ -374,8 +377,12 @@ public class Jogo{
      * Obter o map das substituições da equipa visitante
      * @return As substituições.
      */
-    public Map<Integer, Integer> getEntraSaiVisitante () {
-        return this.entraSaiVisitante;
+    public Map<Integer,Integer> getEntraSaiVisitante(){
+        Map<Integer,Integer> m = new HashMap<>();
+        for (Map.Entry<Integer,Integer> entry : this.entraSaiVisitante.entrySet()){
+            m.put(entry.getKey(), entry.getValue());
+        }
+        return m;
     }
 
     /**

@@ -1,11 +1,11 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Classe Jogador Medio
  * @version 1
  */
-public class Medio extends Jogador
-{
+public class Medio extends Jogador implements Serializable{
     private int recuperacao_bolas;
  
     /**
@@ -21,7 +21,7 @@ public class Medio extends Jogador
      */
     public Medio(int numero,int velocidade, int resistencia, int destreza, int impulsao,
      int jogo_de_cabeça, int remate, int capacidade_de_passe,int recuperacao_bolas,
-     int idAtleta,String nomeAtleta,int idade, ArrayList<Equipa> eq,boolean t, int p,boolean supl){
+     int idAtleta,String nomeAtleta,int idade, ArrayList<IEquipa> eq,boolean t, int p,boolean supl){
         super(numero,
               velocidade,
               resistencia,
@@ -44,7 +44,7 @@ public class Medio extends Jogador
      * @return O novo Médio com os parametros preenchidos de acordo com as informações passadas.
      */
     public static Medio parse(String input){
-        ArrayList<Equipa> eq = new ArrayList<Equipa>();
+        ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
         String[] campos = input.split(",");
         return new Medio( Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[11]),
@@ -57,7 +57,7 @@ public class Medio extends Jogador
                 Integer.parseInt(campos[9]),
                 Integer.parseInt(campos[10]),
                 campos[0],
-                Integer.parseInt(campos[1]),eq,false, 3,true);
+                Integer.parseInt(campos[1]),eq,true, 3,false);
     }
 
     /**
