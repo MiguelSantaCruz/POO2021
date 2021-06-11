@@ -106,9 +106,9 @@ public class Lateral extends Jogador implements Serializable{
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
-        sb.append(" Cruzamentos: ");
+        sb.append("\nCruzamentos: ");
         sb.append(getCruzamentos());
-        sb.append(" Lateral\n");
+        sb.append("\nPosição: Lateral\n");
         return sb.toString();
     }
 

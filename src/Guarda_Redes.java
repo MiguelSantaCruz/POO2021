@@ -103,9 +103,9 @@ public class Guarda_Redes extends Jogador implements Serializable{
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
-        sb.append(" Elasticidade: ");
+        sb.append("\nElasticidade: ");
         sb.append(this.getElasticidade());
-        sb.append(" Guarda-Redes\n");
+        sb.append("\nGuarda-Redes\n");
         return sb.toString();
     }
 

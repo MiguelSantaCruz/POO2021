@@ -50,7 +50,7 @@ public class View implements IView{
         menuEquipas.show(true);
     }
 
-    public void mostrarListaDeJogadores(){
+    public void mostrarSelecaoDePosicaoJogador(){
         Menu menu = new Menu();
         menu.setTitulo("Selecione a posição");
         menu.adicionaOpcao("Medio");
@@ -63,7 +63,7 @@ public class View implements IView{
 
     public void showInicioJogo(IEquipa equipaCasa, IEquipa equipaVisitante){
         clearScreen();
-        System.out.println("\u001B[36mJogo entre " + equipaCasa.getNome() + " e " + equipaVisitante.getNome() + " [Ainda não dá para selecionar]\u001B[0m");
+        System.out.println("\u001B[36mJogo entre " + equipaCasa.getNome() + " e " + equipaVisitante.getNome() + "\u001B[0m");
         System.out.println("-----------------------------------------");
         System.out.println("Bola ao meio campo");
     }

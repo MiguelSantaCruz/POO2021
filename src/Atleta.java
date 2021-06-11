@@ -83,11 +83,11 @@ public class Atleta{
      */
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("IdAtleta:");
+        sb.append("Id Atleta: ");
         sb.append(this.getIdAtleta());
-        sb.append(" Nome:");
+        sb.append("\nNome: ");
         sb.append(this.getNomeAtleta());
-        sb.append(" Idade:");
+        sb.append("\nIdade: ");
         sb.append(this.getIdade());
         return sb.toString();
     }

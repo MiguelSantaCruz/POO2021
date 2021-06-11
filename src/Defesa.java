@@ -135,9 +135,9 @@ public class Defesa extends Jogador implements Serializable{
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
-        sb.append(" Interseção=").append(intersecao);
-        sb.append(", Drible=").append(drible);
-        sb.append(" Defesa\n");
+        sb.append("\nInterseção: ").append(intersecao);
+        sb.append("\nDrible: ").append(drible);
+        sb.append("\nPosição: Defesa\n");
         return sb.toString();
     }
 

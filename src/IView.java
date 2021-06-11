@@ -6,10 +6,11 @@ public interface IView {
     public void mostrarMenuDeConsultaDeEquipas();
     public void mostrarMenuDeConsultaDeJogador();
     public void mostrarEquipas(IModel model);
-    public void mostrarListaDeJogadores();
+    public void mostrarSelecaoDePosicaoJogador();
     public void showInicioJogo(IEquipa equipaCasa, IEquipa equipaVisitante);
     public void showFimJogo(IJogo j);
     public static void showEquipa(IEquipa e,boolean showPlantel,int highlight){
+        clearScreen();
         System.out.print("Nome: " + truncateString(e.getNome(), 30));
         System.out.print("  Data de fundação: " + e.getDataDeFundação());
         System.out.println("            Habilidade global: " + e.getHabilidadeGlobal() + avaliaHabilidade(e.getHabilidadeGlobal()));
@@ -36,12 +37,8 @@ public interface IView {
     }
 
     public static void showDetalhesJogador(IJogador j,IEquipa e){
-        System.out.println("Equipa: " + e.getNome());
-        System.out.println("Nome: " + (j.getNomeAtleta()));
-        System.out.println("Número: " + j.getIdAtleta());
-        System.out.println("Idade " + j.getIdade());
+        System.out.println("Equipa atual: " + e.getNome());
         System.out.println("Habilidade geral: " + j.getHabilidade() + avaliaHabilidade(j.getHabilidade()));
-        System.out.println("Posição: " + j.getClass().getName());
         System.out.println(j.toString());
     }
 
@@ -58,5 +55,10 @@ public interface IView {
 
     public static String truncateString(String s, int n) {
         return String.format("%-" + n + "s", s);  
+    }
+
+    public static void clearScreen(){
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
     }
 }

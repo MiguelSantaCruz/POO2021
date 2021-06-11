@@ -106,9 +106,9 @@ public class Medio extends Jogador implements Serializable{
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
-        sb.append(" Recuperação de bolas: ");
+        sb.append("\nRecuperação de bolas: ");
         sb.append(this.getRecuperacao_bolas());
-        sb.append(" Médio\n");
+        sb.append("\nPosição: Médio\n");
         return sb.toString();
     }
 
