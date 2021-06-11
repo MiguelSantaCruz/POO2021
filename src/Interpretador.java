@@ -71,6 +71,9 @@ public class Interpretador {
                     view.mostraMensagem("Insira o nome do ficheiro: ");
                     String filePath2 = input.InputString();
                     p.guardaBin(filePath2, model);
+                    view.mostraMensagem("Guardado em " + filePath2);
+                    view.mostraMensagem("--- press enter ---");
+                    input.InputString();
                     break;
                 case 10:
                     input.closeScanner();
