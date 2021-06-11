@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Classe Jogador lateral
  * @version 1
  */
-public class Lateral extends Jogador{
+public class Lateral extends Jogador implements Serializable{
     private int cruzamentos;
  
     /**
@@ -21,7 +22,7 @@ public class Lateral extends Jogador{
     public Lateral(int numero,int velocidade, int resistencia, int destreza, 
     int impulsao, int jogo_de_cabeça, int remate, 
     int capacidade_de_passe,int cruzamentos,int idAtleta,
-    String nomeAtleta,int idade, ArrayList<Equipa> eq,boolean t,int p,boolean supl) {
+    String nomeAtleta,int idade, ArrayList<IEquipa> eq,boolean t,int p,boolean supl) {
         super(numero,velocidade,
                 resistencia,
                 destreza,
@@ -43,7 +44,7 @@ public class Lateral extends Jogador{
      * @return O novo lateral.
      */
     public static Lateral parse(String input){
-        ArrayList<Equipa> eq = new ArrayList<Equipa>();
+        ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
         String[] campos = input.split(",");
         return new Lateral(Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[10]),
@@ -56,7 +57,7 @@ public class Lateral extends Jogador{
                 Integer.parseInt(campos[9]),
                 Integer.parseInt(campos[11]),
                 campos[0],
-                Integer.parseInt(campos[1]),eq,false,2,true);
+                Integer.parseInt(campos[1]),eq,true,2,false);
     }
 
     /**

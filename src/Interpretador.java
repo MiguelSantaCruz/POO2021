@@ -1,74 +1,63 @@
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Interpretador {
-    public static void run() throws LinhaIncorretaException{
-        Scanner scanner = new Scanner(System.in);
-        Parser p = new Parser();
-        p.parse();
+    public static void run() throws LinhaIncorretaException, ClassNotFoundException, IOException{
+        IView view = new View();
+        IInput input = new Input();
+        IModel model = new Model();
+        IParser p = new Parser();
+        p.parse(model);
         while(true){ 
-            clearScreen();
-            Menu menu = new Menu();
-            System.out.println("[Foram lidas: " + p.getEquipas().size() + " equipas de " + p.getPath()+"]");
-            menu.setTitulo("Football Manager ⚽");
-            menu.adicionaOpcao("Consultar equipas 👥");
-            menu.adicionaOpcao("Consultar jogadores ⛹️‍");
-            menu.adicionaOpcao("Adicionar equipa ➕👥");
-            menu.adicionaOpcao("Adicionar jogador ➕⛹️");
-            menu.adicionaOpcao("Transferir jogador ➡️ ⛹️");
-            menu.adicionaOpcao("Jogar 🎮‍");
-            menu.adicionaOpcao("Sair ❌");
-            menu.show();
-            int escolha = 0;
-            try {
-                    escolha = scanner.nextInt();
-                    scanner.nextLine();
-            } catch (InputMismatchException e) {
-                    escolha = -1;
-                    scanner.nextLine();
-            }
+            view.mostrarMenuPrincipal();
+            int escolha = input.InputInteger();
             switch (escolha) {
                 case 1:
-                    procurarEquipa(p,scanner);
+                    procurarEquipa(p, input,view,model);
                     break;
                 case 2:
-                    procurarJogador(p,scanner);
+                    procurarJogador(p,input,view,model);
                     break;
                 case 3:
-                    adicionaEquipa(p,scanner);
+                    adicionaEquipa(p,input,view,model);
                     break;
                 case 4:
-                    adicionaJogador(p,scanner);
+                    adicionaJogador(p,input,view,model);
                     break;
                 case 6:
-                    clearScreen();
-                    Menu menuEquipas = new Menu();
-                    menuEquipas.setTitulo("Selecione duas equipas");
-                    for (Equipa e : p.getEquipas().values()) {
-                        menuEquipas.adicionaOpcao(e.getNome());
-                    }
-                    menuEquipas.show();
-                    ArrayList<String> text = new ArrayList<>();
-                    text.add("Insira a primeira equipa");
-                    text.add("Insira a segunda equipa");
-                    ArrayList<String> numEquipas = new ArrayList<>();
-                    numEquipas = leNargumentos(p, scanner, 2, true, text);
+                    view.mostrarEquipas(model);
+                    view.mostraMensagem("Insira a primeira equipa");
+                    int equipa1 = input.InputInteger();
+                    view.mostraMensagem("Insira a segunda equipa");
+                    int equipa2 = input.InputInteger();
                     int i = 1;
-                    Equipa eqCasa = new Equipa();
-                    Equipa eqVisitante = new Equipa();
-                    for (Equipa equipa : p.getEquipas().values()){
-                        if(String.valueOf(i).equals(numEquipas.get(0))) eqCasa = equipa;
-                        if(String.valueOf(i).equals(numEquipas.get(1))) eqVisitante = equipa; 
+                    IEquipa eqCasa = new Equipa();
+                    IEquipa eqVisitante = new Equipa();
+                    for (IEquipa equipa : model.getEquipas().values()){
+                        if(i == equipa1) eqCasa = equipa;
+                        if(i == equipa2) eqVisitante = equipa; 
                         i++;
                     }
-                    jogar(eqCasa,eqVisitante,scanner);
+                    jogar(eqCasa,eqVisitante,view,input);
                     break;
                 case 7:
-                    scanner.close();
+                    view.mostraMensagem("Insira o nome do ficheiro: ");
+                    String filePath = input.InputString();
+                    model = p.readBin(filePath);
+                    view.mostraMensagem("Lidas: " + model.getEquipas().values().size() + " equipas de [" + filePath + "]");
+                    view.mostraMensagem("--- press enter ---");
+                    input.InputString();
+                    break;
+                case 8:
+                    view.mostraMensagem("Insira o nome do ficheiro: ");
+                    String filePath2 = input.InputString();
+                    p.guardaBin(filePath2,model);  
+                    break;
+                case 9:
+                    input.closeScanner();
                     System.exit(0);
                     break;
                 default:
@@ -82,160 +71,86 @@ public class Interpretador {
         System.out.flush();  
     }  
 
-    public static void procurarJogador(Parser p, Scanner s){
-        clearScreen();
-        Menu menu = new Menu();
-        menu.adicionaOpcao("Procurar jogador nos planteis 📕");
-        menu.adicionaOpcao("Ver detalhes do jogador 📊");
-        menu.adicionaOpcao("Voltar");
-        menu.setTitulo("Consultar jogadores ⚽");
-        menu.show();
+    public static void procurarJogador(IParser p, IInput input,IView view,IModel model){
+        view.mostrarMenuDeConsultaDeJogador();
         boolean detalhesJogador = false;
-        int escolha;
-        try {
-            escolha = s.nextInt();
-        } catch (InputMismatchException e) {
-            escolha = -1;
-        }
-        s.nextLine();
+        int escolha = input.InputInteger();
         if(escolha == 2) {
             escolha = 1;
             detalhesJogador = true;
         }
         switch (escolha) {
-            case 1: 
-                System.out.println("Insira um nome para procurar:");
-                String search = s.nextLine();
+            case 1:
+                view.mostraMensagem("Insira um nome para procurar:");
+                String search = input.InputString();
                 boolean playerExists = false;
-                for (Equipa e : p.getEquipas().values()) {
+                for (IEquipa e : model.getEquipas().values()) {
                     if (playerExists) break;
-                    for (Jogador j : e.getplantel().values()) {
+                    for (IJogador j : e.getplantel().values()) {
                         if (j.getNomeAtleta().toLowerCase().equals(search.toLowerCase())){
                            playerExists = true;
-                           if(detalhesJogador) showDetalhesJogador(j,e);
-                           else showEquipa(e, true, j.getNumeroJogador());
+                           if(detalhesJogador) IView.showDetalhesJogador(j,e);
+                           else IView.showEquipa(e, true, j.getNumeroJogador());
                            break;
                         }
                         
                     }
                 }
-                if(!playerExists) System.out.println("Não encontrado");
+                if(!playerExists) view.mostraMensagem("Não encontrado");
                 break;
             case 3:
                 return;
             default:
-                System.out.println("-- [Erro]: pressione enter --");
-                s.nextLine();
-                procurarJogador(p, s);
+                view.mostraMensagem("-- [Erro]: pressione enter --");
+                input.InputString();
+                procurarJogador(p, input,view,model);
                 break;  
         }
         System.out.println("-- press enter --");
-        s.nextLine();
+        input.InputString();
         return;
     }
 
-    public static void procurarEquipa(Parser p,Scanner s){
-        clearScreen();
-        Menu menu = new Menu();
-        menu.adicionaOpcao("Procurar por nome 📕");
-        menu.adicionaOpcao("Consultar lista 📋");
-        menu.adicionaOpcao("Voltar");
-        menu.setTitulo("Consultar equipas ⚽");
-        menu.show();
-        ArrayList<String> text = new ArrayList<>();
-        ArrayList<String> args = new ArrayList<>();
-        args = leNargumentos(p, s, 1, false, null);
-        switch (Integer.valueOf(args.get(0))) {
+    public static void procurarEquipa(IParser p,IInput input,IView view,IModel model){
+        view.mostrarMenuDeConsultaDeEquipas();
+        int escolha = input.InputInteger();
+        switch (escolha) {
             case 1: 
-                System.out.println("Insira um nome para procurar:");
-                String search = s.nextLine();
-                if (p.getEquipas().containsKey(search.toLowerCase())) {
+                view.mostraMensagem("Insira um nome para procurar");
+                String search = input.InputString();
+                if (model.getEquipas().containsKey(search.toLowerCase())) {
                     clearScreen();
-                    showEquipa(p.getEquipas().get(search.toLowerCase()),true,-1);
+                    IView.showEquipa(model.getEquipas().get(search.toLowerCase()),true,-1);
                 }
-                else System.out.println("Não encontrado");
+                else  view.mostraMensagem("Não encontrado");
                 break;
             case 2:
-                for (Equipa e: p.getEquipas().values()){
-                    showEquipa(e,false,-1);
+                for (IEquipa e: model.getEquipas().values()){
+                    IView.showEquipa(e,false,-1);
                 }
                 break;
             case 3:
                 return;
             default:
-                System.out.println("-- [Erro]: pressione enter --");
-                s.nextLine();
-                procurarEquipa(p, s);
+                view.mostraMensagem("-- [Erro]: pressione enter --");
+                input.InputString();
+                procurarEquipa(p, input,view,model);
                 break;
         }
-        System.out.println("-- press enter --");
-        s.nextLine();
+        view.mostraMensagem("-- pressione enter --");
+        input.InputString();
         return;
     }
 
-    public static void showDetalhesJogador(Jogador j,Equipa e){
-        System.out.println("Equipa: " + e.getNome());
-        System.out.println("Nome: " + (j.getNomeAtleta()));
-        System.out.println("Número: " + j.getIdAtleta());
-        System.out.println("Idade " + j.getIdade());
-        System.out.println("Habilidade geral: " + j.getHabilidade() + avaliaHabilidade(j.getHabilidade()));
-        System.out.println("Posição: " + j.getClass().getName());
-        System.out.println(j.toString());
-    }
-
-    public static void showEquipa(Equipa e,boolean showPlantel,int highlight){
-        System.out.print("Nome: " + truncateString(e.getNome(), 30));
-        System.out.print("  Data de fundação: " + e.getDataDeFundação());
-        System.out.println("            Habilidade global: " + e.getHabilidadeGlobal() + avaliaHabilidade(e.getHabilidadeGlobal()));
-        if(showPlantel){
-            System.out.println("Plantel:");
-            for (Map.Entry<Integer,Jogador> plantel: e.getplantel().entrySet()) {
-                if(plantel.getKey() == highlight) showJogador(plantel.getValue(),true);
-                else showJogador(plantel.getValue(), false);
-                
-            }
-        }
-    }
-
-    public static void showJogador(Jogador j,boolean highlight){
-        if (highlight) {
-            System.out.print("\u001B[47m");
-            System.out.print("\u001B[30m");
-        }
-        System.out.print("Nome: " + truncateString(j.getNomeAtleta(),30));
-        System.out.print(" │ Número: " + truncateString(String.valueOf(j.getIdAtleta()),3));
-        System.out.print(" │ Idade " + truncateString(String.valueOf(j.getIdade()),3));
-        System.out.println(" │ Habilidade geral: " + j.getHabilidade() + avaliaHabilidade(j.getHabilidade()));
-        System.out.print("\u001B[0m");
-    }
-
-    public static String truncateString(String s, int n) {
-        return String.format("%-" + n + "s", s);  
-    }
-
-    public static String avaliaHabilidade(float habilidade){
-        StringBuilder sb = new StringBuilder();
-        if(habilidade >= 90) sb.append("[Lendário]");
-        if(habilidade >= 80 && habilidade < 90) sb.append("[Muito elevado]");
-        if(habilidade >= 60 && habilidade < 80) sb.append("[Elevado]");
-        if(habilidade >= 40 && habilidade < 60) sb.append("[Mediano]");
-        if(habilidade >= 20 && habilidade < 40) sb.append("[Baixo]");
-        if(habilidade < 20) sb.append("[Muito baixo]");
-        return sb.toString();
-    }
-
-    public static void jogar(Equipa equipaCasa, Equipa equipaVisitante,Scanner s){
-        clearScreen();
-        System.out.println("\u001B[36mJogo entre " + equipaCasa.getNome() + " e " + equipaVisitante.getNome() + " [Ainda não dá para selecionar]\u001B[0m");
-        System.out.println("-----------------------------------------");
-        Jogo j = new Jogo();
+    public static void jogar(IEquipa equipaCasa, IEquipa equipaVisitante,IView view,IInput input){
+        IJogo j = new Jogo();
         j.setEqVisitante(equipaVisitante);
         j.setEqCasa(equipaCasa);
         j.setPosicaoBola(0);
-        System.out.println("Bola ao meio campo");
+        view.showInicioJogo(equipaCasa, equipaVisitante);
         for (int i = 0; i < 90; i++) {
             GameResult.calculaJogada(j);
-            System.out.println(" (" + (i+1) + "')");
+            view.mostraMensagem(" (" + (i+1) + "')");
             try
             {
             Thread.sleep(200);
@@ -245,39 +160,35 @@ public class Interpretador {
                 Thread.currentThread().interrupt();
             }
         }
-        System.out.println("\u001B[32mResultado final: " + j.getEqCasa().getNome() + " " + j.getGolosCasa() + " : " + j.getGolosVisitante() + " " + j.getEqVisitante().getNome()+"\u001B[0m");
-        System.out.println("-- press enter --");
-        s.nextLine();
+        view.showFimJogo(j);
+        view.mostraMensagem("-- press enter --");
+        input.InputString();
     }
 
-    public static void adicionaEquipa(Parser p, Scanner s){
-        Equipa e = new Equipa();
-        e.setplantel(new HashMap<Integer,Jogador>());
-        e.setJogosAgendados(new ArrayList<Jogo>());
-        ArrayList<String> args = new ArrayList<>();
-        ArrayList<String> text = new ArrayList<>();
-        text.add("Insira o nome");
-        text.add("Insira a data de fundação (aaaa-mm-dd)");
-        args = leNargumentos(p, s, 2, false,text);
-        e.setNome(args.get(0));
-        e.setDataDeFundação(LocalDate.parse(args.get(1)));
-        p.addEquipa(e);
+    public static void adicionaEquipa(IParser p, IInput input,IView view,IModel model){
+        IEquipa e = new Equipa();
+        e.setplantel(new HashMap<Integer,IJogador>());
+        e.setJogosAgendados(new ArrayList<IJogo>());
+        view.mostraMensagem("Insira o nome");
+        String nome = input.InputString();
+        view.mostraMensagem("Insira a data de fundação (aaaa-mm-dd)");
+        String dataDeFundacao = input.InputString();
+        e.setNome(nome);
+        e.setDataDeFundação(LocalDate.parse(dataDeFundacao));
+        model.addEquipa(e);
     }
 
-    public static void adicionaJogador(Parser p, Scanner s){
-        Jogador j = new Jogador();
-        ArrayList<String> args = new ArrayList<>();
-        ArrayList<String> text = new ArrayList<>();
-        text.add("Insira o nome");
-        args = leNargumentos(p, s, 1, false,text);
-        ArrayList<String> args2 = new ArrayList<>();
-        ArrayList<String> text2 = new ArrayList<>();
-        text2.add("Insira a idade");
-        text2.add("Insira o número");
-        args2 = leNargumentos(p, s, 2, true,text2);
-        j.setNomeAtleta(args.get(0));
-        j.setIdade(Integer.valueOf(args2.get(0)));
-        j.setNumeroJogador(Integer.valueOf(args2.get(1)));
+    public static void adicionaJogador(IParser p, IInput input,IView view,IModel model){
+        IJogador j = new Jogador();
+        view.mostraMensagem("Insira o nome");
+        String nome = input.InputString();
+        view.mostraMensagem("Insira a idade");
+        Integer idade = input.InputInteger();
+        view.mostraMensagem("Insira o número");
+        Integer numero = input.InputInteger();
+        j.setNomeAtleta(nome);
+        j.setIdade(idade);
+        j.setNumeroJogador(numero);
         j.setCapacidadeDePasse((int) (Math.random()*100));
         j.setDestreza((int) (Math.random()*100));
         j.setImpulsao((int) (Math.random()*100));
@@ -287,43 +198,20 @@ public class Interpretador {
         j.setVelocidade((int) (Math.random()*100));
         j.setTitular(true);
         j.setSuplente(false);
-        Menu menuEquipas = new Menu();
-        menuEquipas.setTitulo("Selecione uma equipa");
-            for (Equipa e : p.getEquipas().values()) {
-                menuEquipas.adicionaOpcao(e.getNome());
-            }
-        menuEquipas.show();
-        ArrayList<String> texto = new ArrayList<>();
-        text.add("Insira a equipa");
-        ArrayList<String> numEquipas = new ArrayList<>();
-        numEquipas = leNargumentos(p, s, 1, true, texto);
+        view.mostrarEquipas(model);
+        view.mostraMensagem("Insira a equipa");
+        int numEquipas = input.InputInteger();
         int i = 1;
-        for (Equipa equipa : p.getEquipas().values()){
-            if(String.valueOf(i).equals(numEquipas.get(0))) {
+        for (IEquipa equipa : model.getEquipas().values()){
+            if(i == numEquipas) {
                 equipa.insereJogador(j);
                 j.addEquipa(equipa);
                 break;
             }
             i++;
         }
-        Menu menu = new Menu();
-        menu.setTitulo("Selecione a posição");
-        menu.adicionaOpcao("Medio");
-        menu.adicionaOpcao("Lateral");
-        menu.adicionaOpcao("Defesa");
-        menu.adicionaOpcao("Guarda-Redes");
-        menu.adicionaOpcao("Avançado");
-        menu.show();
-        int escolha = 0;
-        while(true) {
-            try {
-                  escolha = Integer.parseInt(s.nextLine());
-                  break;
-            }catch (NumberFormatException e) {
-                System.out.print("[Erro] Introduza de novo: ");
-                continue;
-            }
-        }
+        view.mostrarListaDeJogadores();
+        int escolha = input.InputInteger();
         switch (escolha) {
             case 1:
                 Medio m = (Medio) j;
@@ -361,7 +249,7 @@ public class Interpretador {
         }
     }
 
-    public static ArrayList<String> leNargumentos(Parser p, Scanner s,int n, boolean isNumeric,ArrayList<String> text){
+    public static ArrayList<String> leNargumentos(IParser p, Scanner s,int n, boolean isNumeric,ArrayList<String> text){
         ArrayList<String> l = new ArrayList<>();
         int inputInt = 0;
         String inputStr = "";

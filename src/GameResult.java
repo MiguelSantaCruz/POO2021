@@ -9,7 +9,7 @@ public class GameResult {
      * @param eq1 A equipa.
      * @return O overall da equipa.
      */
-    public double getOverallEquipa1(Equipa eq1) {
+    public double getOverallEquipa1(IEquipa eq1) {
         return eq1.getHabilidadeGlobal();
     }
 
@@ -23,7 +23,7 @@ public class GameResult {
      * @throws JogadorNaoExisteException Exceção lançada quando o jogador que é passado como argumento não pertence à equipa.
      * @throws EquipaNaoExisteException Exceção lançada quando a equipa não corresponde à equipa da casa, nem à Visitante.
      */
-    public static void efetuarSubstituicao (Jogo jogo, Integer entra, Integer sai, Equipa nomeEquipa) throws JogadorNaoExisteException, EquipaNaoExisteException {
+    public static void efetuarSubstituicao (IJogo jogo, Integer entra, Integer sai, IEquipa nomeEquipa) throws JogadorNaoExisteException, EquipaNaoExisteException {
         if (nomeEquipa.getNome().equals(jogo.getEqCasa().getNome())) {           //saber se é na equipa da casa ou na visitante que vamos fazer a substituiçao
             if (jogo.getEmJogoCasa().contains(sai)) {                   //se o que sai estiver em jogo
                 if (jogo.getEqCasa().getplantel().get(entra).getSuplente()) {       //se o que entra estiver a suplente
@@ -31,7 +31,7 @@ public class GameResult {
                     jogo.getEmJogoCasa().add(entra);
                     jogo.getEqCasa().getplantel().get(entra).setSuplente(false);    //o que entra deixa de ser suplente
                     jogo.getEqCasa().getplantel().get(sai).setSuplente(true);       //o que sai passa a suplente
-                    jogo.entraSaiCasa.put(entra, sai);        //Map que tem os que entram como key, e os que saem como value
+                    jogo.getEntraSaiCasa().put(entra, sai);        //Map que tem os que entram como key, e os que saem como value
                 }
                 else {
                     throw new JogadorNaoExisteException("[Eq. Casa] Jogador que entra não está no banco...");
@@ -49,7 +49,7 @@ public class GameResult {
                     jogo.getEmJogoFora().add(entra);
                     jogo.getEqVisitante().getplantel().get(entra).setSuplente(false);       //o que entra passa a estar em Jogo
                     jogo.getEqVisitante().getplantel().get(sai).setSuplente(true);      //o que sai passa a suplente
-                    jogo.entraSaiVisitante.put(entra, sai);
+                    jogo.getEntraSaiVisitante().put(entra, sai);
                 }
                 else {
                     throw new JogadorNaoExisteException("[Eq. Visitante] Jogador que entra não está no banco...");
@@ -71,7 +71,7 @@ public class GameResult {
      * @param j O jogo em questão.
      * @return O valor correspondente ao resultado daquela jogada (Golo, canto, remate à baliza, etc...)
      */
-    public static int calculaJogada (Jogo j) {
+    public static int calculaJogada (IJogo j) {
         Random r = new Random();
         int rand;
         rand = r.nextInt(100);

@@ -1,5 +1,7 @@
-import java.util.*;
-public class Avancado extends Jogador {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Avancado extends Jogador implements Serializable {
     private int finalizacao;
     private int sprint;
 
@@ -28,7 +30,7 @@ public class Avancado extends Jogador {
     int destreza, int impulsao, int jogo_de_cabeça, 
     int remate, int capacidade_de_passe,float habilidade, 
     int finalizacao, int sprint,int idAtleta,String nomeAtleta,
-    int idade,ArrayList<Equipa> eq,boolean tit,int p,boolean supl) {
+    int idade,ArrayList<IEquipa> eq,boolean tit,int p,boolean supl) {
         super(numero,
               velocidade,
               resistencia,
@@ -46,14 +48,14 @@ public class Avancado extends Jogador {
         this.habilidade = calculaHabilidade();
     }
 
-
+    
     /**
      * Parser de avançado.
      * @param input String com as informações de avançado.
      * @return O avançado com as caracteristicas fornecidas na string.
      */
     public static Avancado parse(String input){
-        ArrayList<Equipa> eq = new ArrayList<Equipa>();
+        ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
         String[] campos = input.split(",");
         return new Avancado(Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[13]),
@@ -68,7 +70,7 @@ public class Avancado extends Jogador {
                 Integer.parseInt(campos[11]),
                 Integer.parseInt(campos[12]),
                 campos[0],
-                Integer.parseInt(campos[1]),eq,false,4,false);//titular = false suplente = false (???????)
+                Integer.parseInt(campos[1]),eq,true,4,false);//titular = false suplente = false (???????)
     }
 
     /**

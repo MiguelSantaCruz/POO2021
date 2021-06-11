@@ -3,7 +3,7 @@ import java.util.*;
  * Classe jogador
  * @version 1
  */
-public class Jogador extends Atleta{
+public class Jogador extends Atleta implements IJogador{
     
     private int velocidade;
     private int resistencia;
@@ -14,7 +14,7 @@ public class Jogador extends Atleta{
     private int capacidade_de_passe;
     protected float habilidade;
     private int numeroJogador;  //numero da camisola do jogador
-    private ArrayList<Equipa> equipas;
+    private ArrayList<IEquipa> equipas;
     private int posicao;
     private boolean titular;
     private boolean suplente;
@@ -35,9 +35,9 @@ public class Jogador extends Atleta{
         this.remate = 0;
         this.capacidade_de_passe = 0;
         this.habilidade = (float) 0.0;
-        this.equipas = new ArrayList<Equipa>();
+        this.equipas = new ArrayList<IEquipa>();
         this.posicao = 0;
-        this.titular = false;
+        this.titular = true;
         this.suplente = false;
     }
     
@@ -45,7 +45,7 @@ public class Jogador extends Atleta{
      * Construtor para objetos da classe Jogador
      */
     public Jogador(int numero,int velocidade, int resistencia, int destreza, int impulsao, 
-    int jogo_de_cabeça, int remate, int capacidade_de_passe,ArrayList<Equipa> eq,
+    int jogo_de_cabeça, int remate, int capacidade_de_passe,ArrayList<IEquipa> eq,
     int idAtleta, String nomeAtleta,int idade,boolean tit, int p, boolean supl){
         super(idAtleta,
               nomeAtleta,
@@ -136,7 +136,7 @@ public class Jogador extends Atleta{
      * Obter a lista das equipas.
      * @return A lista das equipas
      */
-    public ArrayList<Equipa> getEquipas(){
+    public ArrayList<IEquipa> getEquipas(){
         return this.equipas;
     }
 
@@ -144,7 +144,7 @@ public class Jogador extends Atleta{
      * Adicionar uma equipa à lista das equipas.
      * @param eq A equipa a adicionar
      */
-    public void addEquipa(Equipa eq) {
+    public void addEquipa(IEquipa eq) {
         this.equipas.add(eq.clone());
     }
 
@@ -301,7 +301,7 @@ public class Jogador extends Atleta{
      */
     public String toString(){
         StringBuilder s = new StringBuilder();
-        for (Equipa e : this.equipas) {
+        for (IEquipa e : this.equipas) {
             s.append(e.getNome());
             s.append(" ");
         }

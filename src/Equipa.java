@@ -1,11 +1,13 @@
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
-public class Equipa {
-    private HashMap<Integer, Jogador>  plantel;
+public class Equipa implements IEquipa{
+    private HashMap<Integer, IJogador>  plantel;
     private String nome;
     private LocalDate dataDeFundação;
-    private ArrayList<Jogo> jogosAgendados;
+    private ArrayList<IJogo> jogosAgendados;
     private float habilidadeGlobal;
 
 
@@ -40,7 +42,7 @@ public class Equipa {
      * @param c Data de Fundação da Equipa.
      * @param jogosAgendados Lista dos jogos agendados.
      */
-    public Equipa(HashMap <Integer,Jogador> li,String nome, LocalDate c, ArrayList<Jogo> jogosAgendados) {
+    public Equipa(HashMap <Integer,IJogador> li,String nome, LocalDate c, ArrayList<IJogo> jogosAgendados) {
         this.plantel = li;
         this.nome = nome;
         this.dataDeFundação = c;
@@ -64,18 +66,17 @@ public class Equipa {
      * Método para calcular a habilidade da equipa que está em jogo.
      * @return O valor da média da habilidade.
      */
-    private float calculaHabilidadeGlobal() {       //NOTA:: TEMOS QUE CHAMAR ESTE METODO SEMPRE QUE MEXER NA EQUIPA!!!!
+    public float calculaHabilidadeGlobal() {       //NOTA:: TEMOS QUE CHAMAR ESTE METODO SEMPRE QUE MEXER NA EQUIPA!!!!
         double sum = 0;
         int i=0;
-        for (Jogador j : this.plantel.values()) {
+        for (IJogador j : this.plantel.values()) {
             if (j.getSuplente()==false) {   //ou seja, se estiver em jogo conta para o calculo da habilidade da equipa
                 sum += j.getHabilidade();
-
                 i += 1;
             }
         }
         float media = (float) (sum / i);
-        return media;
+        return this.habilidadeGlobal = Math.round(media);
     }
 
     /**
@@ -94,7 +95,7 @@ public class Equipa {
      * Inserir um novo jogador na equipa.
      * @param j O Jogador a inserir
      */
-    public void insereJogador(Jogador j) {
+    public void insereJogador(IJogador j) {
         this.plantel.put(j.getNumeroJogador(), j.clone());
         j.addEquipa(this);
         calculaHabilidadeGlobal();
@@ -104,8 +105,8 @@ public class Equipa {
      * Remover um Jogador da equipa.
      * @param jo O Jogador que sai da equipa.
      */
-    public void removeJogador(Jogador jo) {
-        for (Jogador j : this.plantel.values()) {
+    public void removeJogador(IJogador jo) {
+        for (IJogador j : this.plantel.values()) {
             if (jo.getNumeroJogador() == j.getNumeroJogador()) {
                 this.plantel.remove(jo.getNumeroJogador());
                 break;
@@ -117,7 +118,7 @@ public class Equipa {
      * Obter o plantel da Equipa.
      * @return O plantel.
      */
-    public HashMap<Integer, Jogador> getplantel() {
+    public HashMap<Integer, IJogador> getplantel() {
         return this.plantel;
     }
 
@@ -125,7 +126,7 @@ public class Equipa {
      * Definir o plantel da Equipa
      * @param plantel O Map do plantel (key é o nº da camisola e value é o jogador).
      */
-    public void setplantel(HashMap<Integer,Jogador> plantel) {
+    public void setplantel(HashMap<Integer,IJogador> plantel) {
         this.plantel = plantel;
     }
 
@@ -165,7 +166,7 @@ public class Equipa {
      * Obter a Lista de jogos agendados.
      * @return A lista dos jogos.
      */
-    public ArrayList<Jogo> getJogosAgendados() {
+    public ArrayList<IJogo> getJogosAgendados() {
         return this.jogosAgendados;
     }
 
@@ -173,7 +174,7 @@ public class Equipa {
      * Definir uma nova lista de jogos agendados.
      * @param jogosAgendados A nova lista de jogos.
      */
-    public void setJogosAgendados(ArrayList<Jogo> jogosAgendados) {
+    public void setJogosAgendados(ArrayList<IJogo> jogosAgendados) {
         this.jogosAgendados = jogosAgendados;
     }
 
@@ -198,7 +199,7 @@ public class Equipa {
      * @param n O número da Camisola do Jogador que procuramos.
      * @return O Jogador correspondente ao número passado.
      */
-    public Jogador getJogador(int n) {return this.plantel.get(n);}
+    public IJogador getJogador(int n) {return this.plantel.get(n);}
 
     /**
      * Verificar a igualdade entre uma Equipa e um Objeto.
