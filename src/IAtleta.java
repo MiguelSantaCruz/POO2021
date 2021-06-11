@@ -1,9 +1,11 @@
+import java.io.Serializable;
+
 /**
  * Classe Atleta
  * @version 1
  */
 
-public interface IAtleta{
+public interface IAtleta extends Serializable{
     public int getIdade();
     public String getNomeAtleta();
     public int getIdAtleta();

@@ -1,11 +1,10 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Classe Jogador lateral
  * @version 1
  */
-public class Lateral extends Jogador implements Serializable{
+public class Lateral extends Jogador{
     private int cruzamentos;
  
     /**

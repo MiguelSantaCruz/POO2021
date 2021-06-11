@@ -1,7 +1,6 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Avancado extends Jogador implements Serializable {
+public class Avancado extends Jogador{
     private int finalizacao;
     private int sprint;
 

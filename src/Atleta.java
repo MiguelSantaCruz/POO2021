@@ -3,7 +3,7 @@
  * @version 1
  */
 
-public class Atleta{
+public class Atleta implements IAtleta{
     private int idAtleta;
     private String nomeAtleta;
     private int idade;

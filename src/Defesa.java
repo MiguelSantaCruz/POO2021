@@ -1,7 +1,6 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Defesa extends Jogador implements Serializable{
+public class Defesa extends Jogador{
     private int intersecao;
     private int drible;
 

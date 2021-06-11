@@ -1,4 +1,5 @@
-import java.util.*;
+import java.util.ArrayList;
+
 /**
  * Classe jogador
  * @version 1

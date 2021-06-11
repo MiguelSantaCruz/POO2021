@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Interpretador {
     public static void run() throws LinhaIncorretaException, ClassNotFoundException, IOException {
@@ -22,8 +23,7 @@ public class Interpretador {
                     break;
                 case 3:
                     view.showJogos(model);
-                    view.mostraMensagem("--- press enter ---");
-                    input.InputString();
+                    IView.pressEnterToContinue(input);
                     break;
                 case 4:
                     adicionaEquipa(input, view, model);
@@ -64,18 +64,36 @@ public class Interpretador {
                             "Lidas " + model.getEquipas().values().size() + " equipas de [" + filePath + "]");
                     view.mostraMensagem(
                             "Lidos " + model.getJogos().size() + " jogos de [" + filePath + "]");
-                    view.mostraMensagem("--- press enter ---");
-                    input.InputString();
+                    IView.pressEnterToContinue(input);
                     break;
                 case 9:
                     view.mostraMensagem("Insira o nome do ficheiro: ");
                     String filePath2 = input.InputString();
                     p.guardaBin(filePath2, model);
                     view.mostraMensagem("Guardado em " + filePath2);
-                    view.mostraMensagem("--- press enter ---");
-                    input.InputString();
+                    IView.pressEnterToContinue(input);
                     break;
                 case 10:
+                    removeJogador(input,view,model);
+                    break;
+                case 11:
+                    view.mostrarEquipas(model);
+                    int escolha2 = -1;
+                    while (escolha2 < 1 || escolha2 > model.getEquipas().values().size()) {
+                        escolha2 = input.InputInteger();
+                    }
+                    int index = 1;
+                    for (IEquipa equipa : model.getEquipas().values()) {
+                        if(index == escolha2){
+                            view.mostraMensagem("Removida a equipa " + equipa.getNome());
+                            model.removeEquipa(equipa);
+                            break;
+                        }
+                        index++;
+                    }
+                    IView.pressEnterToContinue(input);
+                    break;
+                case 12:
                     input.closeScanner();
                     System.exit(0);
                     break;
@@ -107,7 +125,8 @@ public class Interpretador {
             }
         }
         if(!playerExists){
-            view.mostraMensagem("--- Não encontrado - Press enter ---");
+            view.mostraMensagem("--- Não encontrado ---");
+            IView.pressEnterToContinue(input);
             return;
         } else {
            view.mostrarEquipas(model);
@@ -161,13 +180,12 @@ public class Interpretador {
             case 3:
                 return;
             default:
-                view.mostraMensagem("-- [Erro]: pressione enter --");
-                input.InputString();
+                view.mostraMensagem("-- [Erro] --");
+                IView.pressEnterToContinue(input);
                 procurarJogador(input, view, model);
                 break;
         }
-        System.out.println("-- press enter --");
-        input.InputString();
+        IView.pressEnterToContinue(input);
         return;
     }
 
@@ -192,13 +210,11 @@ public class Interpretador {
             case 3:
                 return;
             default:
-                view.mostraMensagem("-- [Erro]: pressione enter --");
-                input.InputString();
+                IView.pressEnterToContinue(input);
                 procurarEquipa(input, view, model);
                 break;
         }
-        view.mostraMensagem("-- pressione enter --");
-        input.InputString();
+        IView.pressEnterToContinue(input);
         return;
     }
 
@@ -224,8 +240,7 @@ public class Interpretador {
         }
         model.addJogo(j);
         view.showFimJogo(j);
-        view.mostraMensagem("-- press enter --");
-        input.InputString();
+        IView.pressEnterToContinue(input);
     }
 
     public static void adicionaEquipa(IInput input, IView view, IModel model) {
@@ -240,6 +255,7 @@ public class Interpretador {
         e.setDataDeFundação(LocalDate.parse(dataDeFundacao));
         model.addEquipa(e);
     }
+
 
     public static void adicionaJogador(IInput input, IView view, IModel model) {
         view.mostraMensagem("Insira o nome");
@@ -374,6 +390,36 @@ public class Interpretador {
                 a1.setSuplente(false);
                 model.getEquipas().get(e.getNome().toLowerCase()).insereJogador(a1);
                 break;
+        }
+    }
+
+    public static void removeJogador(IInput input,IView view,IModel model){
+        view.mostraMensagem("Insira um nome:");
+        String name = input.InputString();
+        List<IJogador> l = new ArrayList<>();
+        for (IEquipa e : model.getEquipas().values()) {
+            for (IJogador j : e.getplantel().values()) {
+                if (j.getNomeAtleta().toLowerCase().equals(name.toLowerCase())) {
+                    l.add(j);
+                }
+            }
+        }
+        //Remove o jogador da equipa atual
+        if(l.size() == 1) {
+            IEquipa e = l.get(0).getEquipas().get(l.get(0).getEquipas().size()-1);
+            model.getEquipas().get(e.getNome().toLowerCase()).removeJogador(l.get(0));
+            view.mostraMensagem("Removido " + l.get(0).getNomeAtleta() + " da equipa " +e.getNome());
+        }   
+        else if(l.size() > 1) {
+            view.mostrarListaJogadoresComoMenu(l);
+            int escolha = -1;
+            while(escolha < 1 || escolha > l.size()){
+                escolha = input.InputInteger();
+            }
+            IEquipa e = l.get(escolha-1).getEquipas().get(l.get(escolha-1).getEquipas().size()-1);
+            model.getEquipas().get(e.getNome().toLowerCase()).removeJogador(l.get(escolha));
+            view.mostraMensagem("Removido " + l.get(escolha-1).getNomeAtleta() + " da equipa " + e.getNome());
+            
         }
     }
 }

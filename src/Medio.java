@@ -1,11 +1,10 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Classe Jogador Medio
  * @version 1
  */
-public class Medio extends Jogador implements Serializable{
+public class Medio extends Jogador{
     private int recuperacao_bolas;
  
     /**

@@ -1,11 +1,10 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Classe Jogador Guarda_Redes
  * @version 1
  */
-public class Guarda_Redes extends Jogador implements Serializable{
+public class Guarda_Redes extends Jogador{
     private int elasticidade;
  
     /**

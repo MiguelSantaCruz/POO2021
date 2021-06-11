@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Map;
 
 public interface IView {
@@ -61,6 +62,8 @@ public interface IView {
         return sb.toString();
     }
 
+    public void mostrarListaJogadoresComoMenu(List<IJogador> l);
+
     public static String truncateString(String s, int n) {
         return String.format("%-" + n + "s", s);  
     }
@@ -68,5 +71,11 @@ public interface IView {
     public static void clearScreen(){
         System.out.print("\033[H\033[2J");  
         System.out.flush();  
+    }
+
+
+    public static void pressEnterToContinue(IInput input){
+        System.out.println(" --- press enter ---");
+        input.InputString();
     }
 }

@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class View implements IView{
     public View(){
 
@@ -14,8 +16,10 @@ public class View implements IView{
             menu.adicionaOpcao("Adicionar jogador ➕⛹️");
             menu.adicionaOpcao("Transferir jogador ➡️ ⛹️");
             menu.adicionaOpcao("Jogar 🎮‍");
-            menu.adicionaOpcao("Carrega estado 🖥️");
-            menu.adicionaOpcao("Guarda estado 💾");
+            menu.adicionaOpcao("Carregar estado 🖥️");
+            menu.adicionaOpcao("Guardar estado 💾");
+            menu.adicionaOpcao("Remover Jogador ❌⛹️");
+            menu.adicionaOpcao("Remover Equipa ❌👥");
             menu.adicionaOpcao("Sair ❌");
             menu.show(true);
     }
@@ -83,6 +87,15 @@ public class View implements IView{
         menu.show(true);
     }
 
+    public void mostrarListaJogadoresComoMenu(List<IJogador> l){
+        Menu menu = new Menu();
+        menu.setTitulo("Selecione o jogador");
+        for (IJogador jogador : l) {
+            menu.adicionaOpcao(jogador.getNomeAtleta() + " [" + jogador.getEquipas().get(jogador.getEquipas().size()-1).getNome() + "]");
+        }
+        menu.show(true);
+    }
+
     public void showInicioJogo(IEquipa equipaCasa, IEquipa equipaVisitante){
         clearScreen();
         System.out.println("\u001B[36mJogo entre " + equipaCasa.getNome() + " e " + equipaVisitante.getNome() + "\u001B[0m");
@@ -102,5 +115,9 @@ public class View implements IView{
         System.out.print("\033[H\033[2J");  
         System.out.flush();  
     } 
+
+    public static void pressEnterToContinue(){
+        System.out.println(" --- press enter ---");
+    }
 }
 

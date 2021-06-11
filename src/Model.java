@@ -17,7 +17,7 @@ public class Model implements IModel{
     }
 
     public void removeEquipa(IEquipa e){
-        this.equipas.remove(e.getNome());
+        this.equipas.remove(e.getNome().toLowerCase());
     }   
 
     public void addJogo(IJogo j){
