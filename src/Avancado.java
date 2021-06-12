@@ -27,7 +27,7 @@ public class Avancado extends Jogador{
      */
     public Avancado (int numero,int velocidade, int resistencia,
     int destreza, int impulsao, int jogo_de_cabeça, 
-    int remate, int capacidade_de_passe,float habilidade, 
+    int remate, int capacidade_de_passe,
     int finalizacao, int sprint,int idAtleta,String nomeAtleta,
     int idade,ArrayList<IEquipa> eq,boolean tit,int p,boolean supl) {
         super(numero,
@@ -56,7 +56,27 @@ public class Avancado extends Jogador{
     public static Avancado parse(String input){
         ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
         String[] campos = input.split(",");
-        return new Avancado(Integer.parseInt(campos[2]),
+        long tam = input.codePoints().filter(ch -> ch ==',').count();
+        if (tam == 8 ){
+            String idade = "20";
+            String idA = "0";
+            String fin = "50";
+            String spt = "50";
+            return new Avancado(Integer.parseInt(campos[1]),
+                Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                Integer.parseInt(fin),
+                Integer.parseInt(spt),
+                Integer.parseInt(idA),
+                campos[0],
+                Integer.parseInt(idade),eq,true,4,false);//titular = false suplente = false (???????)
+        }
+        else {return new Avancado(Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[13]),
                 Integer.parseInt(campos[3]),
                 Integer.parseInt(campos[4]),
@@ -67,9 +87,9 @@ public class Avancado extends Jogador{
                 Integer.parseInt(campos[9]),
                 Integer.parseInt(campos[10]),
                 Integer.parseInt(campos[11]),
-                Integer.parseInt(campos[12]),
                 campos[0],
                 Integer.parseInt(campos[1]),eq,true,4,false);//titular = false suplente = false (???????)
+        }
     }
 
     /**

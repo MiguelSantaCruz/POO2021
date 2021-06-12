@@ -57,31 +57,37 @@ public class Parser implements IParser{
                     model.addEquipa(e);
                     ultima = e;
                     break;
-                case "GK":
+                case "Guarda-Redes":
                     j = Guarda_Redes.parse(linhaPartida[1]);
                     //jogadores.put(j.getNomeAtleta(), j);
                     if (ultima == null) throw new LinhaIncorretaException(); //we need to insert the player into the team
                     ultima.insereJogador(j.clone()); //if no team was parsed previously, file is not well-formed
                     break;
-                case "CB":
+                case "Defesa":
                     j = Defesa.parse(linhaPartida[1]);
                     //jogadores.put(j.getNomeAtleta(), j);
                     if (ultima == null) throw new LinhaIncorretaException(); //we need to insert the player into the team
                     ultima.insereJogador(j.clone()); //if no team was parsed previously, file is not well-formed
                     break;
-                case "CDM":
+                case "Medio":
                     j = Medio.parse(linhaPartida[1]);
                     //jogadores.put(j.getNomeAtleta(), j);
                     if (ultima == null) throw new LinhaIncorretaException(); //we need to insert the player into the team
                     ultima.insereJogador(j.clone()); //if no team was parsed previously, file is not well-formed
                     break;
-                case "RB":
+                case "Lateral":
                     j = Lateral.parse(linhaPartida[1]);
                     //jogadores.put(j.getNomeAtleta(), j);
                     if (ultima == null) throw new LinhaIncorretaException(); //we need to insert the player into the team
                     ultima.insereJogador(j.clone()); //if no team was parsed previously, file is not well-formed
                     break;
                 case "ST":
+                    j = Avancado.parse(linhaPartida[1]);
+                    //jogadores.put(j.getNomeAtleta(), j);
+                    if (ultima == null) throw new LinhaIncorretaException(); //we need to insert the player into the team
+                    ultima.insereJogador(j.clone()); //if no team was parsed previously, file is not well-formed
+                    break;
+                case "Avancado":
                     j = Avancado.parse(linhaPartida[1]);
                     //jogadores.put(j.getNomeAtleta(), j);
                     if (ultima == null) throw new LinhaIncorretaException(); //we need to insert the player into the team
@@ -96,7 +102,6 @@ public class Parser implements IParser{
 
             }
         }
-
     }
 
     /**

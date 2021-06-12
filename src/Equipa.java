@@ -86,8 +86,16 @@ public class Equipa implements IEquipa{
      */
     public static Equipa parse(String input){
         String[] campos = input.split(",");
-        String[] data = campos[1].split("-");
-        return new Equipa(campos[0],LocalDate.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]), Integer.parseInt(data[2])));
+        long tam = input.codePoints().filter(ch -> ch ==',').count();
+        String[] data ;
+        if (tam == 0){        
+            String d  = "2000-01-01";
+            data  =  d.split("-");
+        }else {data  =  campos[1].split("-");}
+        
+        return new Equipa(campos[0],LocalDate.of(Integer.parseInt(data[0]), 
+                                                 Integer.parseInt(data[1]), 
+                                                 Integer.parseInt(data[2]))); 
     }
 
 

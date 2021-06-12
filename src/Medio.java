@@ -45,7 +45,23 @@ public class Medio extends Jogador{
     public static Medio parse(String input){
         ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
         String[] campos = input.split(",");
-        return new Medio( Integer.parseInt(campos[2]),
+        long tam = input.codePoints().filter(ch -> ch ==',').count();
+        if (tam == 9 ){
+            String idade = "20";
+            String idA = "0";
+            return new Medio( Integer.parseInt(campos[1]),
+                Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                Integer.parseInt(campos[9]),
+                Integer.parseInt(idA),
+                campos[0],
+                Integer.parseInt(idade),eq,true, 3,false);
+        }else{return new Medio( Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[11]),
                 Integer.parseInt(campos[3]),
                 Integer.parseInt(campos[4]),
@@ -57,6 +73,8 @@ public class Medio extends Jogador{
                 Integer.parseInt(campos[10]),
                 campos[0],
                 Integer.parseInt(campos[1]),eq,true, 3,false);
+        }
+        
     }
 
     /**

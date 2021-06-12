@@ -40,20 +40,38 @@ public class Guarda_Redes extends Jogador{
      * Construtor de cópia para objetos da classe Guarda_Redes
      */
    public static Guarda_Redes parse(String input){
-        ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
-        String[] campos = input.split(",");
-        return new Guarda_Redes(Integer.parseInt(campos[2]),
-                Integer.parseInt(campos[11]),
-                Integer.parseInt(campos[3]),
-                Integer.parseInt(campos[4]),
-                Integer.parseInt(campos[5]),
-                Integer.parseInt(campos[6]),
-                Integer.parseInt(campos[7]),
-                Integer.parseInt(campos[8]),
-                Integer.parseInt(campos[9]),
-                Integer.parseInt(campos[10]),
-                campos[0],
-                Integer.parseInt(campos[1]),eq,true,0,false);
+    ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
+    String[] campos = input.split(",");
+    long tam = input.codePoints().filter(ch -> ch ==',').count();
+    if (tam == 9 ){
+        String idade = "20";
+        String idA = "0";
+        return new Guarda_Redes(Integer.parseInt(campos[1]),
+            Integer.parseInt(campos[2]),
+            Integer.parseInt(campos[3]),
+            Integer.parseInt(campos[4]),
+            Integer.parseInt(campos[5]),
+            Integer.parseInt(campos[6]),
+            Integer.parseInt(campos[7]),
+            Integer.parseInt(campos[8]),
+            Integer.parseInt(campos[9]),
+            Integer.parseInt(idA),
+            campos[0],
+            Integer.parseInt(idade),eq,true,0,false);
+    }
+    else {return new Guarda_Redes(Integer.parseInt(campos[2]),
+            Integer.parseInt(campos[11]),
+            Integer.parseInt(campos[3]),
+            Integer.parseInt(campos[4]),
+            Integer.parseInt(campos[5]),
+            Integer.parseInt(campos[6]),
+            Integer.parseInt(campos[7]),
+            Integer.parseInt(campos[8]),
+            Integer.parseInt(campos[9]),
+            Integer.parseInt(campos[10]),
+            campos[0],
+            Integer.parseInt(campos[1]),eq,true,0,false);
+    }
     }
 
     /**

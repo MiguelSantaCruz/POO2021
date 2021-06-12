@@ -54,7 +54,27 @@ public class Defesa extends Jogador{
     public static Defesa parse(String input){
         ArrayList<IEquipa> eq = new ArrayList<IEquipa>();
         String[] campos = input.split(",");
-        return new Defesa(Integer.parseInt(campos[2]),
+        long tam = input.codePoints().filter(ch -> ch ==',').count();
+        if (tam == 8 ){
+            String idade = "20";
+            String idA = "0";
+            String drib = "50";
+            String inter = "50";
+            return new Defesa(Integer.parseInt(campos[1]),
+            Integer.parseInt(campos[2]),
+            Integer.parseInt(campos[3]),
+            Integer.parseInt(campos[4]),
+            Integer.parseInt(campos[5]),
+            Integer.parseInt(campos[6]),
+            Integer.parseInt(campos[7]),
+            Integer.parseInt(campos[8]),
+            Integer.parseInt(drib),
+            Integer.parseInt(inter),
+            Integer.parseInt(idA), 
+            campos[0],
+            Integer.parseInt(idade),eq,true,1,false);
+        }
+        else {return new Defesa(Integer.parseInt(campos[2]),
                 Integer.parseInt(campos[12]),
                 Integer.parseInt(campos[3]),
                 Integer.parseInt(campos[4]),
@@ -67,6 +87,7 @@ public class Defesa extends Jogador{
                 Integer.parseInt(campos[11]), 
                 campos[0],
                 Integer.parseInt(campos[1]),eq,true,1,false);
+        }
     }
 
     /**
