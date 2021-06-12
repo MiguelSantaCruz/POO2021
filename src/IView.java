@@ -3,6 +3,7 @@ import java.util.Map;
 
 public interface IView {
     public void mostraMensagem(String msg);
+    public void mostraMensagemSemNewLine(String msg);
     public void mostrarMenuPrincipal();
     public void mostrarMenuDeConsultaDeEquipas();
     public void mostrarMenuDeConsultaDeJogador();

@@ -20,6 +20,9 @@ public class Parser implements IParser{
         this.path = "../POO2021/final.txt";
     }
 
+    /**
+     * Função que permite guardar o estado do modelo num ficheiro binário
+     */
     public void guardaBin(String nomeFicheiro,IModel model) throws FileNotFoundException, IOException {
         FileOutputStream bf = new FileOutputStream(nomeFicheiro);
         ObjectOutputStream oos = new ObjectOutputStream(bf);
@@ -28,6 +31,9 @@ public class Parser implements IParser{
         oos.close();
     }
 
+    /**
+     * Função que permite ler um ficheiro binário com um estado da aplicação 
+     */
     public IModel readBin(String nomeFich) throws IOException, ClassNotFoundException{
         FileInputStream bf = new FileInputStream(nomeFich);
         ObjectInputStream ois = new ObjectInputStream(bf);

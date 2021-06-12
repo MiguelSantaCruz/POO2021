@@ -11,6 +11,7 @@ public class Main
      */
     public static void main(String[] args) throws Exception{
         Interpretador.run();
+       
         //Interpretador.run();
         //Avancado j1 = new Avancado (1,1,5,3,3,7,8,7,0,123,3,3,"Sérgio",20);
         //System.out.println("Atleta: " + j1.toString());

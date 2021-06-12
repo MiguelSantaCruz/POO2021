@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Interpretador {
+    /**
+     * Mostrar o menu principal, pedir input e chamar as respetivas funções
+     */
     public static void run() throws LinhaIncorretaException, ClassNotFoundException, IOException {
         IView view = new View();
         IInput input = new Input();
@@ -103,11 +106,12 @@ public class Interpretador {
         }
     }
 
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
+    /**
+     * Função que pede ao utilizador o nome de um jogador e uma equipa e efetua a transferencia
+     * @param input Scanner aberto no momento encapsulado pela classe Input
+     * @param view  View inicializada no momento
+     * @param model Modelo carregado em memória no momento
+     */
     public static void transfereJogador(IInput input, IView view, IModel model){
         view.mostraMensagem("Insira o nome do jogador para procurar:");
         String search;
@@ -146,6 +150,12 @@ public class Interpretador {
         }
     }
 
+    /**
+     * Função que procura um determinado jogador
+     * @param input Scanner aberto no momento encapsulado pela classe Input
+     * @param view  View inicializada no momento
+     * @param model Modelo carregado em memória no momento
+     */
     public static void procurarJogador(IInput input, IView view, IModel model) {
         view.mostrarMenuDeConsultaDeJogador();
         boolean detalhesJogador = false;
@@ -190,6 +200,12 @@ public class Interpretador {
         return;
     }
 
+    /**
+     * Função que procura uma determinada equipa
+     * @param input Scanner aberto no momento encapsulado pela classe Input
+     * @param view  View inicializada no momento
+     * @param model Modelo carregado em memória no momento
+     */
     public static void procurarEquipa(IInput input, IView view, IModel model) {
         view.mostrarMenuDeConsultaDeEquipas();
         int escolha = input.InputInteger();
@@ -198,7 +214,7 @@ public class Interpretador {
                 view.mostraMensagem("Insira um nome para procurar");
                 String search = input.InputString();
                 if (model.getEquipas().containsKey(search.toLowerCase())) {
-                    clearScreen();
+                    IView.clearScreen();
                     IView.showEquipa(model.getEquipas().get(search.toLowerCase()), true, -1);
                 } else
                     view.mostraMensagem("Não encontrado");
@@ -219,6 +235,14 @@ public class Interpretador {
         return;
     }
 
+    /**
+     * Função que inicializa um jogo dadas duas equipas
+     * @param equipaCasa Equipa que joga em casa
+     * @param equipaVisitante Equipa que joga fora de casa
+     * @param input Scanner aberto no momento encapsulado pela classe Input
+     * @param view  View inicializada no momento
+     * @param model Modelo carregado em memória no momento
+     */
     public static void jogar(IEquipa equipaCasa, IEquipa equipaVisitante, IView view, IInput input,IModel model) {
         IJogo j = new Jogo();
         j.setTempoJogo(LocalDate.now());
@@ -227,7 +251,7 @@ public class Interpretador {
         j.setPosicaoBola(0);
         view.showInicioJogo(equipaCasa, equipaVisitante);
         for (int i = 0; i < 90; i++) {
-            GameResult.calculaJogada(j);
+            GameResult.calculaJogada(j,view);
             view.mostraMensagem(" (" + (i + 1) + "')");
             try {
                 if((i+1) == 45){
@@ -244,6 +268,12 @@ public class Interpretador {
         IView.pressEnterToContinue(input);
     }
 
+    /**
+     * Função que permite adicionar uma equipa ao modelo
+     * @param input Scanner aberto no momento encapsulado pela classe Input
+     * @param view  View inicializada no momento
+     * @param model Modelo carregado em memória no momento
+     */
     public static void adicionaEquipa(IInput input, IView view, IModel model) {
         IEquipa e = new Equipa();
         e.setplantel(new HashMap<Integer, IJogador>());
@@ -258,6 +288,12 @@ public class Interpretador {
     }
 
 
+    /**
+     * Função que permite adicionar um jogador ao modelo
+     * @param input Scanner aberto no momento encapsulado pela classe Input
+     * @param view  View inicializada no momento
+     * @param model Modelo carregado em memória no momento
+     */
     public static void adicionaJogador(IInput input, IView view, IModel model) {
         view.mostraMensagem("Insira o nome");
         String nome = input.InputString();
@@ -394,6 +430,12 @@ public class Interpretador {
         }
     }
 
+    /**
+     * Função que permite remover um jogador ao modelo
+     * @param input Scanner aberto no momento encapsulado pela classe Input
+     * @param view  View inicializada no momento
+     * @param model Modelo carregado em memória no momento
+     */
     public static void removeJogador(IInput input,IView view,IModel model){
         view.mostraMensagem("Insira um nome:");
         String name = input.InputString();
